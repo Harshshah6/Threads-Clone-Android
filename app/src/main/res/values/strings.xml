@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Threads-Clone-Android</string>
+    <string name="auth_username_hint">Username or email</string>
+    <string name="auth_password_hint">Password</string>
+    <string name="auth_sign_in">Log in</string>
 </resources>
