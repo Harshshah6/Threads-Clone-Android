@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,27 @@ public class AuthActivity extends AppCompatActivity {
                 hideKeyboard(view);
             }
         });
+
+        binding.password.setOnEditorActionListener((textView, i, keyEvent) -> {
+            hideKeyboard(textView);
+            binding.signIn.performClick();
+            return false;
+        });
+
+        initOnClickListeners();
+    }
+
+    private void initOnClickListeners() {
+        binding.signIn.setOnClickListener(view -> {
+            Toast.makeText(AuthActivity.this, "Sign In", Toast.LENGTH_SHORT).show();
+        });
+
+        binding.loginRegister.setOnClickListener(view -> {
+            binding.usernameLayout.setVisibility(binding.usernameLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            binding.loginRegister.setText(binding.loginRegister.getText().equals("Register") ? "Login" : "Register");
+            binding.emailLayout.setHint(binding.loginRegister.getText().equals("Register") ? "Username or email" : "Email");
+        });
+
     }
 
     @Override

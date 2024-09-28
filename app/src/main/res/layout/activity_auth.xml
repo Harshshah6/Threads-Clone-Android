@@ -9,23 +9,55 @@
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="18dp">
+    android:padding="18dp"
+    android:animateLayoutChanges="true">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="@dimen/corner_radius_small"
+        android:contentDescription="app icon"
+        android:src="@drawable/ic_launcher_foreground"/>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         app:boxCornerRadiusBottomEnd="@dimen/corner_radius_micro"
         app:boxCornerRadiusBottomStart="@dimen/corner_radius_micro"
         app:boxCornerRadiusTopEnd="@dimen/corner_radius_micro"
-        app:boxCornerRadiusTopStart="@dimen/corner_radius_micro">
+        app:boxCornerRadiusTopStart="@dimen/corner_radius_micro"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints="username"
+            android:hint="Username"
+            android:inputType="text"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        app:boxCornerRadiusBottomEnd="@dimen/corner_radius_micro"
+        app:boxCornerRadiusBottomStart="@dimen/corner_radius_micro"
+        app:boxCornerRadiusTopEnd="@dimen/corner_radius_micro"
+        app:boxCornerRadiusTopStart="@dimen/corner_radius_micro"
+        android:hint="@string/auth_username_hint"
+        >
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:autofillHints="emailAddress|username"
-            android:hint="@string/auth_username_hint"
             android:inputType="text|textEmailAddress"
             android:singleLine="true" />
 
@@ -52,6 +84,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/sign_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/corner_radius_medium"
@@ -73,6 +106,7 @@
             android:layout_weight="1"/>
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/login_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register"
@@ -80,8 +114,50 @@
             android:gravity="end"
             android:layout_weight="1"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginVertical="@dimen/corner_radius_medium">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/material_on_surface_emphasis_medium"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="or"
+            android:textColor="@color/material_on_surface_emphasis_medium"
+            android:gravity="center"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/material_on_surface_emphasis_medium"/>
 
     </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login_with_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        app:cornerRadius="@dimen/corner_radius_micro"
+        android:text="Log in with Google"
+        app:icon="@drawable/ic_google"
+        app:iconGravity="start"
+
+        />
 
 
 </LinearLayout>
