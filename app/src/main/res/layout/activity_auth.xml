@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,7 +18,8 @@
         android:layout_height="150dp"
         android:layout_marginBottom="@dimen/corner_radius_small"
         android:contentDescription="app icon"
-        android:src="@drawable/ic_launcher_foreground"/>
+        android:src="@drawable/ic_launcher_foreground"
+        android:transitionName="splash_image"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_layout"
@@ -28,7 +30,8 @@
         app:boxCornerRadiusBottomStart="@dimen/corner_radius_micro"
         app:boxCornerRadiusTopEnd="@dimen/corner_radius_micro"
         app:boxCornerRadiusTopStart="@dimen/corner_radius_micro"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <EditText
             android:id="@+id/username"
@@ -50,8 +53,7 @@
         app:boxCornerRadiusBottomStart="@dimen/corner_radius_micro"
         app:boxCornerRadiusTopEnd="@dimen/corner_radius_micro"
         app:boxCornerRadiusTopStart="@dimen/corner_radius_micro"
-        android:hint="@string/auth_username_hint"
-        >
+        android:hint="@string/auth_username_hint">
 
         <EditText
             android:id="@+id/email"
@@ -95,11 +97,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/corner_radius_default">
+        android:layout_marginTop="@dimen/corner_radius_micro">
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/forgot_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:text="Forgot password?"
             android:textColor="@color/material_on_surface_emphasis_medium"
             android:gravity="start"
@@ -109,6 +113,7 @@
             android:id="@+id/login_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:text="Register"
             android:textColor="@color/material_on_surface_emphasis_medium"
             android:gravity="end"
@@ -121,7 +126,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginVertical="@dimen/corner_radius_medium">
+        android:layout_marginVertical="@dimen/corner_radius_micro">
 
         <TextView
             android:layout_width="match_parent"
