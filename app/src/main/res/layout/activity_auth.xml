@@ -11,21 +11,20 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="18dp"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:transitionName="splash_image">
 
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginBottom="@dimen/corner_radius_small"
         android:contentDescription="app icon"
-        android:src="@drawable/ic_launcher_foreground"
-        android:transitionName="splash_image"/>
+        android:src="@drawable/ic_launcher_foreground"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
         app:boxCornerRadiusBottomEnd="@dimen/corner_radius_micro"
         app:boxCornerRadiusBottomStart="@dimen/corner_radius_micro"
         app:boxCornerRadiusTopEnd="@dimen/corner_radius_micro"
@@ -48,7 +47,6 @@
         android:id="@+id/email_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
         app:boxCornerRadiusBottomEnd="@dimen/corner_radius_micro"
         app:boxCornerRadiusBottomStart="@dimen/corner_radius_micro"
         app:boxCornerRadiusTopEnd="@dimen/corner_radius_micro"
@@ -66,13 +64,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         app:boxCornerRadiusBottomEnd="@dimen/corner_radius_micro"
         app:boxCornerRadiusBottomStart="@dimen/corner_radius_micro"
         app:boxCornerRadiusTopEnd="@dimen/corner_radius_micro"
-        app:boxCornerRadiusTopStart="@dimen/corner_radius_micro">
+        app:boxCornerRadiusTopStart="@dimen/corner_radius_micro"
+        app:passwordToggleEnabled="true">
 
         <EditText
             android:id="@+id/password"
@@ -128,11 +127,11 @@
         android:gravity="center"
         android:layout_marginVertical="@dimen/corner_radius_micro">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="@color/material_on_surface_emphasis_medium"/>
+            android:background="#3d3d3d"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -143,11 +142,11 @@
             android:gravity="center"/>
 
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="@color/material_on_surface_emphasis_medium"/>
+            android:background="#3d3d3d"/>
 
     </LinearLayout>
 
