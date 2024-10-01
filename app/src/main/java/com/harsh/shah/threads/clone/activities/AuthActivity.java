@@ -2,6 +2,7 @@ package com.harsh.shah.threads.clone.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.Constants;
 import com.harsh.shah.threads.clone.databinding.ActivityAuthBinding;
@@ -65,26 +67,17 @@ public class AuthActivity extends BaseActivity {
 
             if (isModeRegister) {
                 if (binding.usernameLayout.getError() == null && binding.emailLayout.getError() == null && binding.passwordLayout.getError() == null) {
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            successLogin();
-                        }
-                        else {
-                            showToast("Error: " + task.getException());
-                        }
-                    });
+                    createNewUser(email, username, password);
+                    if(true)
+                        return;
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
+                    UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(username).build();
+                    mAuth.getCurrentUser().updateProfile(userProfileChangeRequest);
                 }
             } else {
-                showToast("logging in..");
                 if (binding.emailLayout.getError() == null && binding.passwordLayout.getError() == null) {
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            successLogin();
-                        }
-                        else {
-                            showToast("Error: " + task.getException());
-                        }
-                    });
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
                 }
             }
         });
@@ -98,12 +91,6 @@ public class AuthActivity extends BaseActivity {
         });
 
         binding.loginWithGoogle.setOnClickListener(view -> {
-            GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(Constants.webApplicationID)
-                    .requestEmail()
-                    .build();
-
-            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
             startActivityForResult(googleSignInClient.getSignInIntent(), 22);
 
         });
@@ -204,28 +191,7 @@ public class AuthActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 22) {
-            Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
-            if (signInAccountTask.isSuccessful()) {
-                String s = "Google sign in successful";
-                showToast(s);
-                try {
-                    GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);
-                    if (googleSignInAccount != null) {
-                        AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
-                        mAuth.signInWithCredential(authCredential).addOnCompleteListener(AuthActivity.this, task -> {
-                            if (task.isSuccessful()) {
-                                successLogin();
-                            } else {
-                                showToast("Authentication Failed :" + task.getException().getMessage());
-                            }
-                        });
-                    }
-                } catch (ApiException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+
     }
 
 }

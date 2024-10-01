@@ -1,8 +1,11 @@
 package com.harsh.shah.threads.clone;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -10,17 +13,51 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.harsh.shah.threads.clone.activities.ProfileActivity;
+import com.harsh.shah.threads.clone.model.User;
 
 public class BaseActivity extends AppCompatActivity {
 
+    public static final String TAG = "BaseActivity";
+
     public FirebaseAuth mAuth;
+    public FirebaseDatabase mDatabase;
+    public DatabaseReference mUsersDatabaseReference;
+    public GoogleSignInOptions googleSignInOptions;
+    public GoogleSignInClient googleSignInClient;
+    public AlertDialog progressDialog;
+
+    public OnCompleteListener<AuthResult> authResultTask = task -> {
+        if (!task.isSuccessful()) {
+            showToast("Error: " + task.getException());
+            return;
+        }
+
+        loginTask(task);
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +66,93 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+        mUsersDatabaseReference = mDatabase.getReference(Constants.UsersDBReference);
+
+        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(Constants.webApplicationID)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(BaseActivity.this, googleSignInOptions);
+
+        mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 :
+                     snapshot.getChildren()) {
+                    Log.i(TAG, "onDataChange: " + snapshot1.getValue(User.class).toString());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 22) {
+            Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if (signInAccountTask.isSuccessful()) {
+                try {
+                    GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);
+                    if (googleSignInAccount != null) {
+                        AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
+                        mAuth.signInWithCredential(authCredential).addOnCompleteListener(BaseActivity.this,authResultTask);
+                    }
+                } catch (ApiException e) {
+                    Log.e(TAG, "onActivityResult: ", e);
+                }
+            }
+        }
+    }
+
+    public boolean isUserLoggedIn() {
+        return mAuth.getCurrentUser() != null;
+    }
+
+    public void logoutUser() {
+        mAuth.signOut();
+        try {
+            googleSignInClient.signOut();
+        } catch (Exception e) {
+            Log.e(TAG, "logoutUser(): ", e);
+        }
+    }
+
+    public void createNewUser(String email, String username, String password){
+        final boolean[] isExist = {false};
+        mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child(username).exists()) {
+                    showToast("Username already exists.");
+                    isExist[0] = true;
+                    return;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        if (isExist[0])
+            return;
+        //TODO: FIX THIS ASYNC ISSUE
+        //HINT: use interface to monitor progress or random number after username
+        //mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
+    }
+
+    public void loginTask(Task<AuthResult> task) {
+        Log.i(TAG, "loginTask: " + task.getResult().getUser().getDisplayName());
+        startActivity(new Intent(this, ProfileActivity.class));
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -37,8 +160,8 @@ public class BaseActivity extends AppCompatActivity {
             if (view instanceof EditText) {
                 Rect r = new Rect();
                 view.getGlobalVisibleRect(r);
-                int rawX = (int)ev.getRawX();
-                int rawY = (int)ev.getRawY();
+                int rawX = (int) ev.getRawX();
+                int rawY = (int) ev.getRawY();
                 if (!r.contains(rawX, rawY)) {
                     view.clearFocus();
                 }
@@ -48,11 +171,31 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showProgressDialog(){
+        if (progressDialog == null) {
+            progressDialog = getProgressDialogInit();
+        }
+        try {
+            progressDialog.show();
+        } catch (Exception ignored) {}
+    }
+
+    public void hideProgressDialog(){
+        try {
+            progressDialog.dismiss();
+            progressDialog = null;
+        } catch (Exception ignored) {}
+    }
+
+    private AlertDialog getProgressDialogInit(){
+        return new MaterialAlertDialogBuilder(this).setView(R.layout.progress_dialog).setCancelable(false).setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT)).create();
     }
 }

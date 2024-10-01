@@ -29,19 +29,9 @@ public class ProfileActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         binding.logout.setOnClickListener(view -> {
-            mAuth.signOut();
-            try{
-                GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(Constants.webApplicationID)
-                        .requestEmail()
-                        .build();
-                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(ProfileActivity.this, googleSignInOptions);
-                googleSignInClient.signOut();
-            }catch (Exception e){
-                Log.e("ProfileActivity", "onCreate: " , e);
-            }
+            logoutUser();
             startActivity(new Intent(this, SplashActivity.class));
-            finish();
+            finishAffinity();
         });
     }
 }
