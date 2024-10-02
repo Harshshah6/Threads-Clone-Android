@@ -22,12 +22,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.Constants;
 import com.harsh.shah.threads.clone.databinding.ActivityAuthBinding;
+import com.harsh.shah.threads.clone.model.User;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,17 +73,94 @@ public class AuthActivity extends BaseActivity {
 
             if (isModeRegister) {
                 if (binding.usernameLayout.getError() == null && binding.emailLayout.getError() == null && binding.passwordLayout.getError() == null) {
-                    createNewUser(email, username, password);
-                    if(true)
-                        return;
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
-                    UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(username).build();
-                    mAuth.getCurrentUser().updateProfile(userProfileChangeRequest);
+                    getUsersDatabase(new AuthListener() {
+                        @Override
+                        public void onAuthTaskStart() {
+                            showProgressDialog();
+                        }
+
+                        @Override
+                        public void onAuthSuccess(DataSnapshot snapshot) {
+                            hideProgressDialog();
+                            if (snapshot.hasChild(username)) {
+                                binding.usernameLayout.setError("Username already taken.");
+                                return;
+                            }
+                            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                                if (!task.isSuccessful()) {
+                                    Log.e(TAG, "onAuthSuccess-Error: ", task.getException());
+                                    showToast("Error: " + task.getException());
+                                    hideProgressDialog();
+                                    return;
+                                }
+                                UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(username).build();
+                                task.getResult().getUser().updateProfile(userProfileChangeRequest);
+                                task.getResult().getUser().reload().isSuccessful();
+                                showProgressDialog();
+                                mUsersDatabaseReference.child(username).setValue(new User(
+                                        "",
+                                        ""+password,
+                                        "public",
+                                        ""+username,
+                                        "email",
+                                        "",
+                                        ""+email,
+                                        ""+username
+                                )).addOnCompleteListener(task1 -> {
+                                    if(task1.isSuccessful()){
+                                        startActivity(new Intent(AuthActivity.this, ProfileActivity.class));
+                                        finish();
+                                    } else {
+                                        Log.e(TAG, "onAuthSuccess: ", task1.getException());
+                                        hideProgressDialog();
+                                    }
+                                });
+                            });
+
+                        }
+
+                        @Override
+                        public void onAuthFail(DatabaseError error) {
+                            hideProgressDialog();
+                        }
+                    });
                 }
             } else {
                 if (binding.emailLayout.getError() == null && binding.passwordLayout.getError() == null) {
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
+                    showProgressDialog();
+                    if(email.contains("@")) {
+                        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
+                        hideProgressDialog();
+                    }
+                    else{
+                        mUsersDatabaseReference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                User mUser = snapshot.getValue(User.class);
+                                if(mUser != null && mUser.getEmail() != null){
+                                    mAuth.signInWithEmailAndPassword(mUser.getEmail(), password).addOnCompleteListener(task -> {
+                                        hideProgressDialog();
+                                        if (!task.isSuccessful()) {
+                                            Log.e(TAG, "onAuthSuccess-Error: ", task.getException());
+                                            showToast("Error: " + task.getException());
+                                            return;
+                                        }
+                                        startActivity(new Intent(AuthActivity.this, ProfileActivity.class));
+                                        finish();
+                                    });
+                                }else{
+                                    binding.emailLayout.setError("Invalid Username/Password");
+                                    hideProgressDialog();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                hideProgressDialog();
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -92,7 +175,6 @@ public class AuthActivity extends BaseActivity {
 
         binding.loginWithGoogle.setOnClickListener(view -> {
             startActivityForResult(googleSignInClient.getSignInIntent(), 22);
-
         });
 
     }
@@ -103,6 +185,7 @@ public class AuthActivity extends BaseActivity {
         binding.username.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                binding.usernameLayout.setError(null);
             }
 
             @Override
@@ -116,7 +199,7 @@ public class AuthActivity extends BaseActivity {
             }
 
             private boolean isUsernameValid(String username) {
-                String usernameRegex = "^[a-zA-Z0-9._]{6,20}$";
+                String usernameRegex = "^[a-z0-9._]{6,20}$";
                 return username.matches(usernameRegex);
             }
 
@@ -135,7 +218,7 @@ public class AuthActivity extends BaseActivity {
         binding.password.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                binding.passwordLayout.setError(null);
             }
 
             @Override
@@ -153,39 +236,51 @@ public class AuthActivity extends BaseActivity {
         });
 
         binding.email.addTextChangedListener(new TextWatcher() {
-            public final Pattern VALID_EMAIL_ADDRESS_REGEX =
-                    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                binding.emailLayout.setError(null);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!isModeRegister) {
-                    if (!validate(charSequence.toString()))
-                        binding.emailLayout.setError("Invalid email address.");
-                    else
-                        binding.emailLayout.setError(null);
-                }
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
 
             }
-
-            public boolean validate(String emailStr) {
-                Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-                return matcher.matches();
-            }
         });
-    }
 
-    private void successLogin() {
-        startActivity(new Intent(this, ProfileActivity.class));
-        finish();
+//        binding.email.addTextChangedListener(new TextWatcher() {
+//            public final Pattern VALID_EMAIL_ADDRESS_REGEX =
+//                    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                if (!isModeRegister) {
+//                    if (!validate(charSequence.toString()))
+//                        binding.emailLayout.setError("Invalid email address.");
+//                    else
+//                        binding.emailLayout.setError(null);
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//
+//            public boolean validate(String emailStr) {
+//                Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+//                return matcher.matches();
+//            }
+//        });
     }
 
     @Override

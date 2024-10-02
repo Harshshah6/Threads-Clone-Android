@@ -12,6 +12,20 @@ public class User {
     private String email;
     private String username;
 
+    public User() {
+    }
+
+    public User(String profilePicture, String password, String accountVisibility, String displayName, String signInProvider, String bio, String email, String username) {
+        this.profilePicture = profilePicture;
+        this.password = password;
+        this.accountVisibility = accountVisibility;
+        this.displayName = displayName;
+        this.signInProvider = signInProvider;
+        this.bio = bio;
+        this.email = email;
+        this.username = username;
+    }
+
     public String getProfilePicture() {
         return profilePicture;
     }

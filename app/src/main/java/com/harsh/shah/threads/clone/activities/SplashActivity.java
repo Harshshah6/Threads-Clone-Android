@@ -22,12 +22,9 @@ public class SplashActivity extends BaseActivity {
             Intent intent = new Intent(SplashActivity.this, isUserLoggedIn() ? ProfileActivity.class : AuthActivity.class);
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, p1);
             startActivity(intent, options.toBundle());
-            try {
-                Thread.sleep(2000);
-            } catch (Exception ignored) {}
-            finish();
         }, 3000);
 
+        new Handler().postDelayed(this::finish, 6000);
 
     }
 }

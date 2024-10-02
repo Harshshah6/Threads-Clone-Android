@@ -39,6 +39,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.harsh.shah.threads.clone.activities.ProfileActivity;
 import com.harsh.shah.threads.clone.model.User;
 
+import java.util.concurrent.CountDownLatch;
+
 public class BaseActivity extends AppCompatActivity {
 
     public static final String TAG = "BaseActivity";
@@ -46,6 +48,7 @@ public class BaseActivity extends AppCompatActivity {
     public FirebaseAuth mAuth;
     public FirebaseDatabase mDatabase;
     public DatabaseReference mUsersDatabaseReference;
+    public DatabaseReference gUsernamesDatabaseReference;
     public GoogleSignInOptions googleSignInOptions;
     public GoogleSignInClient googleSignInClient;
     public AlertDialog progressDialog;
@@ -68,28 +71,13 @@ public class BaseActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseReference = mDatabase.getReference(Constants.UsersDBReference);
+        gUsernamesDatabaseReference = mDatabase.getReference(Constants.GUsernamesDBReference);
 
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(Constants.webApplicationID)
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(BaseActivity.this, googleSignInOptions);
-
-        mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snapshot1 :
-                     snapshot.getChildren()) {
-                    Log.i(TAG, "onDataChange: " + snapshot1.getValue(User.class).toString());
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     @Override
@@ -102,7 +90,87 @@ public class BaseActivity extends AppCompatActivity {
                     GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);
                     if (googleSignInAccount != null) {
                         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
-                        mAuth.signInWithCredential(authCredential).addOnCompleteListener(BaseActivity.this,authResultTask);
+                        mAuth.signInWithCredential(authCredential).addOnCompleteListener(BaseActivity.this, task -> {
+                            if (!task.isSuccessful()) {
+                                Log.e(TAG, "onActivityResult: ", task.getException());
+                                showToast("Error: " + task.getException());
+                                return;
+                            }
+                            String em = task.getResult().getUser().getEmail().substring(0, task.getResult().getUser().getEmail().indexOf("@"));
+                            mUsersDatabaseReference.child(task.getResult().getUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    User mUser = snapshot.getValue(User.class);
+                                    if (mUser == null) {
+                                        User user = new User(
+                                                "" + task.getResult().getUser().getPhotoUrl(),
+                                                "google:google",
+                                                "public",
+                                                "" + task.getResult().getUser().getDisplayName(),
+                                                "google",
+                                                "",
+                                                "" + task.getResult().getUser().getEmail(),
+                                                "" + checkUser(task.getResult().getUser().getDisplayName().trim().replace(" ", "_"))
+                                        );
+                                        gUsernamesDatabaseReference.child(user.getUsername()).setValue(task.getResult().getUser().getUid()).isComplete();
+                                        mUsersDatabaseReference.child(task.getResult().getUser().getUid()).setValue(user).addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                startActivity(new Intent(BaseActivity.this, ProfileActivity.class));
+                                                finish();
+                                            } else {
+                                                Log.e(TAG, "onDataChange: ", task1.getException());
+                                                showToast("Error: " + task1.getException());
+                                            }
+                                        });
+                                    } else {
+                                        startActivity(new Intent(BaseActivity.this, ProfileActivity.class));
+                                        finish();
+                                    }
+                                }
+
+                                private String checkUser(String replace) {
+                                    CountDownLatch countDownLatch = new CountDownLatch(2);
+                                    replace = replace.toLowerCase();
+                                    Task<DataSnapshot> task = mUsersDatabaseReference.child(replace).get().addOnCompleteListener(task1 -> {
+                                        countDownLatch.countDown();
+                                    });
+                                    Task<DataSnapshot> task2 = gUsernamesDatabaseReference.get().addOnCompleteListener(task1 -> {
+                                        countDownLatch.countDown();
+                                    });
+                                    try {
+                                        countDownLatch.await();
+                                    } catch (InterruptedException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    boolean digit = Character.isDigit(replace.charAt(replace.length() - 1));
+
+                                    Log.i(TAG, "checkUser: " + replace);
+
+                                    if (task.getResult().hasChildren()) {
+                                        Log.i(TAG, "checkUser: " + task.getResult().hasChildren() + "\n" + task.getResult().toString());
+                                        if (digit)
+                                            return checkUser(replace + ((int) replace.charAt(replace.length() - 1)) + 1);
+                                        else
+                                            return checkUser(replace + "1");
+                                    } else {
+                                        if (task2.getResult().hasChild(replace)) {
+                                            Log.i(TAG, "checkUser: " + task2.getResult().hasChild(replace) + "\n" + task2.getResult().toString());
+                                            if (digit)
+                                                return checkUser(replace + ((int) replace.charAt(replace.length() - 1)) + 1);
+                                            else
+                                                return checkUser(replace + "1");
+                                        }
+                                        Log.i(TAG, "checkUser: returning " + replace);
+                                        return replace;
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        });
                     }
                 } catch (ApiException e) {
                     Log.e(TAG, "onActivityResult: ", e);
@@ -124,27 +192,19 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void createNewUser(String email, String username, String password){
-        final boolean[] isExist = {false};
+    public void getUsersDatabase(AuthListener authListener) {
+        authListener.onAuthTaskStart();
         mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child(username).exists()) {
-                    showToast("Username already exists.");
-                    isExist[0] = true;
-                    return;
-                }
+                authListener.onAuthSuccess(snapshot);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                authListener.onAuthFail(error);
             }
         });
-        if (isExist[0])
-            return;
-        //TODO: FIX THIS ASYNC ISSUE
-        //HINT: use interface to monitor progress or random number after username
         //mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
     }
 
@@ -179,23 +239,33 @@ public class BaseActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    public void showProgressDialog(){
+    public void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = getProgressDialogInit();
         }
         try {
             progressDialog.show();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
-    public void hideProgressDialog(){
+    public void hideProgressDialog() {
         try {
             progressDialog.dismiss();
             progressDialog = null;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
-    private AlertDialog getProgressDialogInit(){
+    private AlertDialog getProgressDialogInit() {
         return new MaterialAlertDialogBuilder(this).setView(R.layout.progress_dialog).setCancelable(false).setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT)).create();
+    }
+
+    public static interface AuthListener {
+        void onAuthTaskStart();
+
+        void onAuthSuccess(DataSnapshot snapshot);
+
+        void onAuthFail(DatabaseError error);
     }
 }
