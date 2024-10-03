@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -84,6 +85,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 22) {
+            showProgressDialog();
             Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
             if (signInAccountTask.isSuccessful()) {
                 try {
@@ -96,13 +98,13 @@ public class BaseActivity extends AppCompatActivity {
                                 showToast("Error: " + task.getException());
                                 return;
                             }
-                            String em = task.getResult().getUser().getEmail().substring(0, task.getResult().getUser().getEmail().indexOf("@"));
                             mUsersDatabaseReference.child(task.getResult().getUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     User mUser = snapshot.getValue(User.class);
                                     if (mUser == null) {
                                         User user = new User(
+                                                ""+task.getResult().getUser().getUid(),
                                                 "" + task.getResult().getUser().getPhotoUrl(),
                                                 "google:google",
                                                 "public",
@@ -110,7 +112,7 @@ public class BaseActivity extends AppCompatActivity {
                                                 "google",
                                                 "",
                                                 "" + task.getResult().getUser().getEmail(),
-                                                "" + checkUser(task.getResult().getUser().getDisplayName().trim().replace(" ", "_"))
+                                                "" +(task.getResult().getUser().getDisplayName().trim().replace(" ", "_"))
                                         );
                                         gUsernamesDatabaseReference.child(user.getUsername()).setValue(task.getResult().getUser().getUid()).isComplete();
                                         mUsersDatabaseReference.child(task.getResult().getUser().getUid()).setValue(user).addOnCompleteListener(task1 -> {
@@ -128,43 +130,6 @@ public class BaseActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                private String checkUser(String replace) {
-                                    CountDownLatch countDownLatch = new CountDownLatch(2);
-                                    replace = replace.toLowerCase();
-                                    Task<DataSnapshot> task = mUsersDatabaseReference.child(replace).get().addOnCompleteListener(task1 -> {
-                                        countDownLatch.countDown();
-                                    });
-                                    Task<DataSnapshot> task2 = gUsernamesDatabaseReference.get().addOnCompleteListener(task1 -> {
-                                        countDownLatch.countDown();
-                                    });
-                                    try {
-                                        countDownLatch.await();
-                                    } catch (InterruptedException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    boolean digit = Character.isDigit(replace.charAt(replace.length() - 1));
-
-                                    Log.i(TAG, "checkUser: " + replace);
-
-                                    if (task.getResult().hasChildren()) {
-                                        Log.i(TAG, "checkUser: " + task.getResult().hasChildren() + "\n" + task.getResult().toString());
-                                        if (digit)
-                                            return checkUser(replace + ((int) replace.charAt(replace.length() - 1)) + 1);
-                                        else
-                                            return checkUser(replace + "1");
-                                    } else {
-                                        if (task2.getResult().hasChild(replace)) {
-                                            Log.i(TAG, "checkUser: " + task2.getResult().hasChild(replace) + "\n" + task2.getResult().toString());
-                                            if (digit)
-                                                return checkUser(replace + ((int) replace.charAt(replace.length() - 1)) + 1);
-                                            else
-                                                return checkUser(replace + "1");
-                                        }
-                                        Log.i(TAG, "checkUser: returning " + replace);
-                                        return replace;
-                                    }
-                                }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
 
@@ -172,10 +137,13 @@ public class BaseActivity extends AppCompatActivity {
                             });
                         });
                     }
+                    hideProgressDialog();
                 } catch (ApiException e) {
+                    hideProgressDialog();
                     Log.e(TAG, "onActivityResult: ", e);
                 }
             }
+            hideProgressDialog();
         }
     }
 
@@ -206,6 +174,21 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
         //mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
+    }
+
+    public void getDatabase(String path, AuthListener authListener){
+        authListener.onAuthTaskStart();
+        mDatabase.getReference(path).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                authListener.onAuthSuccess(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                authListener.onAuthFail(error);
+            }
+        });
     }
 
     public void loginTask(Task<AuthResult> task) {
@@ -267,5 +250,10 @@ public class BaseActivity extends AppCompatActivity {
         void onAuthSuccess(DataSnapshot snapshot);
 
         void onAuthFail(DatabaseError error);
+    }
+
+    public static interface UserQueryListener {
+        boolean isUsernameAvailable(String username);
+
     }
 }

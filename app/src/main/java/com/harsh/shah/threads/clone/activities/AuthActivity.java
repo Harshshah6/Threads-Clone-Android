@@ -98,7 +98,8 @@ public class AuthActivity extends BaseActivity {
                                 task.getResult().getUser().updateProfile(userProfileChangeRequest);
                                 task.getResult().getUser().reload().isSuccessful();
                                 showProgressDialog();
-                                mUsersDatabaseReference.child(username).setValue(new User(
+                                mUsersDatabaseReference.child(task.getResult().getUser().getUid()).setValue(new User(
+                                        task.getResult().getUser().getUid(),
                                         "",
                                         ""+password,
                                         "public",

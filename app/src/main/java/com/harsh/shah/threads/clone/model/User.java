@@ -11,11 +11,13 @@ public class User {
     private String bio;
     private String email;
     private String username;
+    private String uid;
 
     public User() {
     }
 
-    public User(String profilePicture, String password, String accountVisibility, String displayName, String signInProvider, String bio, String email, String username) {
+    public User(String uid, String profilePicture, String password, String accountVisibility, String displayName, String signInProvider, String bio, String email, String username) {
+        this.uid = uid;
         this.profilePicture = profilePicture;
         this.password = password;
         this.accountVisibility = accountVisibility;
@@ -24,6 +26,14 @@ public class User {
         this.bio = bio;
         this.email = email;
         this.username = username;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getProfilePicture() {
@@ -95,6 +105,7 @@ public class User {
     public String toString() {
         return
                 "User{" +
+                        "uid = '" + uid + '\'' +
                         "profilePicture = '" + profilePicture + '\'' +
                         ",password = '" + password + '\'' +
                         ",accountVisibility = '" + accountVisibility + '\'' +
