@@ -69,7 +69,8 @@ public class AuthActivity extends BaseActivity {
         binding.signIn.setOnClickListener(view -> {
             String email = binding.email.getText().toString().trim();
             String password = binding.password.getText().toString().trim();
-            String username = binding.username.getText().toString().trim();
+            String username = binding.username.getText().toString().trim().toLowerCase();
+            binding.username.setText(username);
 
             if (isModeRegister) {
                 if (binding.usernameLayout.getError() == null && binding.emailLayout.getError() == null && binding.passwordLayout.getError() == null) {
@@ -98,7 +99,7 @@ public class AuthActivity extends BaseActivity {
                                 task.getResult().getUser().updateProfile(userProfileChangeRequest);
                                 task.getResult().getUser().reload().isSuccessful();
                                 showProgressDialog();
-                                mUsersDatabaseReference.child(task.getResult().getUser().getUid()).setValue(new User(
+                                mUsersDatabaseReference.child(username).setValue(new User(
                                         task.getResult().getUser().getUid(),
                                         "",
                                         ""+password,
@@ -109,12 +110,12 @@ public class AuthActivity extends BaseActivity {
                                         ""+email,
                                         ""+username
                                 )).addOnCompleteListener(task1 -> {
+                                    hideProgressDialog();
                                     if(task1.isSuccessful()){
                                         startActivity(new Intent(AuthActivity.this, ProfileActivity.class));
                                         finish();
                                     } else {
                                         Log.e(TAG, "onAuthSuccess: ", task1.getException());
-                                        hideProgressDialog();
                                     }
                                 });
                             });
@@ -135,7 +136,7 @@ public class AuthActivity extends BaseActivity {
                         hideProgressDialog();
                     }
                     else{
-                        mUsersDatabaseReference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                        mUsersDatabaseReference.child(email).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 User mUser = snapshot.getValue(User.class);
@@ -211,6 +212,8 @@ public class AuthActivity extends BaseActivity {
                     binding.usernameLayout.setError("Username must be between 6 and 20 characters.");
                 else if (username.contains(" "))
                     binding.usernameLayout.setError("Username should not contain spaces.");
+                else if(username.matches("^.*[A-Z].*$"))
+                    binding.usernameLayout.setError("Username should not contain capital characters.");
                 else
                     binding.usernameLayout.setError("Contains invalid characters.");
             }

@@ -33,5 +33,7 @@ public class ProfileActivity extends BaseActivity {
             startActivity(new Intent(this, SplashActivity.class));
             finishAffinity();
         });
+
+        binding.next.setOnClickListener(view -> startActivity(new Intent(ProfileActivity.this, MainActivity.class)));
     }
 }

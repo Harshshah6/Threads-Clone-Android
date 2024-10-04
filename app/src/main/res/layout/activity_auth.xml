@@ -125,7 +125,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginVertical="@dimen/corner_radius_micro">
+        android:layout_marginVertical="@dimen/corner_radius_micro"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -160,7 +161,7 @@
         android:text="Log in with Google"
         app:icon="@drawable/ic_google"
         app:iconGravity="start"
-
+        android:visibility="gone"
         />
 
 
