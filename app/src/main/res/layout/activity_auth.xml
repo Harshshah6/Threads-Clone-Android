@@ -12,14 +12,16 @@
     android:orientation="vertical"
     android:padding="18dp"
     android:animateLayoutChanges="true"
-    android:transitionName="splash_image">
+    android:transitionName="splash_image"
+    android:background="@color/bgColor">
 
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginBottom="@dimen/corner_radius_small"
         android:contentDescription="app icon"
-        android:src="@drawable/ic_launcher_foreground"/>
+        android:src="@drawable/ic_launcher_foreground"
+        app:tint="@color/textMain"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_layout"
@@ -39,7 +41,8 @@
             android:autofillHints="username"
             android:hint="Username"
             android:inputType="text"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/textMain"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,7 +62,8 @@
             android:layout_height="wrap_content"
             android:autofillHints="emailAddress|username"
             android:inputType="text|textEmailAddress"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/textMain"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,17 +84,20 @@
             android:autofillHints="password"
             android:hint="@string/auth_password_hint"
             android:inputType="textPassword"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/textMain"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <android.widget.Button
         android:id="@+id/sign_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/corner_radius_medium"
         android:text="@string/auth_sign_in"
-        app:cornerRadius="@dimen/corner_radius_micro" />
+        android:textColor="@color/textSec"
+        app:cornerRadius="@dimen/corner_radius_micro"
+        android:background="@drawable/main_button"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -104,7 +111,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Forgot password?"
-            android:textColor="@color/material_on_surface_emphasis_medium"
+            android:textColor="@color/textSec"
             android:gravity="start"
             android:layout_weight="1"/>
 
@@ -114,7 +121,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Register"
-            android:textColor="@color/material_on_surface_emphasis_medium"
+            android:textColor="@color/textSec"
             android:gravity="end"
             android:layout_weight="1"/>
 

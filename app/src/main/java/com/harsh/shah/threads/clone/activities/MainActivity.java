@@ -1,5 +1,6 @@
 package com.harsh.shah.threads.clone.activities;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.widget.ImageViewCompat;
 
 import com.google.android.material.internal.EdgeToEdgeUtils;
 import com.harsh.shah.threads.clone.BaseActivity;
@@ -26,9 +28,7 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.searchIcon.setColorFilter(ContextCompat.getColor(this, R.color.textSec), android.graphics.PorterDuff.Mode.SRC_IN);
-        binding.addIcon.setColorFilter(ContextCompat.getColor(this, R.color.textSec), android.graphics.PorterDuff.Mode.SRC_IN);
-        binding.favoriteIcon.setColorFilter(ContextCompat.getColor(this, R.color.textSec), android.graphics.PorterDuff.Mode.SRC_IN);
-        binding.personIcon.setColorFilter(ContextCompat.getColor(this, R.color.textSec), android.graphics.PorterDuff.Mode.SRC_IN);
+
+//        ImageViewCompat.setImageTintList(binding.searchIcon, ColorStateList.valueOf(ContextCompat.getColor(this, R.color.textSec)));
     }
 }
