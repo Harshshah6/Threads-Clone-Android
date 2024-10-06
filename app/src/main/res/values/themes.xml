@@ -17,6 +17,10 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
+        <item name="cornerSize">12%</item>
+    </style>
+
     <style name="Base.Widget.AppCompat.TextView.TextMain" parent="">
         <item name="android:textColor">@color/textMain</item>
         <item name="android:textSize">15sp</item>
