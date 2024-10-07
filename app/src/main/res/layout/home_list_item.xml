@@ -19,7 +19,7 @@
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:srcCompat="@drawable/ic_launcher_foreground"
         app:strokeColor="@color/textMain"
-        app:strokeWidth="1dp" />
+        app:strokeWidth="0.1dp" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/followImage"
@@ -40,7 +40,7 @@
         style="@style/Base.Widget.AppCompat.TextView.TextMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:text="harsh_.s._shah"
         app:layout_constraintStart_toEndOf="@+id/profileImage"
         app:layout_constraintTop_toTopOf="@+id/profileImage" />
@@ -69,20 +69,34 @@
         app:layout_constraintStart_toEndOf="@+id/verifiedImage"
         app:layout_constraintTop_toTopOf="@+id/verifiedImage" />
 
+    <ImageView
+        android:id="@+id/moreOptionsImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="6dp"
+        android:src="@drawable/more_horiz_24px"
+        app:layout_constraintBottom_toBottomOf="@+id/time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/time"
+        app:tint="@color/textSec" />
+
+
     <TextView
         android:id="@+id/title"
         style="@style/Base.Widget.AppCompat.TextView.TextMain"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Snow falling and soon heading to wyoming..."
+        android:layout_marginTop="8dp"
+        android:text="💻 𝗤𝘂𝗶𝗰𝗸 𝗣𝗿𝗼𝗴𝗿𝗮𝗺𝗺𝗶𝗻𝗴 𝗧𝗶𝗽𝘀! 🖥️\n\n1\/ 🌟𝐌𝐚𝐬𝐭𝐞𝐫 𝐭𝐡𝐞 𝐁𝐚𝐬𝐢𝐜𝐬: Focus on loops, conditionals, and data structures for a strong foundation.\n\n2\/ 👨‍💻𝐂𝐥𝐞𝐚𝐧 𝐂𝐨𝐝𝐞 𝐌𝐚𝐭𝐭𝐞𝐫𝐬: Use clear names, comments, and neat formatting for easy-to-read code.\n\n3\/🛠️ 𝐃𝐞𝐛𝐮𝐠 𝐒𝐦𝐚𝐫𝐭: Use print statements and debugging tools to trace issues step-by-step.\n\n4\/🌐𝐄𝐱𝐩𝐥𝐨𝐫𝐞 𝐎𝐩𝐞𝐧-𝐒𝐨𝐮𝐫𝐜𝐞: Contribute on GitHub to learn and grow through real projects."
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/username"
-        app:layout_constraintTop_toBottomOf="@+id/username"
-        android:singleLine="true"/>
+        app:layout_constraintTop_toBottomOf="@+id/username" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/imagesListRecyclerView"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintEnd_toEndOf="@+id/title"
         app:layout_constraintStart_toStartOf="@+id/title"
@@ -93,6 +107,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:translationX="-4dp"
         app:layout_constraintStart_toStartOf="@+id/imagesListRecyclerView"
         app:layout_constraintTop_toBottomOf="@+id/imagesListRecyclerView">
@@ -101,8 +116,8 @@
             android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginEnd="8dp"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout"
             app:layout_constraintHorizontal_bias="0.5"
@@ -131,8 +146,8 @@
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginEnd="8dp"
+            android:gravity="center"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/linearLayout2">
@@ -159,8 +174,8 @@
             android:id="@+id/linearLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginEnd="8dp"
+            android:gravity="center"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/linearLayout">

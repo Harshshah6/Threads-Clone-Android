@@ -30,19 +30,19 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:srcCompat="@drawable/ic_launcher_foreground"
-        app:strokeWidth="1dp"
+        app:strokeWidth="0.1dp"
         app:strokeColor="@color/textMain"
         android:padding="2dp"
         app:tint="@color/textMain"/>
 
     <TextView
         android:id="@+id/textView"
+        style="@style/Base.Widget.AppCompat.TextView.TextMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="harsh_.s._shah"
+        android:layout_marginStart="8dp"
 
-        style="@style/Base.Widget.AppCompat.TextView.TextMain"
+        android:text="harsh_.s._shah"
 
         app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
         app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
