@@ -1,222 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bgColor"
-    android:padding="8dp">
+    android:background="@color/bgColor">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profileImage"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:background="@color/white"
-        android:padding="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        app:strokeColor="@color/textMain"
-        app:strokeWidth="0.1dp" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/followImage"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:padding="2dp"
-        android:background="@color/textMain"
-        android:scaleType="fitXY"
-        app:tint="@color/bgColor"
-        app:layout_constraintBottom_toBottomOf="@+id/profileImage"
-        app:layout_constraintEnd_toEndOf="@+id/profileImage"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-        app:srcCompat="@drawable/add_24px"
-        android:elevation="4dp"/>
-
-    <TextView
-        android:id="@+id/username"
-        style="@style/Base.Widget.AppCompat.TextView.TextMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="harsh_.s._shah"
-        app:layout_constraintStart_toEndOf="@+id/profileImage"
-        app:layout_constraintTop_toTopOf="@+id/profileImage" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/verifiedImage"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="4dp"
-        android:padding="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/username"
-        app:layout_constraintStart_toEndOf="@+id/username"
-        app:layout_constraintTop_toTopOf="@+id/username"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-        app:srcCompat="@drawable/verified_24px" />
-
-    <TextView
-        android:id="@+id/time"
-        style="@style/Base.Widget.AppCompat.TextView.TextSec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="22h"
-        app:layout_constraintBottom_toBottomOf="@+id/verifiedImage"
-        app:layout_constraintStart_toEndOf="@+id/verifiedImage"
-        app:layout_constraintTop_toTopOf="@+id/verifiedImage" />
-
-    <ImageView
-        android:id="@+id/moreOptionsImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:padding="6dp"
-        android:src="@drawable/more_horiz_24px"
-        app:layout_constraintBottom_toBottomOf="@+id/time"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/time"
-        app:tint="@color/textSec" />
-
-
-    <TextView
-        android:id="@+id/title"
-        style="@style/Base.Widget.AppCompat.TextView.TextMain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <View
+        android:id="@+id/border"
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
         android:layout_marginTop="8dp"
-        android:text="💻 𝗤𝘂𝗶𝗰𝗸 𝗣𝗿𝗼𝗴𝗿𝗮𝗺𝗺𝗶𝗻𝗴 𝗧𝗶𝗽𝘀! 🖥️\n\n1\/ 🌟𝐌𝐚𝐬𝐭𝐞𝐫 𝐭𝐡𝐞 𝐁𝐚𝐬𝐢𝐜𝐬: Focus on loops, conditionals, and data structures for a strong foundation.\n\n2\/ 👨‍💻𝐂𝐥𝐞𝐚𝐧 𝐂𝐨𝐝𝐞 𝐌𝐚𝐭𝐭𝐞𝐫𝐬: Use clear names, comments, and neat formatting for easy-to-read code.\n\n3\/🛠️ 𝐃𝐞𝐛𝐮𝐠 𝐒𝐦𝐚𝐫𝐭: Use print statements and debugging tools to trace issues step-by-step.\n\n4\/🌐𝐄𝐱𝐩𝐥𝐨𝐫𝐞 𝐎𝐩𝐞𝐧-𝐒𝐨𝐮𝐫𝐜𝐞: Contribute on GitHub to learn and grow through real projects."
-        android:textSize="13sp"
+        android:background="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/username"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/imagesListRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:listitem="@layout/home_list_item_image_item" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:translationX="-4dp"
-        app:layout_constraintStart_toStartOf="@+id/imagesListRecyclerView"
-        app:layout_constraintTop_toBottomOf="@+id/imagesListRecyclerView">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-            app:layout_constraintHorizontal_bias="0.5"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/bgColor1"
+            android:padding="2dp"
+            android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:srcCompat="@drawable/ic_launcher_foreground"
+            app:strokeColor="@color/textMain"
+            app:strokeWidth="0.1dp" />
 
-            <ImageView
-                android:id="@+id/likeImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="6dp"
-                android:src="@drawable/favorite_outline_24px"
-                app:tint="@color/textSec" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/followImage"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@color/textMain"
+            android:elevation="4dp"
+            android:padding="4dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/profileImage"
+            app:layout_constraintEnd_toEndOf="@+id/profileImage"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:srcCompat="@drawable/add_24px"
+            app:tint="@color/bgColor" />
 
-            <TextView
-                android:id="@+id/likes"
-                style="@style/Base.Widget.AppCompat.TextView.TextSec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4K"
-                android:textAllCaps="true" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <TextView
+            android:id="@+id/username"
+            style="@style/Base.Widget.AppCompat.TextView.TextMain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout2">
+            android:layout_marginStart="8dp"
+            android:text="harsh_.s._shah"
+            app:layout_constraintStart_toEndOf="@+id/profileImage"
+            app:layout_constraintTop_toTopOf="@+id/profileImage" />
 
-            <ImageView
-                android:id="@+id/commentsImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="6dp"
-                android:src="@drawable/comments"
-                app:tint="@color/textSec" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/verifiedImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="4dp"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/username"
+            app:layout_constraintStart_toEndOf="@+id/username"
+            app:layout_constraintTop_toTopOf="@+id/username"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:srcCompat="@drawable/verified_24px" />
 
-            <TextView
-                android:id="@+id/comments"
-                style="@style/Base.Widget.AppCompat.TextView.TextSec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4K"
-                android:textAllCaps="true" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
+        <TextView
+            android:id="@+id/time"
+            style="@style/Base.Widget.AppCompat.TextView.TextSec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout">
+            android:layout_marginStart="4dp"
+            android:text="22h"
+            app:layout_constraintBottom_toBottomOf="@+id/verifiedImage"
+            app:layout_constraintStart_toEndOf="@+id/verifiedImage"
+            app:layout_constraintTop_toTopOf="@+id/verifiedImage" />
 
-            <ImageView
-                android:id="@+id/repostsImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="6dp"
-                android:src="@drawable/retweet"
-                app:tint="@color/textSec" />
+        <ImageView
+            android:id="@+id/moreOptionsImage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="4dp"
+            android:src="@drawable/more_horiz_24px"
+            app:layout_constraintBottom_toBottomOf="@+id/time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/time"
+            app:tint="@color/textSec" />
 
-            <TextView
-                android:id="@+id/reposts"
-                style="@style/Base.Widget.AppCompat.TextView.TextSec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4K"
-                android:textAllCaps="true" />
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/title"
+            style="@style/Base.Widget.AppCompat.TextView.TextMain"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="💻 𝗤𝘂𝗶𝗰𝗸 𝗣𝗿𝗼𝗴𝗿𝗮𝗺𝗺𝗶𝗻𝗴 𝗧𝗶𝗽𝘀! 🖥️\n\n1\/ 🌟𝐌𝐚𝐬𝐭𝐞𝐫 𝐭𝐡𝐞 𝐁𝐚𝐬𝐢𝐜𝐬: Focus on loops, conditionals, and data structures for a strong foundation.\n\n2\/ 👨‍💻𝐂𝐥𝐞𝐚𝐧 𝐂𝐨𝐝𝐞 𝐌𝐚𝐭𝐭𝐞𝐫𝐬: Use clear names, comments, and neat formatting for easy-to-read code.\n\n3\/🛠️ 𝐃𝐞𝐛𝐮𝐠 𝐒𝐦𝐚𝐫𝐭: Use print statements and debugging tools to trace issues step-by-step.\n\n4\/🌐𝐄𝐱𝐩𝐥𝐨𝐫𝐞 𝐎𝐩𝐞𝐧-𝐒𝐨𝐮𝐫𝐜𝐞: Contribute on GitHub to learn and grow through real projects."
+            android:textSize="12.5sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/username" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout4"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imagesListRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/title"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:listitem="@layout/home_list_item_image_item" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout3">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:translationX="-4dp"
+            app:layout_constraintStart_toStartOf="@+id/imagesListRecyclerView"
+            app:layout_constraintTop_toBottomOf="@+id/imagesListRecyclerView">
 
-            <ImageView
-                android:id="@+id/shareImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="6dp"
-                android:src="@drawable/share_24px"
-                app:tint="@color/textSec" />
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/likeImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="6dp"
+                    android:src="@drawable/favorite_outline_24px"
+                    app:tint="@color/textSec" />
 
+                <TextView
+                    android:id="@+id/likes"
+                    style="@style/Base.Widget.AppCompat.TextView.TextSec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4K"
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout2">
+
+                <ImageView
+                    android:id="@+id/commentsImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="6dp"
+                    android:src="@drawable/comments"
+                    app:tint="@color/textSec" />
+
+                <TextView
+                    android:id="@+id/comments"
+                    style="@style/Base.Widget.AppCompat.TextView.TextSec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4K"
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout">
+
+                <ImageView
+                    android:id="@+id/repostsImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="6dp"
+                    android:src="@drawable/retweet"
+                    app:tint="@color/textSec" />
+
+                <TextView
+                    android:id="@+id/reposts"
+                    style="@style/Base.Widget.AppCompat.TextView.TextSec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4K"
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout3">
+
+                <ImageView
+                    android:id="@+id/shareImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="6dp"
+                    android:src="@drawable/share_24px"
+                    app:tint="@color/textSec" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
