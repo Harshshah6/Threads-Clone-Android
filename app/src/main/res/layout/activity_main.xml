@@ -56,8 +56,8 @@
 
             <ImageView
                 android:id="@+id/homeIcon"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/home_24px" />
         </LinearLayout>
 
@@ -74,8 +74,8 @@
 
             <ImageView
                 android:id="@+id/searchIcon"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/search_24px"
                 android:tintMode="src_in"
                 app:tint="@color/textSec" />
@@ -94,8 +94,8 @@
 
             <ImageView
                 android:id="@+id/addIcon"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/add_24px"
                 android:tintMode="src_in"
                 app:tint="@color/textSec" />
@@ -114,8 +114,8 @@
 
             <ImageView
                 android:id="@+id/favoriteIcon"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/favorite_outline_24px"
                 android:tintMode="src_in"
                 app:tint="@color/textSec" />
@@ -134,8 +134,8 @@
 
             <ImageView
                 android:id="@+id/personIcon"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/person_outline_24px"
                 android:tintMode="src_in"
                 app:tint="@color/textSec" />

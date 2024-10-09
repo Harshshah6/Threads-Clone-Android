@@ -47,5 +47,6 @@ dependencies {
     implementation libs.firebase.auth
     implementation libs.firebase.database
     implementation libs.firebase.play.service.auth
+    implementation libs.swipe.refresh.layout
 
 }

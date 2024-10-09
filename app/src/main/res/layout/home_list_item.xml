@@ -34,7 +34,7 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/ic_launcher_foreground"
             app:strokeColor="@color/textMain"
-            app:strokeWidth="0.1dp" />
+            app:strokeWidth="0.01dp" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/followImage"
