@@ -35,5 +35,6 @@ public class ProfileActivity extends BaseActivity {
         });
 
         binding.next.setOnClickListener(view -> startActivity(new Intent(ProfileActivity.this, MainActivity.class)));
+        startActivity(new Intent(ProfileActivity.this, MainActivity.class));
     }
 }

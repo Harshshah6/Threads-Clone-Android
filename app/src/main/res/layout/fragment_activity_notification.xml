@@ -1,14 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ActivityNotificationFragment">
+    tools:context=".fragments.ActivityNotificationFragment"
+    android:background="@color/bgColor">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/header_title"
+        style="@style/Base.Widget.AppCompat.TextView.TextMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Activity"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_title"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginStart="12dp"
+                android:text="All"
+                style="@style/Base.Widget.AppCompat.TextView.ButtonFilled"/>
+
+            <TextView
+                android:layout_marginStart="8dp"
+                android:text="Requests"
+                style="@style/Base.Widget.AppCompat.TextView.ButtonOutlined"/>
+
+            <TextView
+                android:layout_marginStart="8dp"
+                android:text="Replies"
+                style="@style/Base.Widget.AppCompat.TextView.ButtonOutlined"/>
+
+            <TextView
+                android:layout_marginStart="8dp"
+                android:text="Mentions"
+                style="@style/Base.Widget.AppCompat.TextView.ButtonOutlined"/>
+
+            <TextView
+                android:layout_marginStart="8dp"
+                android:text="Quotes"
+                style="@style/Base.Widget.AppCompat.TextView.ButtonOutlined"/>
+
+            <TextView
+                android:layout_marginHorizontal="8dp"
+                android:text="Reposts"
+                style="@style/Base.Widget.AppCompat.TextView.ButtonOutlined"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

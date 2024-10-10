@@ -112,7 +112,7 @@ public class AuthActivity extends BaseActivity {
                                 )).addOnCompleteListener(task1 -> {
                                     hideProgressDialog();
                                     if(task1.isSuccessful()){
-                                        startActivity(new Intent(AuthActivity.this, ProfileActivity.class));
+                                        startActivity(new Intent(AuthActivity.this, MainActivity.class));
                                         finish();
                                     } else {
                                         Log.e(TAG, "onAuthSuccess: ", task1.getException());
@@ -148,7 +148,7 @@ public class AuthActivity extends BaseActivity {
                                             showToast("Error: " + task.getException());
                                             return;
                                         }
-                                        startActivity(new Intent(AuthActivity.this, ProfileActivity.class));
+                                        startActivity(new Intent(AuthActivity.this, MainActivity.class));
                                         finish();
                                     });
                                 }else{

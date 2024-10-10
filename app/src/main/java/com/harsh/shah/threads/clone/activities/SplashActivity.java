@@ -19,7 +19,7 @@ public class SplashActivity extends BaseActivity {
 
         new Handler().postDelayed(() -> {
             Pair<View, String> p1 = Pair.create(findViewById(R.id.imageView), "splash_image");
-            Intent intent = new Intent(SplashActivity.this, isUserLoggedIn() ? ProfileActivity.class : AuthActivity.class);
+            Intent intent = new Intent(SplashActivity.this, isUserLoggedIn() ? MainActivity.class : AuthActivity.class);
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, p1);
             startActivity(intent, options.toBundle());
         }, 3000);

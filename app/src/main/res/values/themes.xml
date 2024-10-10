@@ -34,4 +34,26 @@
         <item name="android:fontFamily">@font/poppins_light</item>
         <item name="android:includeFontPadding">false</item>
     </style>
+
+    <style name="Base.Widget.AppCompat.TextView.ButtonFilled" parent="">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/bgColor</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:background">@drawable/button_background_filled</item>
+    </style>
+    <style name="Base.Widget.AppCompat.TextView.ButtonOutlined" parent="">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textMain</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:background">@drawable/button_background_outlined</item>
+    </style>
+
 </resources>
