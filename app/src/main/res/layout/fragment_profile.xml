@@ -32,11 +32,11 @@
             android:layout_weight="1" />
 
         <ImageView
-            android:id="@+id/instaImage"
+            android:id="@+id/threadImage"
             android:padding="2dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/lock_24px" />
+            android:src="@drawable/threads_app" />
 
         <ImageView
             android:id="@+id/segmentImage"
@@ -94,21 +94,21 @@
                 app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-            <TextView
-                android:id="@+id/textView7"
-                style="@style/Base.Widget.AppCompat.TextView.TextMain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/corner_full"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:text="Thread-Clone"
-                android:textColor="@color/textSec"
-                android:textSize="11sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView4"
-                app:layout_constraintStart_toEndOf="@+id/textView4"
-                app:layout_constraintTop_toTopOf="@+id/textView4" />
+<!--            <TextView-->
+<!--                android:id="@+id/textView7"-->
+<!--                style="@style/Base.Widget.AppCompat.TextView.TextMain"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:background="@drawable/corner_full"-->
+<!--                android:paddingHorizontal="12dp"-->
+<!--                android:paddingVertical="4dp"-->
+<!--                android:text="Thread-Clone"-->
+<!--                android:textColor="@color/textSec"-->
+<!--                android:textSize="11sp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/textView4"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/textView4"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/textView4" />-->
 
             <TextView
                 android:id="@+id/textView5"
@@ -233,13 +233,99 @@
 
             </com.google.android.material.tabs.TabLayout>
 
-            <View
-                android:id="@+id/view"
+            <include
+                layout="@layout/layout_divider"
+                android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/textSec"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+            <LinearLayout
+                android:id="@+id/setup_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        style="@style/Base.Widget.AppCompat.TextView.TextSec"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Finish Profile"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        style="@style/Base.Widget.AppCompat.TextView.TextSec"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1 left"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:scrollbars="none"
+                    android:overScrollMode="never">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.harsh.shah.threads.clone.views.ProfileTaskView
+                            android:layout_width="180dp"
+                            android:layout_height="210dp"
+                            app:title="Create Thread"
+                            app:description="Say what's on your mind or share a recent highlight."
+                            app:buttonTitle="Create"
+                            app:imageSrc="@drawable/linear_edit"/>
+
+                        <com.harsh.shah.threads.clone.views.ProfileTaskView
+                            android:layout_width="180dp"
+                            android:layout_height="210dp"
+                            android:layout_marginStart="12dp"
+                            app:title="Add profile photo"
+                            app:description="Make it easier for people to recognize you."
+                            app:buttonTitle="Add"
+                            app:imageSrc="@drawable/person_24px"/>
+
+                        <com.harsh.shah.threads.clone.views.ProfileTaskView
+                            android:layout_width="180dp"
+                            android:layout_height="210dp"
+                            android:layout_marginStart="12dp"
+                            app:title="Add bio"
+                            app:description="Introduce yourself and tell people what you're into."
+                            app:buttonTitle="Add"
+                            app:imageSrc="@drawable/linear_edit"/>
+
+                        <com.harsh.shah.threads.clone.views.ProfileTaskView
+                            android:layout_width="180dp"
+                            android:layout_height="210dp"
+                            android:layout_marginStart="12dp"
+                            app:title="Follow 5 profiles"
+                            app:description="Fill the feed with threads that interest you."
+                            app:buttonTitle="Follow"
+                            app:imageSrc="@drawable/person_add_24"/>
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+            </LinearLayout>
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
@@ -247,31 +333,8 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/setup_layout"
                 app:layout_constraintVertical_weight="1" />
-
-<!--            <TextView-->
-<!--                android:id="@+id/textView8"-->
-<!--                style="@style/Base.Widget.AppCompat.TextView.TextSec"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="12dp"-->
-<!--                android:text="Finish Profile"-->
-<!--                android:textSize="16sp"-->
-<!--                android:textStyle="bold"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/view"/>-->
-
-<!--            <TextView-->
-<!--                style="@style/Base.Widget.AppCompat.TextView.TextSec"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="1 left"-->
-<!--                android:textSize="15sp"-->
-<!--                android:textStyle="bold"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/textView8"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/textView8" />-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
