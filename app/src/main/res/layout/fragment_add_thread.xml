@@ -70,21 +70,29 @@
         app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
         app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
 
-    <EditText
-        android:id="@+id/textView2"
-        style="@style/Base.Widget.AppCompat.TextView.TextSec"
+    <LinearLayout
+        android:id="@+id/linear_main_content_bg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:background="@color/bgColor"
-        android:fontFamily="@font/poppins_regular"
-        android:hint="What's new?"
-        android:importantForAutofill="no"
-        android:inputType="textNoSuggestions"
-        android:textColorHint="@color/textSec"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+        <EditText
+            style="@style/Base.Widget.AppCompat.TextView.TextSec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@color/bgColor"
+            android:fontFamily="@font/poppins_regular"
+            android:hint="What's new?"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:textColorHint="@color/textSec"
+            android:singleLine="false"
+            android:maxLength="500"
+            android:imeOptions="actionNone" />
+    </LinearLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -92,8 +100,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:translationX="-8dp"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintStart_toStartOf="@+id/linear_main_content_bg"
+        app:layout_constraintTop_toBottomOf="@+id/linear_main_content_bg">
 
         <ImageView
             android:id="@+id/insertImage"
@@ -192,25 +200,27 @@
         android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shapeableImageView5"
+        app:layout_constraintVertical_bias="1.0">
 
         <TextView
+            style="@style/Base.Widget.AppCompat.TextView.TextSec"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_regular"
             android:text="Your followers can reply &amp; quote"
-            style="@style/Base.Widget.AppCompat.TextView.TextSec"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Post"
-            android:paddingVertical="8dp"
-            android:paddingHorizontal="16dp"
             android:background="@drawable/main_button"
-            android:textColor="@color/bgColor"/>
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="8dp"
+            android:text="Post"
+            android:textColor="@color/bgColor" />
 
     </LinearLayout>
 

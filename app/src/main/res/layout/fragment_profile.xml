@@ -61,15 +61,15 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="12dp">
+            android:layout_height="match_parent">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/shapeableImageView2"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:background="@color/textMain"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
@@ -81,6 +81,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sample_name"
                 android:textSize="24dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/shapeableImageView2" />
 
@@ -167,6 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="14dp"
                 android:paddingHorizontal="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -241,100 +244,102 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
-            <LinearLayout
-                android:id="@+id/setup_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingVertical="12dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/setup_layout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:paddingVertical="12dp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/divider">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center_vertical">-->
 
-                    <TextView
-                        android:id="@+id/textView8"
-                        style="@style/Base.Widget.AppCompat.TextView.TextSec"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Finish Profile"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView8"-->
+<!--                        style="@style/Base.Widget.AppCompat.TextView.TextSec"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="Finish Profile"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold" />-->
 
-                    <TextView
-                        style="@style/Base.Widget.AppCompat.TextView.TextSec"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1 left"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+<!--                    <TextView-->
+<!--                        style="@style/Base.Widget.AppCompat.TextView.TextSec"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="1 left"-->
+<!--                        android:textSize="15sp"-->
+<!--                        android:textStyle="bold" />-->
 
-                </LinearLayout>
+<!--                </LinearLayout>-->
 
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:scrollbars="none"
-                    android:overScrollMode="never">
+<!--                <HorizontalScrollView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:scrollbars="none"-->
+<!--                    android:overScrollMode="never">-->
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content">-->
 
-                        <com.harsh.shah.threads.clone.views.ProfileTaskView
-                            android:layout_width="180dp"
-                            android:layout_height="210dp"
-                            app:title="Create Thread"
-                            app:description="Say what's on your mind or share a recent highlight."
-                            app:buttonTitle="Create"
-                            app:imageSrc="@drawable/linear_edit"/>
+<!--                        <com.harsh.shah.threads.clone.views.ProfileTaskView-->
+<!--                            android:layout_width="180dp"-->
+<!--                            android:layout_height="210dp"-->
+<!--                            app:title="Create Thread"-->
+<!--                            app:description="Say what's on your mind or share a recent highlight."-->
+<!--                            app:buttonTitle="Create"-->
+<!--                            app:imageSrc="@drawable/linear_edit"/>-->
 
-                        <com.harsh.shah.threads.clone.views.ProfileTaskView
-                            android:layout_width="180dp"
-                            android:layout_height="210dp"
-                            android:layout_marginStart="12dp"
-                            app:title="Add profile photo"
-                            app:description="Make it easier for people to recognize you."
-                            app:buttonTitle="Add"
-                            app:imageSrc="@drawable/person_24px"/>
+<!--                        <com.harsh.shah.threads.clone.views.ProfileTaskView-->
+<!--                            android:layout_width="180dp"-->
+<!--                            android:layout_height="210dp"-->
+<!--                            android:layout_marginStart="12dp"-->
+<!--                            app:title="Add profile photo"-->
+<!--                            app:description="Make it easier for people to recognize you."-->
+<!--                            app:buttonTitle="Add"-->
+<!--                            app:imageSrc="@drawable/person_24px"/>-->
 
-                        <com.harsh.shah.threads.clone.views.ProfileTaskView
-                            android:layout_width="180dp"
-                            android:layout_height="210dp"
-                            android:layout_marginStart="12dp"
-                            app:title="Add bio"
-                            app:description="Introduce yourself and tell people what you're into."
-                            app:buttonTitle="Add"
-                            app:imageSrc="@drawable/linear_edit"/>
+<!--                        <com.harsh.shah.threads.clone.views.ProfileTaskView-->
+<!--                            android:layout_width="180dp"-->
+<!--                            android:layout_height="210dp"-->
+<!--                            android:layout_marginStart="12dp"-->
+<!--                            app:title="Add bio"-->
+<!--                            app:description="Introduce yourself and tell people what you're into."-->
+<!--                            app:buttonTitle="Add"-->
+<!--                            app:imageSrc="@drawable/linear_edit"/>-->
 
-                        <com.harsh.shah.threads.clone.views.ProfileTaskView
-                            android:layout_width="180dp"
-                            android:layout_height="210dp"
-                            android:layout_marginStart="12dp"
-                            app:title="Follow 5 profiles"
-                            app:description="Fill the feed with threads that interest you."
-                            app:buttonTitle="Follow"
-                            app:imageSrc="@drawable/person_add_24"/>
+<!--                        <com.harsh.shah.threads.clone.views.ProfileTaskView-->
+<!--                            android:layout_width="180dp"-->
+<!--                            android:layout_height="210dp"-->
+<!--                            android:layout_marginStart="12dp"-->
+<!--                            app:title="Follow 5 profiles"-->
+<!--                            app:description="Fill the feed with threads that interest you."-->
+<!--                            app:buttonTitle="Follow"-->
+<!--                            app:imageSrc="@drawable/person_add_24"/>-->
 
-                    </LinearLayout>
+<!--                    </LinearLayout>-->
 
-                </HorizontalScrollView>
+<!--                </HorizontalScrollView>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <androidx.viewpager.widget.ViewPager
+            <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/setup_layout"
-                app:layout_constraintVertical_weight="1" />
+                app:layout_constraintTop_toBottomOf="@+id/divider"
+                app:layout_constraintVertical_weight="1"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,15 +5,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.harsh.shah.threads.clone.R;
 
 /**
@@ -67,25 +76,45 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        ViewPager viewPager = view.findViewById(R.id.viewPager);
-        tabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        ViewPager2 viewPager = view.findViewById(R.id.viewPager);
+        new TabLayoutMediator(tabLayout, viewPager, ((tab, position) -> tab.setText(position==0?"Threads":position==1?"Replies":"Reposts")));
+        viewPager.setAdapter(new PageAdapter(this));
+        viewPager.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
 
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+        });
     }
 
     @Override
@@ -94,4 +123,77 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
+
+    static class PageAdapter extends FragmentStateAdapter {
+
+        public PageAdapter(@NonNull Fragment fragment) {
+            super(fragment);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            return position==0?ObjectFragment.newInstance():position==1?Object1Fragment.newInstance(null):Object1Fragment.newInstance("You haven't reposted any threads yet.");
+        }
+
+        @Override
+        public int getItemCount() {
+            return 3;
+        }
+    }
+
+    public static class ObjectFragment extends Fragment {
+
+        public ObjectFragment() {
+
+        }
+
+        public static ObjectFragment newInstance() {
+            return new ObjectFragment();
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.profile_setup_view, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+        }
+    }
+
+    public static class Object1Fragment extends Fragment {
+
+        public Object1Fragment() {
+
+        }
+
+        public static Object1Fragment newInstance(String arg) {
+            Object1Fragment instance = new Object1Fragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("text", arg);
+            instance.setArguments(bundle);
+            return instance;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.profile_tabs_replies_view, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            if (getArguments() == null) {
+                return;
+            }
+            String text = getArguments().getString("text", "You haven't posted any replies yet.");
+            ((TextView) view.findViewById(R.id.textView)).setText(text);
+        }
+    }
+
+
 }
