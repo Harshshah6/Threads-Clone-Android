@@ -48,7 +48,8 @@ public class MainActivity extends BaseActivity {
 
         Fragment f = fragmentManager.findFragmentByTag("addThreadFragment");
         if(f != null && f.isVisible()){
-            fragmentTransaction.replace(R.id.fragmentContainerView, HomeFragment.newInstance("","")).commit();
+            if(position == 2)
+                return;
         }
 
         if (selectedFragment == position)

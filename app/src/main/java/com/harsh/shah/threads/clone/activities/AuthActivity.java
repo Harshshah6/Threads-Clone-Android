@@ -82,8 +82,9 @@ public class AuthActivity extends BaseActivity {
 
                         @Override
                         public void onAuthSuccess(DataSnapshot snapshot) {
-                            hideProgressDialog();
+                            //hideProgressDialog();
                             if (snapshot.hasChild(username)) {
+                                hideProgressDialog();
                                 binding.usernameLayout.setError("Username already taken.");
                                 return;
                             }
@@ -98,7 +99,7 @@ public class AuthActivity extends BaseActivity {
                                         .setDisplayName(username).build();
                                 task.getResult().getUser().updateProfile(userProfileChangeRequest);
                                 task.getResult().getUser().reload().isSuccessful();
-                                showProgressDialog();
+                                //showProgressDialog();
                                 mUsersDatabaseReference.child(username).setValue(new User(
                                         task.getResult().getUser().getUid(),
                                         "",
@@ -132,8 +133,17 @@ public class AuthActivity extends BaseActivity {
                 if (binding.emailLayout.getError() == null && binding.passwordLayout.getError() == null) {
                     showProgressDialog();
                     if(email.contains("@")) {
-                        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
-                        hideProgressDialog();
+                        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                            hideProgressDialog();
+                            if (!task.isSuccessful()) {
+                                Log.e(TAG, "onAuthSuccess-Error: ", task.getException());
+                                showToast("Error: " + task.getException());
+                                return;
+                            }
+                            startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                            finish();
+                        });
+                        //hideProgressDialog();
                     }
                     else{
                         mUsersDatabaseReference.child(email).addValueEventListener(new ValueEventListener() {
