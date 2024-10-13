@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity"
     android:background="@color/bgColor"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:transitionName="splash_image">
 
     <ScrollView
         android:layout_width="match_parent"

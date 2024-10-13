@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/material_dialog_background">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log out of threads?"
+        style="@style/Base.Widget.AppCompat.TextView.TextMain"
+        android:textSize="22sp"
+        android:padding="22dp"
+        android:gravity="center"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Log out of threads?"
+        style="@style/Base.Widget.AppCompat.TextView.TextMain"
+        android:textSize="18sp"
+        android:textColor="@color/textSec"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:gravity="center"/>
+
+    <View
+        android:id="@+id/border"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/textSec"/>
+
+    <TextView
+        android:id="@+id/b1"
+            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textSize="18sp"
+        android:textColor="@color/red"
+        android:gravity="center"
+        android:padding="12dp"/>
+
+    <TextView
+        android:id="@+id/b2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textSize="18sp"
+        android:textColor="@color/textMain"
+        android:gravity="center"
+        android:padding="12dp"/>
+
+</LinearLayout>

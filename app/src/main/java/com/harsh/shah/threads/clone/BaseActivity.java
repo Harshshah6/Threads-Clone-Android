@@ -42,6 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.harsh.shah.threads.clone.activities.AuthActivity;
 import com.harsh.shah.threads.clone.activities.ProfileActivity;
 import com.harsh.shah.threads.clone.model.User;
 
@@ -72,7 +73,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //EdgeToEdge.enable(this);
-
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if(isNightMode()){
                 //icon color -> white
@@ -82,7 +83,6 @@ public class BaseActivity extends AppCompatActivity {
                 getWindow().getDecorView().getWindowInsetsController().setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS);
             }
         }
-
 
         setContentView(R.layout.activity_base);
         FirebaseApp.initializeApp(this);
@@ -96,6 +96,13 @@ public class BaseActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(BaseActivity.this, googleSignInOptions);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
     @Override
@@ -175,6 +182,8 @@ public class BaseActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "logoutUser(): ", e);
         }
+        startActivity(new Intent(this, AuthActivity.class));
+        finish();
     }
 
     public void getUsersDatabase(AuthListener authListener) {
@@ -277,5 +286,10 @@ public class BaseActivity extends AppCompatActivity {
     public boolean isNightMode() {
         int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    public void pressBack(View view){
+        ((Activity)view.getContext()).finish();
+        ((Activity)view.getContext()).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 }

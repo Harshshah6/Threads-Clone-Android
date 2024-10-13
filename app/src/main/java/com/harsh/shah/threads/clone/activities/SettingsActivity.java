@@ -1,17 +1,22 @@
 package com.harsh.shah.threads.clone.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
+import com.harsh.shah.threads.clone.activities.settings.FollowAndInviteFriendsActivity;
 import com.harsh.shah.threads.clone.databinding.ActivitySettingsBinding;
+import com.harsh.shah.threads.clone.utils.MDialogUtil;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -23,10 +28,18 @@ public class SettingsActivity extends BaseActivity {
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.back.setOnClickListener(view -> finish());
-    }
+        binding.followAndInviteFriends.setOnClickListener(v-> startActivity(new Intent(SettingsActivity.this, FollowAndInviteFriendsActivity.class)));
+        binding.notifications.setOnClickListener(view -> startActivity(new Intent(SettingsActivity.this, UnknownErrorActivity.class)));
 
-    public void pressBack(View view) {
-        finish();
+        binding.logout.setOnClickListener(v->{
+            MDialogUtil mDialogUtil =
+            new MDialogUtil(SettingsActivity.this)
+                    .setTitle("Log out Threads?")
+                    .setMessage("are you sure you want to logout?",false)
+                    .setB1("Logout", view -> logoutUser());
+            AlertDialog dialog = mDialogUtil.create();
+            mDialogUtil.setB2("Cancel", view -> dialog.dismiss());
+            dialog.show();
+        });
     }
 }
