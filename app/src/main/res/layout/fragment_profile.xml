@@ -20,10 +20,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:padding="2dp"
             android:id="@+id/lockImage"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:scaleType="center"
             android:src="@drawable/lock_24px" />
 
         <Space
@@ -33,15 +34,17 @@
 
         <ImageView
             android:id="@+id/threadImage"
-            android:padding="2dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:scaleType="center"
             android:src="@drawable/threads_app" />
 
         <ImageView
             android:id="@+id/segmentImage"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
             android:layout_marginStart="8dp"
             android:scaleType="fitXY"
             android:src="@drawable/segment_two_bar" />
@@ -163,6 +166,19 @@
                 app:layout_constraintStart_toEndOf="@+id/shapeableImageView4"
                 app:layout_constraintTop_toTopOf="@+id/shapeableImageView4" />
 
+            <TextView
+                style="@style/Base.Widget.AppCompat.TextView.TextSec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:focusable="true"
+                android:text="• github.com/harshshah6"
+                android:linksClickable="true"
+                android:clickable="true"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView6"
+                app:layout_constraintStart_toEndOf="@+id/textView6"
+                app:layout_constraintTop_toTopOf="@+id/textView6" />
 
             <LinearLayout
                 android:id="@+id/linearLayout6"
@@ -176,6 +192,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView6">
 
                 <TextView
+                    android:id="@+id/edit_profile"
                     style="@style/Base.Widget.AppCompat.TextView.TextMain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -192,6 +209,7 @@
                     android:layout_marginHorizontal="4dp" />
 
                 <TextView
+                    android:id="@+id/share_profile"
                     style="@style/Base.Widget.AppCompat.TextView.TextMain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

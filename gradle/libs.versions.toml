@@ -13,6 +13,7 @@ firebaseDatabase = "21.0.0"
 firebaseBom = "33.3.0"
 firebasePlayServiceAuth = "21.2.0"
 swipeRefreshLayout = "1.2.0-alpha01"
+switchButton = "0.0.3"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -27,6 +28,7 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-play-service-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "firebasePlayServiceAuth" }
 swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", name = "swipe-refresh-layout", version.ref = "swipeRefreshLayout" }
+switch-button = { module = "com.github.zcweng:switch-button", version.ref = "switchButton" }
 
 
 [plugins]

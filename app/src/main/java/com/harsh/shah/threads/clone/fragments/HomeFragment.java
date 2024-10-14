@@ -25,6 +25,8 @@ import com.harsh.shah.threads.clone.R;
  */
 public class HomeFragment extends Fragment {
 
+    private static HomeFragment instance;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -40,13 +42,14 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
+    }
+
+    public static Fragment getInstance() {
+        if (instance == null)
+            instance = new HomeFragment();
+        return instance;
     }
 
     @Override
@@ -91,7 +94,7 @@ public class HomeFragment extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             if(getItemViewType(position) == 1)
                 holder.itemView.setOnClickListener(view -> {
-                    getParentFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(R.id.fragmentContainerView, AddThreadFragment.newInstance("",""), "addThreadFragment").commit();
+                    getParentFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(R.id.fragmentContainerView, AddThreadFragment.getInstance(), "addThreadFragment").commit();
                 });
         }
 

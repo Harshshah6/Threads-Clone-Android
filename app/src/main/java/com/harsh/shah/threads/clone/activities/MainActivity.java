@@ -16,6 +16,8 @@ import com.harsh.shah.threads.clone.fragments.HomeFragment;
 import com.harsh.shah.threads.clone.fragments.ProfileFragment;
 import com.harsh.shah.threads.clone.fragments.SearchFragment;
 
+import java.util.ArrayList;
+
 public class MainActivity extends BaseActivity {
 
     ActivityMainBinding binding;
@@ -56,15 +58,24 @@ public class MainActivity extends BaseActivity {
             return;
         selectedFragment = position;
         if(position == 0)
-            fragmentTransaction.replace(R.id.fragmentContainerView, HomeFragment.newInstance("","")).commit();
+            fragmentTransaction.replace(R.id.fragmentContainerView, HomeFragment.getInstance()).commit();
         else if (position == 1)
-            fragmentTransaction.replace(R.id.fragmentContainerView, SearchFragment.newInstance("","")).commit();
+            fragmentTransaction.replace(R.id.fragmentContainerView, SearchFragment.getInstance()).commit();
         else if(position == 2)
-            fragmentTransaction.replace(R.id.fragmentContainerView, AddThreadFragment.newInstance("","")).commit();
+            fragmentTransaction.replace(R.id.fragmentContainerView, AddThreadFragment.getInstance()).commit();
         else if (position == 3)
-            fragmentTransaction.replace(R.id.fragmentContainerView, ActivityNotificationFragment.newInstance("","")).commit();
+            fragmentTransaction.replace(R.id.fragmentContainerView, ActivityNotificationFragment.getInstance()).commit();
         else if (position == 4)
             fragmentTransaction.replace(R.id.fragmentContainerView, ProfileFragment.newInstance("","")).commit();
+
+        binding.homeIcon.setColorFilter(getResources().getColor(position==0?R.color.textMain:R.color.textSec));
+        binding.searchIcon.setColorFilter(getResources().getColor(position==1?R.color.textMain:R.color.textSec));
+        binding.addIcon.setColorFilter(getResources().getColor(position==2?R.color.textMain:R.color.textSec));
+        binding.favoriteIcon.setColorFilter(getResources().getColor(position==3?R.color.textMain:R.color.textSec));
+        binding.personIcon.setColorFilter(getResources().getColor(position==4?R.color.textMain:R.color.textSec));
+
+        binding.favoriteIcon.setImageResource(position == 3 ? R.drawable.favorite_24px : R.drawable.favorite_outline_24px);
+        binding.personIcon.setImageResource(position == 4 ? R.drawable.person_24px : R.drawable.person_outline_24px);
     }
 
     @Override

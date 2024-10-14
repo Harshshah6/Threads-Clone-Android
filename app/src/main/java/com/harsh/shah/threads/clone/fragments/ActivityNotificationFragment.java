@@ -17,6 +17,8 @@ import com.harsh.shah.threads.clone.R;
  */
 public class ActivityNotificationFragment extends Fragment {
 
+    private  static  ActivityNotificationFragment instance;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,6 +48,13 @@ public class ActivityNotificationFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static ActivityNotificationFragment getInstance() {
+        if (instance == null) {
+            instance = new ActivityNotificationFragment();
+        }
+        return instance;
     }
 
     @Override

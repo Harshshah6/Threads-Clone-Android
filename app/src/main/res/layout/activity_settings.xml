@@ -97,7 +97,10 @@
         app:layout_constraintBottom_toTopOf="@+id/saved"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notifications" />
+        app:layout_constraintTop_toBottomOf="@+id/notifications"
+        android:focusable="true"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"/>
 
 
     <TextView
@@ -134,7 +137,10 @@
         app:layout_constraintBottom_toTopOf="@+id/account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saved" />
+        app:layout_constraintTop_toBottomOf="@+id/saved"
+        android:focusable="true"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground" />
 
 
     <TextView
@@ -171,7 +177,10 @@
         app:layout_constraintBottom_toTopOf="@+id/help"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account" />
+        app:layout_constraintTop_toBottomOf="@+id/account"
+        android:focusable="true"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"/>
 
 
     <TextView

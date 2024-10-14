@@ -14,12 +14,16 @@ import android.view.ViewGroup;
 
 import com.harsh.shah.threads.clone.R;
 
+import java.io.Serial;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
+
+    private static SearchFragment instance;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,6 +54,13 @@ public class SearchFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static SearchFragment getInstance() {
+        if (instance == null) {
+            instance = new SearchFragment();
+        }
+        return instance;
     }
 
     @Override
