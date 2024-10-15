@@ -8,6 +8,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.snackbar.SnackbarContentLayout;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.databinding.ActivityEditProfileBinding;
@@ -30,6 +32,10 @@ public class EditProfileActivity extends BaseActivity {
             }else{
                 binding.textView13.setText("If you switch to private, you won't be able to reply to others unless they follow you.");
             }
+        });
+
+        binding.textView7.setOnClickListener(view -> {
+            Snackbar.make(binding.getRoot(), "Cannot change the username until 30 days.", Snackbar.LENGTH_SHORT).show();
         });
     }
 }

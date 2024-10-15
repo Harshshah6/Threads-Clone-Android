@@ -28,7 +28,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.EditProfileActivity;
+import com.harsh.shah.threads.clone.activities.ProfileActivity;
 import com.harsh.shah.threads.clone.activities.SettingsActivity;
+import com.harsh.shah.threads.clone.activities.settings.FollowingFollowersProfilesActivity;
 import com.harsh.shah.threads.clone.activities.settings.PrivacyActivity;
 
 /**
@@ -153,6 +155,11 @@ public class ProfileFragment extends Fragment {
         });
 
         view.findViewById(R.id.lockImage).setOnClickListener(v-> startActivity(new Intent(getContext(), PrivacyActivity.class)));
+
+        View.OnClickListener listener = v -> startActivity(new Intent(getContext(), FollowingFollowersProfilesActivity.class));
+        view.findViewById(R.id.textView6).setOnClickListener(listener);
+        view.findViewById(R.id.shapeableImageView4).setOnClickListener(listener);
+        view.findViewById(R.id.shapeableImageView3).setOnClickListener(listener);
 
     }
 

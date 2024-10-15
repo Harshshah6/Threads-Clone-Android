@@ -16,8 +16,12 @@ public class UnknownErrorActivity extends BaseActivity {
         binding = ActivityUnknownErrorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if(getIntent().hasExtra("error")){
-            binding.toolbarTitle.setText(getIntent().getStringExtra("error"));
+        if(getIntent().hasExtra("title")){
+            binding.toolbarTitle.setText(getIntent().getStringExtra("title"));
+        }
+
+        if(getIntent().hasExtra("desc")){
+            binding.description.setText(getIntent().getStringExtra("desc"));
         }
 
     }

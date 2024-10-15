@@ -11,9 +11,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
+import com.harsh.shah.threads.clone.activities.settings.AccountActivity;
 import com.harsh.shah.threads.clone.activities.settings.FollowAndInviteFriendsActivity;
 import com.harsh.shah.threads.clone.activities.settings.PrivacyActivity;
 import com.harsh.shah.threads.clone.databinding.ActivitySettingsBinding;
@@ -32,6 +34,14 @@ public class SettingsActivity extends BaseActivity {
         binding.followAndInviteFriends.setOnClickListener(v-> startActivity(new Intent(SettingsActivity.this, FollowAndInviteFriendsActivity.class)));
         binding.notifications.setOnClickListener(view -> startActivity(new Intent(SettingsActivity.this, UnknownErrorActivity.class)));
         binding.privacy.setOnClickListener(view -> startActivity(new Intent(SettingsActivity.this, PrivacyActivity.class)));
+        binding.account.setOnClickListener(view -> startActivity(new Intent(SettingsActivity.this, AccountActivity.class)));
+        binding.language.setOnClickListener(view -> startActivity(new Intent(SettingsActivity.this, UnknownErrorActivity.class).putExtra("desc", "Coming soon!").putExtra("title","Language")));
+
+        binding.help.setOnClickListener(view -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(SettingsActivity.this);
+            bottomSheetDialog.setContentView(R.layout.layout_help);
+            bottomSheetDialog.show();
+        });
 
         binding.logout.setOnClickListener(v->{
             MDialogUtil mDialogUtil =

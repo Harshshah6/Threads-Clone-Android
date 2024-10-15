@@ -3,6 +3,7 @@ package com.harsh.shah.threads.clone.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.Constants;
 import com.harsh.shah.threads.clone.R;
+import com.harsh.shah.threads.clone.activities.settings.FollowingFollowersProfilesActivity;
 import com.harsh.shah.threads.clone.databinding.ActivityProfileBinding;
 
 public class ProfileActivity extends BaseActivity {
@@ -33,6 +35,8 @@ public class ProfileActivity extends BaseActivity {
             startActivity(new Intent(this, SplashActivity.class));
             finishAffinity();
         });
+
+
 
         binding.next.setOnClickListener(view -> startActivity(new Intent(ProfileActivity.this, MainActivity.class)));
         startActivity(new Intent(ProfileActivity.this, MainActivity.class));
