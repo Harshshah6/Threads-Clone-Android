@@ -108,15 +108,28 @@
             app:layout_constraintStart_toStartOf="@+id/username"
             app:layout_constraintTop_toBottomOf="@+id/username" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imagesListRecyclerView"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="@+id/title"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:listitem="@layout/home_list_item_image_item" />
+            android:src="@drawable/img"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"/>
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/imagesListRecyclerView"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/title"-->
+<!--            app:layout_constraintHorizontal_weight="1"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/title"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/title"-->
+<!--            tools:listitem="@layout/home_list_item_image_item" />-->
 
 
         <androidx.constraintlayout.widget.ConstraintLayout

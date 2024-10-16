@@ -9,6 +9,7 @@
         <item name="android:navigationBarColor">@color/bgColor</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:windowLightStatusBar">false</item>
+
     </style>
 
     <style name="Theme.ThreadsCloneAndroid" parent="Base.Theme.ThreadsCloneAndroid" />

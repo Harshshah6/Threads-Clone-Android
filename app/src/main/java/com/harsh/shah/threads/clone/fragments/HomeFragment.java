@@ -1,5 +1,6 @@
 package com.harsh.shah.threads.clone.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.harsh.shah.threads.clone.R;
+import com.harsh.shah.threads.clone.activities.NewThreadActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,9 +95,7 @@ public class HomeFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             if(getItemViewType(position) == 1)
-                holder.itemView.setOnClickListener(view -> {
-                    getParentFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(R.id.fragmentContainerView, AddThreadFragment.getInstance(), "addThreadFragment").commit();
-                });
+                holder.itemView.setOnClickListener(view -> startActivity(new Intent(getContext(), NewThreadActivity.class)));
         }
 
         @Override

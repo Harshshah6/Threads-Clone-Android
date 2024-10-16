@@ -16,6 +16,9 @@
         android:theme="@style/Theme.ThreadsCloneAndroid"
         tools:targetApi="31">
         <activity
+            android:name=".activities.NewThreadActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.settings.FollowingFollowersProfilesActivity"
             android:exported="false" />
         <activity

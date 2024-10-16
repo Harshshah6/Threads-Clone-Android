@@ -1,5 +1,6 @@
 package com.harsh.shah.threads.clone.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -39,53 +40,53 @@ public class MainActivity extends BaseActivity {
     private void setOnClickListeners() {
         binding.homeIconLayout.setOnClickListener(v -> setFragment(0));
         binding.searchIconLayout.setOnClickListener(v -> setFragment(1));
-        binding.addIconLayout.setOnClickListener(v -> setFragment(2));
-        binding.favoriteIconLayout.setOnClickListener(v -> setFragment(3));
-        binding.personIconLayout.setOnClickListener(v -> setFragment(4));
+        binding.addIconLayout.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, NewThreadActivity.class)));
+        binding.favoriteIconLayout.setOnClickListener(v -> setFragment(2));
+        binding.personIconLayout.setOnClickListener(v -> setFragment(3));
     }
 
     public void setFragment(int position){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
-        Fragment f = fragmentManager.findFragmentByTag("addThreadFragment");
-        if(f != null && f.isVisible()){
-            if(position == 2)
-                return;
-        }
-
         if (selectedFragment == position)
             return;
         selectedFragment = position;
-        if(position == 0)
-            fragmentTransaction.replace(R.id.fragmentContainerView, HomeFragment.getInstance()).commit();
+        if(position == 0) {
+            fragmentTransaction.add(R.id.fragmentContainerView, HomeFragment.getInstance());
+            fragmentManager.popBackStack("root", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentTransaction.addToBackStack("root");
+        }
         else if (position == 1)
-            fragmentTransaction.replace(R.id.fragmentContainerView, SearchFragment.getInstance()).commit();
-        else if(position == 2)
-            fragmentTransaction.replace(R.id.fragmentContainerView, AddThreadFragment.getInstance()).commit();
+            fragmentTransaction.replace(R.id.fragmentContainerView, SearchFragment.getInstance()).addToBackStack(null).commit();
+//        else if(position == 2)
+//            fragmentTransaction.replace(R.id.fragmentContainerView, AddThreadFragment.getInstance()).addToBackStack(null).commit();
+        else if (position == 2)
+            fragmentTransaction.replace(R.id.fragmentContainerView, ActivityNotificationFragment.getInstance()).addToBackStack(null).commit();
         else if (position == 3)
-            fragmentTransaction.replace(R.id.fragmentContainerView, ActivityNotificationFragment.getInstance()).commit();
-        else if (position == 4)
-            fragmentTransaction.replace(R.id.fragmentContainerView, ProfileFragment.newInstance("","")).commit();
+            fragmentTransaction.replace(R.id.fragmentContainerView, ProfileFragment.newInstance("","")).addToBackStack(null).commit();
 
         binding.homeIcon.setColorFilter(getResources().getColor(position==0?R.color.textMain:R.color.textSec));
         binding.searchIcon.setColorFilter(getResources().getColor(position==1?R.color.textMain:R.color.textSec));
-        binding.addIcon.setColorFilter(getResources().getColor(position==2?R.color.textMain:R.color.textSec));
-        binding.favoriteIcon.setColorFilter(getResources().getColor(position==3?R.color.textMain:R.color.textSec));
-        binding.personIcon.setColorFilter(getResources().getColor(position==4?R.color.textMain:R.color.textSec));
+        //binding.addIcon.setColorFilter(getResources().getColor(position==2?R.color.textMain:R.color.textSec));
+        binding.favoriteIcon.setColorFilter(getResources().getColor(position==2?R.color.textMain:R.color.textSec));
+        binding.personIcon.setColorFilter(getResources().getColor(position==3?R.color.textMain:R.color.textSec));
 
-        binding.favoriteIcon.setImageResource(position == 3 ? R.drawable.favorite_24px : R.drawable.favorite_outline_24px);
-        binding.personIcon.setImageResource(position == 4 ? R.drawable.person_24px : R.drawable.person_outline_24px);
+        binding.favoriteIcon.setImageResource(position == 2 ? R.drawable.favorite_24px : R.drawable.favorite_outline_24px);
+        binding.personIcon.setImageResource(position == 3 ? R.drawable.person_24px : R.drawable.person_outline_24px);
     }
 
     @Override
     public void onBackPressed() {
-
-        new MaterialAlertDialogBuilder(this)
+        if(getSupportFragmentManager().getBackStackEntryCount() == 0){
+            new MaterialAlertDialogBuilder(this)
                 .setTitle("Are you sure?")
                 .setMessage("Do you want to exit?")
                 .setPositiveButton("Yes", (dialog, which) -> super.onBackPressed())
                 .setNegativeButton("No", null)
                 .create().show();
+            return;
+        }
+        super.onBackPressed();
     }
 }
