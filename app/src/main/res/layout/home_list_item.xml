@@ -94,53 +94,116 @@
             app:layout_constraintTop_toTopOf="@+id/time"
             app:tint="@color/textSec" />
 
-
         <TextView
             android:id="@+id/title"
             style="@style/Base.Widget.AppCompat.TextView.TextMain"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="💻 𝗤𝘂𝗶𝗰𝗸 𝗣𝗿𝗼𝗴𝗿𝗮𝗺𝗺𝗶𝗻𝗴 𝗧𝗶𝗽𝘀! 🖥️\n\n1\/ 🌟𝐌𝐚𝐬𝐭𝐞𝐫 𝐭𝐡𝐞 𝐁𝐚𝐬𝐢𝐜𝐬: Focus on loops, conditionals, and data structures for a strong foundation.\n\n2\/ 👨‍💻𝐂𝐥𝐞𝐚𝐧 𝐂𝐨𝐝𝐞 𝐌𝐚𝐭𝐭𝐞𝐫𝐬: Use clear names, comments, and neat formatting for easy-to-read code.\n\n3\/🛠️ 𝐃𝐞𝐛𝐮𝐠 𝐒𝐦𝐚𝐫𝐭: Use print statements and debugging tools to trace issues step-by-step.\n\n4\/🌐𝐄𝐱𝐩𝐥𝐨𝐫𝐞 𝐎𝐩𝐞𝐧-𝐒𝐨𝐮𝐫𝐜𝐞: Contribute on GitHub to learn and grow through real projects."
+            android:paddingBottom="12dp"
+            android:text="This is my test paragraph.\nwriting to test the app's feed page's functionality.and the UI after rendering of the itemView."
             android:textSize="12.5sp"
             android:textStyle="normal"
+            android:maxLength="500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/username"
             app:layout_constraintTop_toBottomOf="@+id/username" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imagesListRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:adjustViewBounds="true"
-            app:layout_constraintEnd_toEndOf="@+id/title"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="@+id/title"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            android:src="@drawable/img"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"/>
-
-<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--        <com.google.android.material.imageview.ShapeableImageView-->
 <!--            android:id="@+id/imagesListRecyclerView"-->
 <!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="12dp"-->
+<!--            android:adjustViewBounds="true"-->
 <!--            app:layout_constraintEnd_toEndOf="@+id/title"-->
 <!--            app:layout_constraintHorizontal_weight="1"-->
 <!--            app:layout_constraintStart_toStartOf="@+id/title"-->
 <!--            app:layout_constraintTop_toBottomOf="@+id/title"-->
-<!--            tools:listitem="@layout/home_list_item_image_item" />-->
+<!--            android:src="@drawable/img"-->
+<!--            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"/>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imagesListRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="200dp"
+            android:paddingBottom="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_goneMarginTop="0dp"
+            tools:itemCount="1"
+            tools:listitem="@layout/home_list_item_image_item" />
+
+        <LinearLayout
+            android:id="@+id/poll_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingEnd="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/imagesListRecyclerView"
+            app:layout_goneMarginBottom="0dp"
+            app:layout_goneMarginTop="0dp">
+
+            <TextView
+                android:id="@+id/poll_option_1_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_background_outlined"
+                android:hint="Yes"
+                android:singleLine="true"
+                android:textColor="@color/textMain"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/poll_option_2_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_background_outlined"
+                android:hint="No"
+                android:singleLine="true"
+                android:textColor="@color/textMain"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/poll_option_3_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_outlined_dashed_border"
+                android:singleLine="true"
+                android:textColor="@color/textMain"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/poll_option_4_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_outlined_dashed_border"
+                android:singleLine="true"
+                android:textColor="@color/textMain"
+                android:textSize="15sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:translationX="-4dp"
-            app:layout_constraintStart_toStartOf="@+id/imagesListRecyclerView"
-            app:layout_constraintTop_toBottomOf="@+id/imagesListRecyclerView">
+            app:layout_constraintStart_toStartOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/poll_layout">
 
             <LinearLayout
                 android:id="@+id/linearLayout2"

@@ -131,36 +131,50 @@
         android:paddingEnd="12dp">
 
         <EditText
+            android:id="@+id/poll_option_1_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/button_background_outlined"
             android:hint="Yes"
             android:textSize="15sp"
-            android:textColor="@color/textMain"/>
+            android:textColor="@color/textMain"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
 
         <EditText
+            android:id="@+id/poll_option_2_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:background="@drawable/button_background_outlined"
             android:hint="No"
             android:textSize="15sp"
-            android:textColor="@color/textMain"/>
+            android:textColor="@color/textMain"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
 
         <EditText
+            android:id="@+id/poll_option_3_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:background="@drawable/background_outlined_dashed_border"
             android:textSize="15sp"
-            android:textColor="@color/textMain"/>
+            android:textColor="@color/textMain"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
         <EditText
+            android:id="@+id/poll_option_4_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:background="@drawable/background_outlined_dashed_border"
             android:textSize="15sp"
-            android:textColor="@color/textMain"/>
+            android:textColor="@color/textMain"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <LinearLayout
             android:layout_width="match_parent"

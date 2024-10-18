@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.NewThreadActivity;
+import com.harsh.shah.threads.clone.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,7 +63,6 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
     }
 
     @Override
@@ -96,6 +96,24 @@ public class HomeFragment extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             if(getItemViewType(position) == 1)
                 holder.itemView.setOnClickListener(view -> startActivity(new Intent(getContext(), NewThreadActivity.class)));
+            if (position == 0) return;
+
+            ((RecyclerView) holder.itemView.findViewById(R.id.imagesListRecyclerView)).setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            ((RecyclerView) holder.itemView.findViewById(R.id.imagesListRecyclerView)).setAdapter(new PostImagesListAdapter());
+            int rand = Utils.getRandomNumber(0,2);
+            if(rand == 0) {
+                holder.itemView.findViewById(R.id.imagesListRecyclerView).setVisibility(View.VISIBLE);
+                holder.itemView.findViewById(R.id.poll_layout).setVisibility(View.GONE);
+            }
+            if(rand == 1) {
+                holder.itemView.findViewById(R.id.imagesListRecyclerView).setVisibility(View.GONE);
+                holder.itemView.findViewById(R.id.poll_layout).setVisibility(View.VISIBLE);
+            }
+            if(rand == 2) {
+                holder.itemView.findViewById(R.id.imagesListRecyclerView).setVisibility(View.GONE);
+                holder.itemView.findViewById(R.id.poll_layout).setVisibility(View.GONE);
+            }
+
         }
 
         @Override
@@ -106,6 +124,38 @@ public class HomeFragment extends Fragment {
         @Override
         public int getItemViewType(int position) {
             return position==0?1:0;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+    }
+
+    class PostImagesListAdapter extends RecyclerView.Adapter<PostImagesListAdapter.ViewHolder> {
+
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.home_list_item_image_item, null);
+            view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            return new PostImagesListAdapter.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+            int dp = ((int) (holder.itemView.getContext().getResources().getDisplayMetrics().density));
+            params.setMargins(dp*12,0,dp*12,0);
+            holder.itemView.setLayoutParams(params);
+        }
+
+        @Override
+        public int getItemCount() {
+            return 5;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

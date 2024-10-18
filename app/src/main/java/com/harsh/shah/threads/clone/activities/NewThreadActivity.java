@@ -28,12 +28,12 @@ public class NewThreadActivity extends BaseActivity {
     ActivityNewThreadBinding binding;
     ArrayList<String> data = new ArrayList<>();
     ImagesListAdapter adapter = new ImagesListAdapter(data, dataList ->{
-        if(!dataList.isEmpty()) {
-            binding.pollLayout.setVisibility(View.VISIBLE);
+        if(dataList.isEmpty()) {
+            binding.insertPoll.setVisibility(View.VISIBLE);
             binding.insertGif.setVisibility(View.VISIBLE);
         }
         else {
-            binding.pollLayout.setVisibility(View.GONE);
+            binding.insertPoll.setVisibility(View.GONE);
             binding.insertGif.setVisibility(View.GONE);
         }
     });

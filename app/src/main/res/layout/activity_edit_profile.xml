@@ -210,7 +210,7 @@
                 style="@style/Base.Widget.AppCompat.TextView.TextSec"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Private profiles cn only reply to their followers. Switch to public to reply to anyone."
+                android:text="Private profiles can only reply to their followers. Switch to public to reply to anyone."
                 android:textSize="13sp"
                 android:textStyle="normal"
                 android:fontFamily="@font/poppins_regular"

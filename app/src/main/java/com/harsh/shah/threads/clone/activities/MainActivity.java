@@ -16,8 +16,7 @@ import com.harsh.shah.threads.clone.fragments.AddThreadFragment;
 import com.harsh.shah.threads.clone.fragments.HomeFragment;
 import com.harsh.shah.threads.clone.fragments.ProfileFragment;
 import com.harsh.shah.threads.clone.fragments.SearchFragment;
-
-import java.util.ArrayList;
+import com.harsh.shah.threads.clone.utils.Utils;
 
 public class MainActivity extends BaseActivity {
 
@@ -31,10 +30,41 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setFragment(selectedFragment);
         setOnClickListeners();
 
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+            if (fragment != null) {
+                if (fragment instanceof HomeFragment) {
+                    setFragmentIcon(0);
+                }
+                if (fragment instanceof SearchFragment) {
+                    setFragmentIcon(1);
+                }
+                if (fragment instanceof ActivityNotificationFragment) {
+                    setFragmentIcon(2);
+                }
+                if (fragment instanceof ProfileFragment) {
+                    setFragmentIcon(3);
+                }
+            }
+        });
+        setFragment(selectedFragment);
+
+
 //        ImageViewCompat.setImageTintList(binding.searchIcon, ColorStateList.valueOf(ContextCompat.getColor(this, R.color.textSec)));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Utils.hideKeyboard(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.hideKeyboard(this);
     }
 
     private void setOnClickListeners() {
@@ -45,32 +75,40 @@ public class MainActivity extends BaseActivity {
         binding.personIconLayout.setOnClickListener(v -> setFragment(3));
     }
 
-    public void setFragment(int position){
+    public void setFragment(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
-        if (selectedFragment == position)
-            return;
         selectedFragment = position;
-        if(position == 0) {
-            fragmentTransaction.add(R.id.fragmentContainerView, HomeFragment.getInstance());
+
+        if (position == 0) {
             fragmentManager.popBackStack("root", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//            FragmentManager fm = getSupportFragmentManager();
+//            int count = fm.getBackStackEntryCount();
+//            for(int i = 0; i < count; ++i) {
+//                fm.popBackStack();
+//            }
             fragmentTransaction.addToBackStack("root");
-        }
-        else if (position == 1)
+            fragmentTransaction.add(R.id.fragmentContainerView, HomeFragment.getInstance());
+            fragmentTransaction.commit();
+        } else if (position == 1)
             fragmentTransaction.replace(R.id.fragmentContainerView, SearchFragment.getInstance()).addToBackStack(null).commit();
 //        else if(position == 2)
 //            fragmentTransaction.replace(R.id.fragmentContainerView, AddThreadFragment.getInstance()).addToBackStack(null).commit();
         else if (position == 2)
             fragmentTransaction.replace(R.id.fragmentContainerView, ActivityNotificationFragment.getInstance()).addToBackStack(null).commit();
         else if (position == 3)
-            fragmentTransaction.replace(R.id.fragmentContainerView, ProfileFragment.newInstance("","")).addToBackStack(null).commit();
+            fragmentTransaction.replace(R.id.fragmentContainerView, ProfileFragment.newInstance("", "")).addToBackStack(null).commit();
 
-        binding.homeIcon.setColorFilter(getResources().getColor(position==0?R.color.textMain:R.color.textSec));
-        binding.searchIcon.setColorFilter(getResources().getColor(position==1?R.color.textMain:R.color.textSec));
+        setFragmentIcon(position);
+    }
+
+    private void setFragmentIcon(int position){
+        binding.homeIcon.setColorFilter(getResources().getColor(position == 0 ? R.color.textMain : R.color.textSec));
+        binding.searchIcon.setColorFilter(getResources().getColor(position == 1 ? R.color.textMain : R.color.textSec));
         //binding.addIcon.setColorFilter(getResources().getColor(position==2?R.color.textMain:R.color.textSec));
-        binding.favoriteIcon.setColorFilter(getResources().getColor(position==2?R.color.textMain:R.color.textSec));
-        binding.personIcon.setColorFilter(getResources().getColor(position==3?R.color.textMain:R.color.textSec));
+        binding.favoriteIcon.setColorFilter(getResources().getColor(position == 2 ? R.color.textMain : R.color.textSec));
+        binding.personIcon.setColorFilter(getResources().getColor(position == 3 ? R.color.textMain : R.color.textSec));
 
         binding.favoriteIcon.setImageResource(position == 2 ? R.drawable.favorite_24px : R.drawable.favorite_outline_24px);
         binding.personIcon.setImageResource(position == 3 ? R.drawable.person_24px : R.drawable.person_outline_24px);
@@ -78,13 +116,13 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount() == 0){
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             new MaterialAlertDialogBuilder(this)
-                .setTitle("Are you sure?")
-                .setMessage("Do you want to exit?")
-                .setPositiveButton("Yes", (dialog, which) -> super.onBackPressed())
-                .setNegativeButton("No", null)
-                .create().show();
+                    .setTitle("Are you sure?")
+                    .setMessage("Do you want to exit?")
+                    .setPositiveButton("Yes", (dialog, which) -> super.onBackPressed())
+                    .setNegativeButton("No", null)
+                    .create().show();
             return;
         }
         super.onBackPressed();

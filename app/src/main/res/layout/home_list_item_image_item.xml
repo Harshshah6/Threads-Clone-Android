@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.imageview.ShapeableImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:src="@drawable/share_24px"
-    android:scaleType="center"
-    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent">
+    android:src="@drawable/img"
+    android:scaleType="fitCenter"
+    android:maxHeight="200dp"
+    android:adjustViewBounds="true"
+    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+    android:layout_marginHorizontal="8dp">
 
 </com.google.android.material.imageview.ShapeableImageView>
