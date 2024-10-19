@@ -16,9 +16,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.NewThreadActivity;
+import com.harsh.shah.threads.clone.activities.ThreadViewActivity;
 import com.harsh.shah.threads.clone.utils.Utils;
 
 /**
@@ -113,7 +116,16 @@ public class HomeFragment extends Fragment {
                 holder.itemView.findViewById(R.id.imagesListRecyclerView).setVisibility(View.GONE);
                 holder.itemView.findViewById(R.id.poll_layout).setVisibility(View.GONE);
             }
+            if(((TextView)holder.itemView.findViewById(R.id.poll_option_3_edittext)).getText().toString().isEmpty()){
+                ((TextView)holder.itemView.findViewById(R.id.poll_option_4_edittext)).setVisibility(View.GONE);
+                ((TextView)holder.itemView.findViewById(R.id.poll_option_3_edittext)).setVisibility(View.GONE);
+            }
+            if(((TextView)holder.itemView.findViewById(R.id.poll_option_4_edittext)).getText().toString().isEmpty()){
+                ((TextView)holder.itemView.findViewById(R.id.poll_option_4_edittext)).setVisibility(View.GONE);
+            }else
+                ((TextView)holder.itemView.findViewById(R.id.poll_option_4_edittext)).setVisibility(View.VISIBLE);
 
+            holder.itemView.setOnClickListener(view -> startActivity(new Intent(getContext(), ThreadViewActivity.class)));
         }
 
         @Override
@@ -134,13 +146,12 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    class PostImagesListAdapter extends RecyclerView.Adapter<PostImagesListAdapter.ViewHolder> {
-
+    public static class PostImagesListAdapter extends RecyclerView.Adapter<PostImagesListAdapter.ViewHolder> {
 
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.home_list_item_image_item, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_list_item_image_item, null);
             view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             return new PostImagesListAdapter.ViewHolder(view);
         }
@@ -158,7 +169,7 @@ public class HomeFragment extends Fragment {
             return 5;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        public static class ViewHolder extends RecyclerView.ViewHolder {
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);

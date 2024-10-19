@@ -4,7 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.harsh.shah.threads.clone.R;
+import com.harsh.shah.threads.clone.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,19 +43,16 @@ public class ActivityNotificationFragment extends Fragment {
     TextView chip_quotes;
     TextView chip_reposts;
 
+    TextView no_data_text;
+
+    int selectedPosition = 0;
+
+    RecyclerView recyclerView;
+
     public ActivityNotificationFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ActivityNotificationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ActivityNotificationFragment newInstance(String param1, String param2) {
         ActivityNotificationFragment fragment = new ActivityNotificationFragment();
         Bundle args = new Bundle();
@@ -94,6 +96,11 @@ public class ActivityNotificationFragment extends Fragment {
         chip_quotes = view.findViewById(R.id.chip_quotes);
         chip_reposts = view.findViewById(R.id.chip_reposts);
 
+        no_data_text = view.findViewById(R.id.no_data_text);
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         chip_all.setOnClickListener(view1 -> setPosition(0));
         chip_requests.setOnClickListener(view1 -> setPosition(1));
         chip_replies.setOnClickListener(view1 -> setPosition(2));
@@ -106,31 +113,73 @@ public class ActivityNotificationFragment extends Fragment {
     }
 
     private void setPosition(int position){
-        chip_all.setBackgroundResource(R.drawable.button_background_outlined);
-        chip_requests.setBackgroundResource(R.drawable.button_background_outlined);
-        chip_replies.setBackgroundResource(R.drawable.button_background_outlined);
-        chip_mentions.setBackgroundResource(R.drawable.button_background_outlined);
-        chip_quotes.setBackgroundResource(R.drawable.button_background_outlined);
-        chip_reposts.setBackgroundResource(R.drawable.button_background_outlined);
+        setHeaderPos(chip_all, position==0);
+        setHeaderPos(chip_requests, position==1);
+        setHeaderPos(chip_replies, position==2);
+        setHeaderPos(chip_mentions, position==3);
+        setHeaderPos(chip_quotes, position==4);
+        setHeaderPos(chip_reposts, position==5);
+        selectedPosition = position;
 
-        if(position == 0){
-            chip_all.setBackgroundResource(R.drawable.button_background_filled);
+        if(position == 0 || position == 1) {
+            no_data_text.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerView.setAdapter(new DataAdapter(position == 0));
         }
-        else if(position == 1){
-            chip_requests.setBackgroundResource(R.drawable.button_background_filled);
+        else{
+            no_data_text.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
-        else if(position == 2){
-            chip_replies.setBackgroundResource(R.drawable.button_background_filled);
-        }
-        else if(position == 3){
-            chip_mentions.setBackgroundResource(R.drawable.button_background_filled);
-        }
-        else if(position == 4){
-            chip_quotes.setBackgroundResource(R.drawable.button_background_filled);
-        }
-        else if(position == 5){
-            chip_reposts.setBackgroundResource(R.drawable.button_background_filled);
-        }
-
     }
+
+    private void setHeaderPos(TextView view, boolean isActivated){
+        if (isActivated){
+            TextViewCompat.setTextAppearance(view, R.style.Base_Widget_AppCompat_TextView_ButtonFilled);
+            view.setBackgroundResource(R.drawable.button_background_filled);
+        }
+        else{
+            TextViewCompat.setTextAppearance(view, R.style.Base_Widget_AppCompat_TextView_ButtonOutlined);
+            view.setBackgroundResource(R.drawable.button_background_outlined);
+        }
+    }
+
+
+    static class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>{
+
+        boolean rand;
+
+        public DataAdapter(boolean rand){
+            this.rand = rand;
+        }
+
+        @NonNull
+        @Override
+        public DataAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = View.inflate(parent.getContext(), R.layout.notification_activity_follow_req_layout,null);
+            view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull DataAdapter.ViewHolder holder, int position) {
+            if (rand){
+                if(Utils.getRandomNumber(0,1)==0){
+                    holder.itemView.findViewById(R.id.follow_button).setVisibility(View.GONE);
+                }
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 100;
+        }
+
+        static class ViewHolder extends RecyclerView.ViewHolder{
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+    }
+
 }

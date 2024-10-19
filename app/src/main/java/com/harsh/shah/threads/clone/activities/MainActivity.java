@@ -105,11 +105,13 @@ public class MainActivity extends BaseActivity {
 
     private void setFragmentIcon(int position){
         binding.homeIcon.setColorFilter(getResources().getColor(position == 0 ? R.color.textMain : R.color.textSec));
+
         binding.searchIcon.setColorFilter(getResources().getColor(position == 1 ? R.color.textMain : R.color.textSec));
         //binding.addIcon.setColorFilter(getResources().getColor(position==2?R.color.textMain:R.color.textSec));
         binding.favoriteIcon.setColorFilter(getResources().getColor(position == 2 ? R.color.textMain : R.color.textSec));
         binding.personIcon.setColorFilter(getResources().getColor(position == 3 ? R.color.textMain : R.color.textSec));
 
+        binding.homeIcon.setImageResource(position == 0 ? R.drawable.home_24px : R.drawable.home_24px_outline);
         binding.favoriteIcon.setImageResource(position == 2 ? R.drawable.favorite_24px : R.drawable.favorite_outline_24px);
         binding.personIcon.setImageResource(position == 3 ? R.drawable.person_24px : R.drawable.person_outline_24px);
     }
