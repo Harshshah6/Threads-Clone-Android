@@ -1,6 +1,7 @@
 package com.harsh.shah.threads.clone.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.EditProfileActivity;
 import com.harsh.shah.threads.clone.activities.ProfileActivity;
@@ -161,6 +163,12 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.shapeableImageView4).setOnClickListener(listener);
         view.findViewById(R.id.shapeableImageView3).setOnClickListener(listener);
 
+        //view.findViewById(R.id.addedLink).setOnClickListener(view1 -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://"+((TextView)view1).getText().toString()))));
+
+        final TextView name = view.findViewById(R.id.name), username = view.findViewById(R.id.username), bio = view.findViewById(R.id.bio);
+        name.setText(BaseActivity.mUser.getDisplayName());
+        username.setText(BaseActivity.mUser.getUsername());
+        bio.setText(BaseActivity.mUser.getBio());
     }
 
     static class PageAdapter extends FragmentStateAdapter {
@@ -168,8 +176,6 @@ public class ProfileFragment extends Fragment {
         public PageAdapter(@NonNull Fragment fragment) {
             super(fragment);
         }
-
-
 
         @NonNull
         @Override
