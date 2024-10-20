@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ThreadViewActivity"
+    android:animateLayoutChanges="true"
     android:background="@color/bgColor">
 
     <LinearLayout
@@ -36,7 +37,7 @@
                 style="@style/Base.Widget.AppCompat.TextView.TextMain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"
+                android:text="Thread"
                 android:textSize="17sp"/>
 
             <TextView
@@ -65,7 +66,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider">
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        android:scrollbars="none"
+        android:overScrollMode="never">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -327,7 +330,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:itemCount="4"
-                tools:listitem="@layout/comments_layout"/>
+                tools:listitem="@layout/comments_layout"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

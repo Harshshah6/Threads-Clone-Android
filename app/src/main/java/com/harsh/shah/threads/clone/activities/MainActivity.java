@@ -63,8 +63,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-        Utils.hideKeyboard(this);
+        try{
+            super.onResume();
+            Utils.hideKeyboard(this);
+        }catch (Exception ignored){}
     }
 
     private void setOnClickListeners() {

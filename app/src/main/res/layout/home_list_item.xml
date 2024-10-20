@@ -155,10 +155,10 @@
                 android:id="@+id/poll_option_1_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_background_outlined"
-                android:hint="Yes"
+                android:text="Yes"
                 android:singleLine="true"
-                android:textColor="@color/textMain"
+                style="@style/Base.Widget.AppCompat.TextView.ButtonFilled"
+                android:gravity="left"
                 android:textSize="15sp" />
 
             <TextView
@@ -167,7 +167,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/button_background_outlined"
-                android:hint="No"
+                android:text="No"
                 android:singleLine="true"
                 android:textColor="@color/textMain"
                 android:textSize="15sp" />

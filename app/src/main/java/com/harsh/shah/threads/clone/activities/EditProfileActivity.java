@@ -37,5 +37,8 @@ public class EditProfileActivity extends BaseActivity {
         binding.textView7.setOnClickListener(view -> {
             Snackbar.make(binding.getRoot(), "Cannot change the username until 30 days.", Snackbar.LENGTH_SHORT).show();
         });
+
+        binding.name.setText(String.format("%s ( %s )", mUser.getDisplayName(), mUser.getUsername()));
+        binding.bio.setText(mUser.getBio());
     }
 }

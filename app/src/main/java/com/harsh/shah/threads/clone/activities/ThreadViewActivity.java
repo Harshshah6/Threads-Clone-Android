@@ -29,7 +29,7 @@ public class ThreadViewActivity extends BaseActivity {
         binding = ActivityThreadViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.postRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.postRecyclerView.setAdapter(new HomeFragment.PostImagesListAdapter());
+        binding.postRecyclerView.setAdapter(new HomeFragment.PostImagesListAdapter(false));
 
         binding.commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.commentsRecyclerView.setAdapter(new CommentsImagesListAdapter());

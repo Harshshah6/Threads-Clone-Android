@@ -37,6 +37,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.harsh.shah.threads.clone.activities.AuthActivity;
 import com.harsh.shah.threads.clone.activities.ProfileActivity;
+import com.harsh.shah.threads.clone.activities.SplashActivity;
 import com.harsh.shah.threads.clone.model.User;
 
 import java.util.concurrent.CountDownLatch;
@@ -59,6 +61,8 @@ public class BaseActivity extends AppCompatActivity {
     public GoogleSignInOptions googleSignInOptions;
     public GoogleSignInClient googleSignInClient;
     public AlertDialog progressDialog;
+
+    public static User mUser;
 
     public OnCompleteListener<AuthResult> authResultTask = task -> {
         if (!task.isSuccessful()) {
@@ -96,6 +100,26 @@ public class BaseActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(BaseActivity.this, googleSignInOptions);
+
+        if (isUserLoggedIn()){
+            mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null && user.getUid().equals(mAuth.getCurrentUser().getUid())) {
+                            mUser = user;
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
 
     }
 
@@ -182,8 +206,8 @@ public class BaseActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "logoutUser(): ", e);
         }
-        startActivity(new Intent(this, AuthActivity.class));
-        finish();
+        startActivity(new Intent(this, SplashActivity.class));
+        finishAffinity();
     }
 
     public void getUsersDatabase(AuthListener authListener) {

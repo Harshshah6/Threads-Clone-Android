@@ -1,6 +1,7 @@
 package com.harsh.shah.threads.clone.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +28,22 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.harsh.shah.threads.clone.BaseActivity;
+import com.harsh.shah.threads.clone.Constants;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.EditProfileActivity;
 import com.harsh.shah.threads.clone.activities.ProfileActivity;
 import com.harsh.shah.threads.clone.activities.SettingsActivity;
 import com.harsh.shah.threads.clone.activities.settings.FollowingFollowersProfilesActivity;
 import com.harsh.shah.threads.clone.activities.settings.PrivacyActivity;
+import com.harsh.shah.threads.clone.model.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -161,6 +173,31 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.shapeableImageView4).setOnClickListener(listener);
         view.findViewById(R.id.shapeableImageView3).setOnClickListener(listener);
 
+        //view.findViewById(R.id.addedLink).setOnClickListener(view1 -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://"+((TextView)view1).getText().toString()))));
+
+        final TextView name = view.findViewById(R.id.name), username = view.findViewById(R.id.username), bio = view.findViewById(R.id.bio);
+
+        final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Constants.UsersDBReference);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                for(DataSnapshot snapshot : snapshot1.getChildren()){
+                    User mUser = snapshot.getValue(User.class);
+                    if (mUser != null && mUser.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        name.setText(mUser.getDisplayName());
+                        username.setText(mUser.getUsername());
+                        bio.setText(mUser.getBio());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ProfileFragment", "onCancelled: ", error.toException());
+            }
+        });
+
     }
 
     static class PageAdapter extends FragmentStateAdapter {
@@ -168,8 +205,6 @@ public class ProfileFragment extends Fragment {
         public PageAdapter(@NonNull Fragment fragment) {
             super(fragment);
         }
-
-
 
         @NonNull
         @Override
