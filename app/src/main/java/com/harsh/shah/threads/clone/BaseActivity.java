@@ -3,7 +3,6 @@ package com.harsh.shah.threads.clone;
 import static android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -17,13 +16,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -37,18 +34,14 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.harsh.shah.threads.clone.activities.AuthActivity;
 import com.harsh.shah.threads.clone.activities.ProfileActivity;
 import com.harsh.shah.threads.clone.activities.SplashActivity;
-import com.harsh.shah.threads.clone.model.User;
-
-import java.util.concurrent.CountDownLatch;
+import com.harsh.shah.threads.clone.model.UserModel;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -62,7 +55,7 @@ public class BaseActivity extends AppCompatActivity {
     public GoogleSignInClient googleSignInClient;
     public AlertDialog progressDialog;
 
-    public static User mUser;
+    public static UserModel mUser;
 
     public OnCompleteListener<AuthResult> authResultTask = task -> {
         if (!task.isSuccessful()) {
@@ -106,7 +99,7 @@ public class BaseActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        User user = dataSnapshot.getValue(User.class);
+                        UserModel user = dataSnapshot.getValue(UserModel.class);
                         if (user != null && user.getUid().equals(mAuth.getCurrentUser().getUid())) {
                             mUser = user;
                             break;
@@ -149,29 +142,21 @@ public class BaseActivity extends AppCompatActivity {
                             mUsersDatabaseReference.child(task.getResult().getUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    User mUser = snapshot.getValue(User.class);
+                                    UserModel mUser = snapshot.getValue(UserModel.class);
                                     if (mUser == null) {
-                                        User user = new User(
-                                                ""+task.getResult().getUser().getUid(),
-                                                "" + task.getResult().getUser().getPhotoUrl(),
-                                                "google:google",
-                                                "public",
-                                                "" + task.getResult().getUser().getDisplayName(),
-                                                "google",
-                                                "",
-                                                "" + task.getResult().getUser().getEmail(),
-                                                "" +(task.getResult().getUser().getDisplayName().trim().replace(" ", "_"))
-                                        );
-                                        gUsernamesDatabaseReference.child(user.getUsername()).setValue(task.getResult().getUser().getUid()).isComplete();
-                                        mUsersDatabaseReference.child(task.getResult().getUser().getUid()).setValue(user).addOnCompleteListener(task1 -> {
-                                            if (task1.isSuccessful()) {
-                                                startActivity(new Intent(BaseActivity.this, ProfileActivity.class));
-                                                finish();
-                                            } else {
-                                                Log.e(TAG, "onDataChange: ", task1.getException());
-                                                showToast("Error: " + task1.getException());
-                                            }
-                                        });
+                                        UserModel user = null;
+                                        return;
+//                                        UserModel user = new UserModel(
+//                                                ""+task.getResult().getUser().getUid(),
+//                                                "" + task.getResult().getUser().getPhotoUrl(),
+//                                                "google:google",
+//                                                "public",
+//                                                "" + task.getResult().getUser().getDisplayName(),
+//                                                "google",
+//                                                "",
+//                                                "" + task.getResult().getUser().getEmail(),
+//                                                "" +(task.getResult().getUser().getDisplayName().trim().replace(" ", "_"))
+//                                        );
                                     } else {
                                         startActivity(new Intent(BaseActivity.this, ProfileActivity.class));
                                         finish();
@@ -238,6 +223,16 @@ public class BaseActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
                 authListener.onAuthFail(error);
             }
+        });
+    }
+
+    public void updateProfileInfo(UserModel user, AuthListener authListener){
+        authListener.onAuthTaskStart();
+        mUsersDatabaseReference.child(user.getUid()).setValue(user).addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                authListener.onAuthFail(null);
+            }
+            authListener.onAuthSuccess(null);
         });
     }
 
@@ -316,4 +311,6 @@ public class BaseActivity extends AppCompatActivity {
         ((Activity)view.getContext()).finish();
         ((Activity)view.getContext()).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
+
+
 }

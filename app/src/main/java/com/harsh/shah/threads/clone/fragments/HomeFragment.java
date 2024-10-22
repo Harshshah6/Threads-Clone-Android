@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.NewThreadActivity;
 import com.harsh.shah.threads.clone.activities.ThreadViewActivity;
@@ -134,8 +135,10 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            if (getItemViewType(position) == 1)
+            if (getItemViewType(position) == 1) {
                 holder.itemView.setOnClickListener(view -> startActivity(new Intent(getContext(), NewThreadActivity.class)));
+                ((TextView)holder.itemView.findViewById(R.id.username)).setText(BaseActivity.mUser.getUsername());
+            }
             if (position == 0) return;
 
             //((RecyclerView) holder.itemView.findViewById(R.id.imagesListRecyclerView)).addItemDecoration(new MarginDecoration(holder.itemView.getContext(), 90, 24));

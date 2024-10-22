@@ -2,7 +2,6 @@ package com.harsh.shah.threads.clone.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,31 +10,16 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.harsh.shah.threads.clone.BaseActivity;
-import com.harsh.shah.threads.clone.Constants;
 import com.harsh.shah.threads.clone.databinding.ActivityAuthBinding;
-import com.harsh.shah.threads.clone.model.User;
+import com.harsh.shah.threads.clone.model.ThreadModel;
+import com.harsh.shah.threads.clone.model.UserModel;
 
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 public class AuthActivity extends BaseActivity {
 
@@ -100,17 +84,27 @@ public class AuthActivity extends BaseActivity {
                                 task.getResult().getUser().updateProfile(userProfileChangeRequest);
                                 task.getResult().getUser().reload().isSuccessful();
                                 //showProgressDialog();
-                                mUsersDatabaseReference.child(username).setValue(new User(
-                                        task.getResult().getUser().getUid(),
-                                        "",
-                                        ""+password,
-                                        "public",
-                                        ""+username,
-                                        "email",
-                                        "",
-                                        ""+email,
-                                        ""+username
-                                )).addOnCompleteListener(task1 -> {
+                                mUsersDatabaseReference.child(username).setValue(
+                                        new UserModel(
+                                                new ArrayList<>(),
+                                                new ArrayList<>(),
+                                                "",
+                                                new ArrayList<>(),
+                                                true,
+                                                "",
+                                                task.getResult().getUser().getUid(),
+                                                password,
+                                                new ArrayList<>(),
+                                                new ArrayList<>(),
+                                                username,
+                                                true,
+                                                "",
+                                                new ArrayList<>(),
+                                                email,
+                                                new ArrayList<>(),
+                                                username,
+                                                ""
+                                        )).addOnCompleteListener(task1 -> {
                                     hideProgressDialog();
                                     if(task1.isSuccessful()){
                                         startActivity(new Intent(AuthActivity.this, MainActivity.class));
@@ -149,7 +143,7 @@ public class AuthActivity extends BaseActivity {
                         mUsersDatabaseReference.child(email).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                User mUser = snapshot.getValue(User.class);
+                                UserModel mUser = snapshot.getValue(UserModel.class);
                                 if(mUser != null && mUser.getEmail() != null){
                                     mAuth.signInWithEmailAndPassword(mUser.getEmail(), password).addOnCompleteListener(task -> {
                                         hideProgressDialog();

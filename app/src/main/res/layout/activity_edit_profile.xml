@@ -33,13 +33,14 @@
             android:textSize="17sp" />
 
         <TextView
+            android:id="@+id/done"
             style="@style/Base.Widget.AppCompat.TextView.TextMain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             android:text="Done"
-            android:textColor="@color/textSec"
+            android:textColor="@color/blue"
             android:textSize="17sp" />
 
     </LinearLayout>
@@ -127,15 +128,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
-        <TextView
+        <EditText
             android:id="@+id/bio"
             style="@style/Base.Widget.AppCompat.TextView.TextMain"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:maxLength="300"
-            android:text="Legendary Streamer (legendary_streamer_official)"
+            android:maxLength="200"
+            android:hint="Bio"
+            tools:text="Legendary Streamer (legendary_streamer_official)"
             android:textSize="13sp"
+            android:background="@android:color/transparent"
             android:fontFamily="@font/poppins_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/label_bio"
@@ -162,20 +165,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view1" />
 
-        <TextView
+        <EditText
             android:id="@+id/link"
             style="@style/Base.Widget.AppCompat.TextView.TextSec"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:maxLength="300"
-            android:text="+ Add link"
+            android:maxLength="30"
+            android:hint="+ Add link"
+            android:background="@android:color/transparent"
             android:fontFamily="@font/poppins_regular"
             android:textSize="13sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/label_link"
-            app:layout_constraintTop_toBottomOf="@+id/label_link" />
+            app:layout_constraintTop_toBottomOf="@+id/label_link"
+            android:singleLine="true"
+            android:maxLines="1" />
 
         <View
             android:id="@+id/view2"

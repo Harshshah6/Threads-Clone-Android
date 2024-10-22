@@ -36,7 +36,7 @@
         app:tint="@color/textMain"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/username"
         style="@style/Base.Widget.AppCompat.TextView.TextMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,8 +55,8 @@
 
         style="@style/Base.Widget.AppCompat.TextView.TextSec"
 
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/username" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"

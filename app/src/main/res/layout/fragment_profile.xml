@@ -118,12 +118,13 @@
             <TextView
                 android:id="@+id/bio"
                 style="@style/Base.Widget.AppCompat.TextView.TextMain"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:maxLength="300"
-                android:textStyle="normal"
+                android:maxLength="200"
                 android:text="bio of the user."
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/username"
                 app:layout_constraintTop_toBottomOf="@+id/username" />
 
@@ -156,7 +157,7 @@
                 android:padding="1dp"/>
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/followers"
                 style="@style/Base.Widget.AppCompat.TextView.TextSec"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -177,9 +178,9 @@
                 android:linksClickable="true"
                 android:clickable="true"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView6"
-                app:layout_constraintStart_toEndOf="@+id/textView6"
-                app:layout_constraintTop_toTopOf="@+id/textView6" />
+                app:layout_constraintBottom_toBottomOf="@+id/followers"
+                app:layout_constraintStart_toEndOf="@+id/followers"
+                app:layout_constraintTop_toTopOf="@+id/followers" />
 
             <LinearLayout
                 android:id="@+id/linearLayout6"
@@ -190,7 +191,7 @@
                 android:paddingHorizontal="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6">
+                app:layout_constraintTop_toBottomOf="@+id/followers">
 
                 <TextView
                     android:id="@+id/edit_profile"

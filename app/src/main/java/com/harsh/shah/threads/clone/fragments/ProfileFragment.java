@@ -1,29 +1,22 @@
 package com.harsh.shah.threads.clone.fragments;
 
+import static com.harsh.shah.threads.clone.BaseActivity.mUser;
+
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
@@ -39,11 +32,10 @@ import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.Constants;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.EditProfileActivity;
-import com.harsh.shah.threads.clone.activities.ProfileActivity;
 import com.harsh.shah.threads.clone.activities.SettingsActivity;
 import com.harsh.shah.threads.clone.activities.settings.FollowingFollowersProfilesActivity;
 import com.harsh.shah.threads.clone.activities.settings.PrivacyActivity;
-import com.harsh.shah.threads.clone.model.User;
+import com.harsh.shah.threads.clone.model.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -169,34 +161,24 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.lockImage).setOnClickListener(v-> startActivity(new Intent(getContext(), PrivacyActivity.class)));
 
         View.OnClickListener listener = v -> startActivity(new Intent(getContext(), FollowingFollowersProfilesActivity.class));
-        view.findViewById(R.id.textView6).setOnClickListener(listener);
+        view.findViewById(R.id.followers).setOnClickListener(listener);
         view.findViewById(R.id.shapeableImageView4).setOnClickListener(listener);
         view.findViewById(R.id.shapeableImageView3).setOnClickListener(listener);
 
         //view.findViewById(R.id.addedLink).setOnClickListener(view1 -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://"+((TextView)view1).getText().toString()))));
 
-        final TextView name = view.findViewById(R.id.name), username = view.findViewById(R.id.username), bio = view.findViewById(R.id.bio);
+        final TextView
+                name = view.findViewById(R.id.name),
+                username = view.findViewById(R.id.username),
+                bio = view.findViewById(R.id.bio),
+                addedLink = view.findViewById(R.id.addedLink),
+                followers = view.findViewById(R.id.followers);
 
-        final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Constants.UsersDBReference);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot1) {
-                for(DataSnapshot snapshot : snapshot1.getChildren()){
-                    User mUser = snapshot.getValue(User.class);
-                    if (mUser != null && mUser.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        name.setText(mUser.getDisplayName());
-                        username.setText(mUser.getUsername());
-                        bio.setText(mUser.getBio());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("ProfileFragment", "onCancelled: ", error.toException());
-            }
-        });
+        name.setText(mUser.getName());
+        username.setText(mUser.getUsername());
+        bio.setText(mUser.getBio());
+        addedLink.setText((mUser.getInfoLink()==null || mUser.getInfoLink().isEmpty())?"":"• "+mUser.getInfoLink());
+        followers.setText(mUser.getFollowers()==null?"0 followers":mUser.getFollowers().size()+" followers");
 
     }
 

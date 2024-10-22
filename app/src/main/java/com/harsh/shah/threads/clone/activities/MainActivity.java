@@ -61,14 +61,6 @@ public class MainActivity extends BaseActivity {
         Utils.hideKeyboard(this);
     }
 
-    @Override
-    protected void onResume() {
-        try{
-            super.onResume();
-            Utils.hideKeyboard(this);
-        }catch (Exception ignored){}
-    }
-
     private void setOnClickListeners() {
         binding.homeIconLayout.setOnClickListener(v -> setFragment(0));
         binding.searchIconLayout.setOnClickListener(v -> setFragment(1));
