@@ -1,61 +1,105 @@
 package com.harsh.shah.threads.clone.model;
 
-public class PollOptions{
-	private Option3 option3;
-	private Option4 option4;
-	private Option1 option1;
-	private Option2 option2;
+import androidx.annotation.NonNull;
 
-	public PollOptions() {
-	}
+public class PollOptions {
+    private PollOptionsItem option3;
+    private PollOptionsItem option4;
+    private PollOptionsItem option1;
+    private PollOptionsItem option2;
 
-	public PollOptions(Option3 option3, Option4 option4, Option1 option1, Option2 option2) {
-		this.option3 = option3;
-		this.option4 = option4;
-		this.option1 = option1;
-		this.option2 = option2;
-	}
+    public PollOptions() {
+    }
 
-	public void setOption3(Option3 option3){
-		this.option3 = option3;
-	}
+    public PollOptions(PollOptionsItem option3, PollOptionsItem option4, PollOptionsItem option1, PollOptionsItem option2) {
+        this.option3 = option3;
+        this.option4 = option4;
+        this.option1 = option1;
+        this.option2 = option2;
+    }
 
-	public Option3 getOption3(){
-		return option3;
-	}
+    public PollOptionsItem getOption3() {
+        return option3;
+    }
 
-	public void setOption4(Option4 option4){
-		this.option4 = option4;
-	}
+    public void setOption3(PollOptionsItem option3) {
+        this.option3 = option3;
+    }
 
-	public Option4 getOption4(){
-		return option4;
-	}
+    public PollOptionsItem getOption4() {
+        return option4;
+    }
 
-	public void setOption1(Option1 option1){
-		this.option1 = option1;
-	}
+    public void setOption4(PollOptionsItem option4) {
+        this.option4 = option4;
+    }
 
-	public Option1 getOption1(){
-		return option1;
-	}
+    public PollOptionsItem getOption1() {
+        return option1;
+    }
 
-	public void setOption2(Option2 option2){
-		this.option2 = option2;
-	}
+    public void setOption1(PollOptionsItem option1) {
+        this.option1 = option1;
+    }
 
-	public Option2 getOption2(){
-		return option2;
-	}
+    public PollOptionsItem getOption2() {
+        return option2;
+    }
 
-	@Override
- 	public String toString(){
-		return 
-			"PollOptions{" + 
-			"option3 = '" + option3 + '\'' + 
-			",option4 = '" + option4 + '\'' + 
-			",option1 = '" + option1 + '\'' + 
-			",option2 = '" + option2 + '\'' + 
-			"}";
-		}
+    public void setOption2(PollOptionsItem option2) {
+        this.option2 = option2;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return
+                "PollOptions{" +
+                        "option3 = '" + option3 + '\'' +
+                        ",option4 = '" + option4 + '\'' +
+                        ",option1 = '" + option1 + '\'' +
+                        ",option2 = '" + option2 + '\'' +
+                        "}";
+    }
+
+
+    public static class PollOptionsItem {
+        private int votes;
+        private String text;
+
+        public PollOptionsItem() {
+        }
+
+        public PollOptionsItem(int votes, String text) {
+            this.votes = votes;
+            this.text = text;
+        }
+
+        public int getVotes() {
+            return votes;
+        }
+
+        public void setVotes(int votes) {
+            this.votes = votes;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return
+                    "Option{" +
+                            "votes = '" + votes + '\'' +
+                            ",text = '" + text + '\'' +
+                            "}";
+        }
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.harsh.shah.threads.clone.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class ThreadModel {
@@ -140,6 +142,7 @@ public class ThreadModel {
 		return likes;
 	}
 
+	@NonNull
 	@Override
  	public String toString(){
 		return 

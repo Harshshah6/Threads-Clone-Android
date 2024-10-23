@@ -98,7 +98,6 @@ public class AuthActivity extends BaseActivity {
                                                 new ArrayList<>(),
                                                 username,
                                                 true,
-                                                "",
                                                 new ArrayList<>(),
                                                 email,
                                                 new ArrayList<>(),

@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.1"
+googleAuthLibraryOauth2Http = "1.19.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -14,8 +15,10 @@ firebaseBom = "33.3.0"
 firebasePlayServiceAuth = "21.2.0"
 swipeRefreshLayout = "1.2.0-alpha01"
 switchButton = "0.0.3"
+firebaseMessaging = "24.0.3"
 
 [libraries]
+google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -29,6 +32,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-play-service-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "firebasePlayServiceAuth" }
 swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", name = "swipe-refresh-layout", version.ref = "swipeRefreshLayout" }
 switch-button = { module = "com.github.zcweng:switch-button", version.ref = "switchButton" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 
 [plugins]

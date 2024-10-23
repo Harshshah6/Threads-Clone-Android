@@ -9,6 +9,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,20 +45,28 @@ import com.harsh.shah.threads.clone.activities.ProfileActivity;
 import com.harsh.shah.threads.clone.activities.SplashActivity;
 import com.harsh.shah.threads.clone.model.UserModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
 public class BaseActivity extends AppCompatActivity {
 
     public static final String TAG = "BaseActivity";
-
+    public static DatabaseReference mUsersDatabaseReference;
+    public static UserModel mUser;
     public FirebaseAuth mAuth;
     public FirebaseDatabase mDatabase;
-    public DatabaseReference mUsersDatabaseReference;
     public DatabaseReference gUsernamesDatabaseReference;
     public GoogleSignInOptions googleSignInOptions;
     public GoogleSignInClient googleSignInClient;
     public AlertDialog progressDialog;
-
-    public static UserModel mUser;
-
     public OnCompleteListener<AuthResult> authResultTask = task -> {
         if (!task.isSuccessful()) {
             showToast("Error: " + task.getException());
@@ -66,16 +76,45 @@ public class BaseActivity extends AppCompatActivity {
         loginTask(task);
     };
 
+    public static void updateUserProfile() {
+        updateProfileInfo(mUser, new AuthListener() {
+            @Override
+            public void onAuthTaskStart() {
+
+            }
+
+            @Override
+            public void onAuthSuccess(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onAuthFail(DatabaseError error) {
+
+            }
+        });
+    }
+
+    public static void updateProfileInfo(UserModel user, AuthListener authListener) {
+        authListener.onAuthTaskStart();
+        mUsersDatabaseReference.child(mUser.getUsername()).setValue(user).addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                authListener.onAuthFail(null);
+            }
+            authListener.onAuthSuccess(null);
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //EdgeToEdge.enable(this);
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if(isNightMode()){
+            if (isNightMode()) {
                 //icon color -> white
                 getWindow().getDecorView().getWindowInsetsController().setSystemBarsAppearance(0, APPEARANCE_LIGHT_STATUS_BARS);
-            }else{
+            } else {
                 //icon color -> black
                 getWindow().getDecorView().getWindowInsetsController().setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS);
             }
@@ -94,7 +133,7 @@ public class BaseActivity extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(BaseActivity.this, googleSignInOptions);
 
-        if (isUserLoggedIn()){
+        if (isUserLoggedIn()) {
             mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -211,7 +250,7 @@ public class BaseActivity extends AppCompatActivity {
         //mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(authResultTask);
     }
 
-    public void getDatabase(String path, AuthListener authListener){
+    public void getDatabase(String path, AuthListener authListener) {
         authListener.onAuthTaskStart();
         mDatabase.getReference(path).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -223,16 +262,6 @@ public class BaseActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
                 authListener.onAuthFail(error);
             }
-        });
-    }
-
-    public void updateProfileInfo(UserModel user, AuthListener authListener){
-        authListener.onAuthTaskStart();
-        mUsersDatabaseReference.child(user.getUid()).setValue(user).addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                authListener.onAuthFail(null);
-            }
-            authListener.onAuthSuccess(null);
         });
     }
 
@@ -289,6 +318,83 @@ public class BaseActivity extends AppCompatActivity {
         return new MaterialAlertDialogBuilder(this).setView(R.layout.progress_dialog).setCancelable(false).setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT)).create();
     }
 
+    public boolean isNightMode() {
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    public void pressBack(View view) {
+        ((Activity) view.getContext()).finish();
+        ((Activity) view.getContext()).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+    }
+
+    public void sendPushNotificationInThread(final String type, String token) {
+        new Thread(() -> pushNotification(type, token)).start();
+    }
+
+    private void pushNotification(String type, String token) {
+        JSONObject jPayload = new JSONObject();
+        JSONObject jNotification = new JSONObject();
+        JSONObject jData = new JSONObject();
+        try {
+            jNotification.put("title", "Google I/O 2016");
+            jNotification.put("body", "Firebase Cloud Messaging (App)");
+            jNotification.put("sound", "default");
+            jNotification.put("badge", "1");
+            jNotification.put("click_action", "OPEN_ACTIVITY_1");
+            jNotification.put("icon", "ic_notification");
+
+            jData.put("picture", "https://miro.medium.com/max/1400/1*QyVPcBbT_jENl8TGblk52w.png");
+
+            switch(type) {
+                case "tokens":
+                    JSONArray ja = new JSONArray();
+                    ja.put("c5pBXXsuCN0:APA91bH8nLMt084KpzMrmSWRS2SnKZudyNjtFVxLRG7VFEFk_RgOm-Q5EQr_oOcLbVcCjFH6vIXIyWhST1jdhR8WMatujccY5uy1TE0hkppW_TSnSBiUsH_tRReutEgsmIMmq8fexTmL");
+                    ja.put(token);
+                    jPayload.put("registration_ids", ja);
+                    break;
+                case "topic":
+                    jPayload.put("to", "/topics/news");
+                    break;
+                case "condition":
+                    jPayload.put("condition", "'sport' in topics || 'news' in topics");
+                    break;
+                default:
+                    jPayload.put("to", token);
+            }
+
+            jPayload.put("priority", "high");
+            jPayload.put("notification", jNotification);
+            jPayload.put("data", jData);
+
+            URL url = new URL("https://fcm.googleapis.com/fcm/send");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", Constants.FCM_AUTH_KEY);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            // Send FCM message content.
+            OutputStream outputStream = conn.getOutputStream();
+            outputStream.write(jPayload.toString().getBytes());
+
+            // Read FCM response.
+            InputStream inputStream = conn.getInputStream();
+            final String resp = convertStreamToString(inputStream);
+
+            Handler h = new Handler(Looper.getMainLooper());
+            h.post(() -> Log.i(TAG, "pushNotification: " + resp));
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String convertStreamToString(InputStream is) {
+        Scanner s = new Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next().replace(",", ",\n") : "";
+    }
+
+
     public static interface AuthListener {
         void onAuthTaskStart();
 
@@ -300,16 +406,6 @@ public class BaseActivity extends AppCompatActivity {
     public static interface UserQueryListener {
         boolean isUsernameAvailable(String username);
 
-    }
-
-    public boolean isNightMode() {
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
-    }
-
-    public void pressBack(View view){
-        ((Activity)view.getContext()).finish();
-        ((Activity)view.getContext()).overridePendingTransition(R.anim.fadein, R.anim.fadeout);
     }
 
 

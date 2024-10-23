@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.databinding.ActivityEditProfileBinding;
+import com.harsh.shah.threads.clone.utils.Utils;
 import com.suke.widget.SwitchButton;
 
 public class EditProfileActivity extends BaseActivity {
@@ -52,6 +53,7 @@ public class EditProfileActivity extends BaseActivity {
         binding.switchButton.setChecked(mUser.isPublicAccount());
 
         binding.done.setOnClickListener(view -> {
+            Utils.hideKeyboard(EditProfileActivity.this);
            if(binding.bio.getText().toString().trim().equals(bio.trim())
                    && binding.link.getText().toString().trim().equals(link.trim())
                    && binding.switchButton.isChecked() == isPublicAccount){

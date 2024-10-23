@@ -16,18 +16,18 @@ public class UserModel {
     private List<String> following;
     private String name;
     private boolean publicAccount;
-    private String notificationId;
     private List<String> blockedUsers;
     private String email;
-    private List<Object> notifications;
+    private List<NotificationItemModel> notifications;
     private String username;
     private String infoLink;
     private List<String> savedThreads;
+    private String fcmToken;
 
     public UserModel() {
     }
 
-    public UserModel(List<String> savedThreads, List<String> likedPosts, String bio, List<ThreadModel> threadsPosted, boolean notificationsEnabled, String profileImage, String uid, String password, List<String> followers, List<String> following, String name, boolean publicAccount, String notificationId, List<String> blockedUsers, String email, List<Object> notifications, String username, String infoLink) {
+    public UserModel(List<String> savedThreads, List<String> likedPosts, String bio, List<ThreadModel> threadsPosted, boolean notificationsEnabled, String profileImage, String uid, String password, List<String> followers, List<String> following, String name, boolean publicAccount, List<String> blockedUsers, String email, List<NotificationItemModel> notifications, String username, String infoLink) {
         this.savedThreads = savedThreads;
         this.likedPosts = likedPosts;
         this.bio = bio;
@@ -40,7 +40,6 @@ public class UserModel {
         this.following = following;
         this.name = name;
         this.publicAccount = publicAccount;
-        this.notificationId = notificationId;
         this.blockedUsers = blockedUsers;
         this.email = email;
         this.notifications = notifications;
@@ -136,14 +135,6 @@ public class UserModel {
         this.publicAccount = publicAccount;
     }
 
-    public String getNotificationId() {
-        return notificationId;
-    }
-
-    public void setNotificationId(String notificationId) {
-        this.notificationId = notificationId;
-    }
-
     public List<String> getBlockedUsers() {
         return blockedUsers;
     }
@@ -160,11 +151,11 @@ public class UserModel {
         this.email = email;
     }
 
-    public List<Object> getNotifications() {
+    public List<NotificationItemModel> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(List<Object> notifications) {
+    public void setNotifications(List<NotificationItemModel> notifications) {
         this.notifications = notifications;
     }
 
@@ -208,13 +199,21 @@ public class UserModel {
                         ",following = '" + following + '\'' +
                         ",name = '" + name + '\'' +
                         ",publicAccount = '" + publicAccount + '\'' +
-                        ",notificationId = '" + notificationId + '\'' +
                         ",blockedUsers = '" + blockedUsers + '\'' +
                         ",email = '" + email + '\'' +
                         ",notifications = '" + notifications + '\'' +
                         ",username = '" + username + '\'' +
                         ",infoLink = '" + infoLink + '\'' +
                         ",savedThreads = '" + savedThreads + '\'' +
+                        ",fcmToken = '" + fcmToken + '\'' +
                         "}";
     }
+
+    public void setFcmToken(String token) {
+        this.fcmToken = token;
+    }
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
 }

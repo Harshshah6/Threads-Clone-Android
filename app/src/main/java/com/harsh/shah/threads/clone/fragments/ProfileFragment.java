@@ -180,6 +180,23 @@ public class ProfileFragment extends Fragment {
         addedLink.setText((mUser.getInfoLink()==null || mUser.getInfoLink().isEmpty())?"":"• "+mUser.getInfoLink());
         followers.setText(mUser.getFollowers()==null?"0 followers":mUser.getFollowers().size()+" followers");
 
+        BaseActivity.mUsersDatabaseReference.child(mUser.getUsername()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserModel user = snapshot.getValue(UserModel.class);
+                if(user!=null)
+                    mUser = user;
+                name.setText(mUser.getName());
+                username.setText(mUser.getUsername());
+                bio.setText(mUser.getBio());
+                addedLink.setText((mUser.getInfoLink()==null || mUser.getInfoLink().isEmpty())?"":"• "+mUser.getInfoLink());
+                followers.setText(mUser.getFollowers()==null?"0 followers":mUser.getFollowers().size()+" followers");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+
     }
 
     static class PageAdapter extends FragmentStateAdapter {
