@@ -1,8 +1,14 @@
 package com.harsh.shah.threads.clone.utils;
 
 import android.app.Activity;
+import android.os.Build;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
@@ -17,5 +23,34 @@ public class Utils {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static long getNowInMillis() {
+        return Calendar.getInstance().getTimeInMillis();
+    }
+
+    public static String calculateTimeDiff(long createdAt) {
+        long now = Calendar.getInstance().getTimeInMillis();
+        long diffInMillis = now - createdAt;
+
+        // Convert milliseconds to seconds, minutes, hours, days, and weeks
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(diffInMillis);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis);
+        long hours = TimeUnit.MILLISECONDS.toHours(diffInMillis);
+        long days = TimeUnit.MILLISECONDS.toDays(diffInMillis);
+        long weeks = TimeUnit.MILLISECONDS.toDays(diffInMillis) / 7;
+
+        // Determine the appropriate time unit based on the difference
+        if (weeks > 0) {
+            return weeks + "week";
+        } else if (days > 0) {
+            return days + "days";
+        } else if (hours > 0) {
+            return hours + "hour";
+        } else if (minutes > 0) {
+            return minutes + "min";
+        } else {
+            return seconds + "sec";
+        }
     }
 }
