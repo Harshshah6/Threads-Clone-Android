@@ -131,8 +131,6 @@
             android:id="@+id/imagesListRecyclerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxHeight="200dp"
-            android:paddingBottom="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
@@ -185,7 +183,9 @@
                 android:background="@drawable/button_background_outlined"
                 android:singleLine="true"
                 android:textColor="@color/textMain"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/poll_option_4"

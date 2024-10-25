@@ -55,4 +55,5 @@ dependencies {
     implementation libs.swipe.refresh.layout
     implementation libs.switch.button
     implementation libs.picasso
+
 }

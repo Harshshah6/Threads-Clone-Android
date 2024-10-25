@@ -1,19 +1,20 @@
 package com.harsh.shah.threads.clone.utils;
 
 import android.app.Activity;
-import android.os.Build;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
-    public static int getRandomNumber(int Min, int Max){
-        return Min + (int)(Math.random() * ((Max - Min) + 1));
+    public static int getRandomNumber(int Min, int Max) {
+        return Min + (int) (Math.random() * ((Max - Min) + 1));
     }
 
     public static void hideKeyboard(Activity activity) {
@@ -42,15 +43,25 @@ public class Utils {
 
         // Determine the appropriate time unit based on the difference
         if (weeks > 0) {
-            return weeks + "week";
+            return weeks + "w";
         } else if (days > 0) {
-            return days + "days";
+            return days + "d";
         } else if (hours > 0) {
-            return hours + "hour";
+            return hours + "h";
         } else if (minutes > 0) {
-            return minutes + "min";
+            return minutes + "m";
         } else {
-            return seconds + "sec";
+            return seconds + "s";
+        }
+    }
+
+    public static Bitmap getBitmapFromURL(String s) {
+        try {
+            URL url = new URL(s);
+            InputStream inputStream = url.openStream();
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (Exception e) {
+            return null;
         }
     }
 }
