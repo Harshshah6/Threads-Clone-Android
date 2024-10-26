@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:background="@color/bgColor"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -16,6 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/textSec"
+        app:strokeWidth="1dp"
         app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
 
     <com.google.android.material.imageview.ShapeableImageView

@@ -9,22 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadModel implements Parcelable {
-    private List<String> images;
-    private ArrayList<CommentsModel> comments;
-    private List<String> shares;
-    private List<String> likes;
-    private List<String> reposts;
-    private boolean allowedComments;
-    private boolean isGif;
-    private boolean isPoll;
-    private String uID;
-    private String gifUrl;
-    private String iD;
-    private String text;
-    private String time;
-    private String username;
-    private String profileImage;
-    private PollOptions pollOptions;
+    private List<String> images = new ArrayList<>();
+    private ArrayList<CommentsModel> comments = new ArrayList<>();
+    private List<String> shares = new ArrayList<>();
+    private List<String> likes = new ArrayList<>();
+    private List<String> reposts = new ArrayList<>();
+    private boolean allowedComments = false;
+    private boolean isGif = false;
+    private boolean isPoll = false;
+    private String uID = "";
+    private String gifUrl = "";
+    private String iD = "";
+    private String text = "";
+    private String time = "";
+    private String username = "";
+    private String profileImage = "";
+    private PollOptions pollOptions = new PollOptions(new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem());
 
     public ThreadModel(List<String> images, ArrayList<CommentsModel> comments, boolean allowedComments, boolean isGif, boolean isPoll, List<String> shares, String uID, String gifUrl, String iD, String text, String time, PollOptions pollOptions, List<String> likes, String profileImage, String username, List<String> reposts) {
         this.images = images;

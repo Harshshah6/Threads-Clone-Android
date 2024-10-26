@@ -98,9 +98,9 @@ public class PollOptions implements Parcelable {
 
 
     public static class PollOptionsItem implements Parcelable{
-        private int votes;
-        private String text;
-        private boolean visibility;
+        private int votes = 0;
+        private String text = "";
+        private boolean visibility = false;
 
         public PollOptionsItem() {
         }

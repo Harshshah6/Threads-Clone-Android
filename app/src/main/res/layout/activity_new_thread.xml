@@ -26,7 +26,7 @@
             android:contentDescription="exit"
             android:padding="2dp"
             android:src="@drawable/rounded_close_24"
-            android:onClick="pressBack"/>
+            android:onClick="askAndPressback"/>
 
         <TextView
             style="@style/Base.Widget.AppCompat.TextView.TextMain"
@@ -128,7 +128,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        android:paddingEnd="12dp">
+        android:paddingEnd="12dp"
+        android:animateLayoutChanges="true">
 
         <EditText
             android:id="@+id/poll_option_1_edittext"
@@ -326,6 +327,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/postButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/main_button"

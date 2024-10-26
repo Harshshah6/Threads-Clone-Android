@@ -1,25 +1,30 @@
 package com.harsh.shah.threads.clone.activities;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.database.DatabaseReference;
 import com.harsh.shah.threads.clone.BaseActivity;
+import com.harsh.shah.threads.clone.Constants;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.databinding.ActivityNewThreadBinding;
+import com.harsh.shah.threads.clone.model.PollOptions;
+import com.harsh.shah.threads.clone.model.ThreadModel;
+import com.harsh.shah.threads.clone.utils.MDialogUtil;
 
 import java.util.ArrayList;
 
@@ -27,12 +32,12 @@ public class NewThreadActivity extends BaseActivity {
 
     ActivityNewThreadBinding binding;
     ArrayList<String> data = new ArrayList<>();
-    ImagesListAdapter adapter = new ImagesListAdapter(data, dataList ->{
-        if(dataList.isEmpty()) {
+    ImagesListAdapter adapter = new ImagesListAdapter(data, dataList -> {
+        data = dataList;
+        if (dataList.isEmpty()) {
             binding.insertPoll.setVisibility(View.VISIBLE);
             binding.insertGif.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             binding.insertPoll.setVisibility(View.GONE);
             binding.insertGif.setVisibility(View.GONE);
         }
@@ -41,12 +46,9 @@ public class NewThreadActivity extends BaseActivity {
         if (o == null) {
             Toast.makeText(NewThreadActivity.this, "No image Selected", Toast.LENGTH_SHORT).show();
         } else {
-            //Glide.with(getApplicationContext()).load(o).into(imageView);
-            //adapter.addData(o.toString());
             for (Uri uri : o) {
                 adapter.addData(uri.toString());
             }
-
         }
     });
 
@@ -57,7 +59,7 @@ public class NewThreadActivity extends BaseActivity {
         setContentView(binding.getRoot());
         binding.edittext.requestFocus();
         binding.insertImage.setOnClickListener(view -> {
-            if(adapter.getData().size() == 5)
+            if (adapter.getData().size() == 5)
                 return;
             launcher.launch(new PickVisualMediaRequest.Builder()
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
@@ -73,10 +75,78 @@ public class NewThreadActivity extends BaseActivity {
             binding.constraintLayout2.setVisibility(View.VISIBLE);
         });
 
+        binding.pollOption3Edittext.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()) {
+                    binding.pollOption4Edittext.setVisibility(View.GONE);
+                } else {
+                    binding.pollOption4Edittext.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        binding.postButton.setOnClickListener(view -> {
+            DatabaseReference databaseReference = mDatabase.getReference(Constants.THREADS).push();
+            databaseReference.setValue(new ThreadModel(
+                    adapter.getData(),
+                    new ArrayList<>(),
+                    true,
+                    false,
+                    binding.pollLayout.getVisibility() == View.VISIBLE,
+                    new ArrayList<>(),
+                    mUser.getUid(),
+                    "",
+                    databaseReference.getKey(),
+                    binding.edittext.getText().toString().trim(),
+                    System.currentTimeMillis() + "",
+                    new PollOptions(
+                            new PollOptions.PollOptionsItem(0, binding.pollOption1Edittext.getText().toString().trim(), true),
+                            new PollOptions.PollOptionsItem(0, binding.pollOption2Edittext.getText().toString().trim(), true),
+                            new PollOptions.PollOptionsItem(0, binding.pollOption3Edittext.getText().toString().trim(), !binding.pollOption3Edittext.getText().toString().trim().isEmpty()),
+                            new PollOptions.PollOptionsItem(0, binding.pollOption4Edittext.getText().toString().trim(), !binding.pollOption4Edittext.getText().toString().trim().isEmpty())
+                    ),
+                    new ArrayList<>(),
+                    (mUser.getProfileImage()==null||mUser.getProfileImage().isEmpty())?"":mUser.getProfileImage(),
+                    mUser.getUsername(),
+                    new ArrayList<>()
+            )).addOnCompleteListener(task ->{
+                if (task.isSuccessful()){
+                    finish();
+                }else
+                    showToast(task.getException()==null?"An Error Occurred While Uploading Thread.":task.getException().toString());
+            });
+        });
+
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.recyclerView.setAdapter(adapter);
     }
 
+    public void askAndPressback(View view) {
+
+        MDialogUtil mDialogUtil = new MDialogUtil(this)
+                .setB1("Exit", v -> finish())
+                .setTitle("Are you sure you want to exit?")
+                .setMessage("", false);
+        AlertDialog dialog = mDialogUtil.create();
+        mDialogUtil.setB2("Cancel", v -> dialog.dismiss());
+        dialog.show();
+    }
+
+
+    interface dataChangeListener {
+        void onChanged(ArrayList<String> data);
+    }
 
     static class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.ViewHolder> {
 
@@ -104,14 +174,13 @@ public class NewThreadActivity extends BaseActivity {
                 return;
             }
             this.data.add(data);
-            notifyItemInserted(this.data.size() - 1);
+            notifyItemInserted(this.data.size());
             dataChangeListener.onChanged(this.data);
         }
 
-        public void removeData(String data) {
-            int index = this.data.indexOf(data);
-            this.data.remove(data);
-            notifyItemRemoved(index);
+        public void removeData(int position) {
+            this.data.remove(position);
+            notifyItemRemoved(position);
             dataChangeListener.onChanged(this.data);
         }
 
@@ -145,13 +214,13 @@ public class NewThreadActivity extends BaseActivity {
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             int dp = ((int) (holder.itemView.getContext().getResources().getDisplayMetrics().density));
             if (position == 0) {
-                params.setMargins(dp*100,dp*8,dp*8,dp*8);
-            }else{
-                params.setMargins(dp*8,dp*8,dp*8,dp*8);
+                params.setMargins(dp * 100, dp * 8, dp * 8, dp * 8);
+            } else {
+                params.setMargins(dp * 8, dp * 8, dp * 8, dp * 8);
             }
             holder.shapeableImageView.setLayoutParams(params);
 
-            holder.delete.setOnClickListener(view -> removeData(data.get(position)));
+            holder.delete.setOnClickListener(view -> removeData(position));
             Uri uri = Uri.parse(data.get(position));
             holder.shapeableImageView.setImageURI(uri);
         }
@@ -166,9 +235,5 @@ public class NewThreadActivity extends BaseActivity {
                 delete = itemView.findViewById(R.id.delete);
             }
         }
-    }
-
-    interface dataChangeListener {
-        void onChanged(ArrayList<String> data);
     }
 }

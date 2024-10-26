@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.NewThreadActivity;
@@ -52,6 +56,8 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    ArrayList<ThreadModel> data = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -89,69 +95,37 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ArrayList<ThreadModel> data = new ArrayList<>();
-        data.add(new ThreadModel(
-                new ArrayList<>(),
-                new ArrayList<>(),
-                true,
-                false,
-                false,
-                new ArrayList<>(),
-                BaseActivity.mUser.getUid(),
-                "",
-                "ID1",
-                "this is sample text written here",
-                "" + (Utils.getNowInMillis() - TimeUnit.DAYS.toMillis(2)),
-                new PollOptions(new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem()),
-                new ArrayList<>(),
-                "",
-                "i_am_tester",
-                new ArrayList<>()
-        ));
-        data.add(new ThreadModel(
-                new ArrayList<>(),
-                new ArrayList<>(),
-                true,
-                false,
-                true,
-                new ArrayList<>(),
-                BaseActivity.mUser.getUid(),
-                "",
-                "ID1",
-                "this is sample text written here",
-                "" + (Utils.getNowInMillis() - TimeUnit.DAYS.toMillis(2)),
-                new PollOptions(new PollOptions.PollOptionsItem(0, "op1", true), new PollOptions.PollOptionsItem(1, "op2", true), new PollOptions.PollOptionsItem(2, "op3", true), new PollOptions.PollOptionsItem(3, "op4", false)),
-                new ArrayList<>(),
-                "",
-                "i_am_tester",
-                new ArrayList<>()
-        ));
-        ArrayList<String> images = new ArrayList<>();
-        images.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWPrgb50WrwS8K-nLcBlB7ZqK1BTXDjsd2nw&s");
-        images.add("https://yt3.googleusercontent.com/hl6DRqxNueVTcN5OyKb97m_Xjf2J_yFCfjv1LAC_nbaqkFhvWEsC71a5aUedbgeLdrD4wtQe=s160-c-k-c0x00ffffff-no-rj");
-        images.add("https://i.pinimg.com/736x/a9/f8/e6/a9f8e67c221483f8735e492679a79029.jpg");
 
-        data.add(new ThreadModel(
-                images,
-                new ArrayList<>(),
-                true,
-                false,
-                false,
-                new ArrayList<>(),
-                BaseActivity.mUser.getUid(),
-                "",
-                "ID1",
-                "taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                "" + (Utils.getNowInMillis() - TimeUnit.DAYS.toMillis(2)),
-                new PollOptions(new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem(), new PollOptions.PollOptionsItem()),
-                new ArrayList<>(),
-                "",
-                "i_am_tester",
-                new ArrayList<>()
-        ));
-        recyclerView.setAdapter(new Adapter(data));
+        refreshList();
+
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(() -> new Handler().postDelayed(() -> swipeRefreshLayout.setRefreshing(false), 3000));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            //new Handler().postDelayed(() -> swipeRefreshLayout.setRefreshing(false), 3000);
+            data.clear();
+            refreshList();
+            swipeRefreshLayout.setRefreshing(false);
+        });
+    }
+
+    private void refreshList(){
+        BaseActivity.mThreadsDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    ThreadModel threadModel = dataSnapshot.getValue(ThreadModel.class);
+                    //Log.i("HomeFragment", "onDataChange: " + threadModel.profileImage());
+                    if (threadModel != null) {
+                        data.add(threadModel);
+                        recyclerView.setAdapter(new Adapter(data));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void setHeaderPos(TextView view, boolean isActivated) {
@@ -324,7 +298,7 @@ public class HomeFragment extends Fragment {
 //            } else
 //                ((TextView) holder.itemView.findViewById(R.id.poll_option_4_edittext)).setVisibility(View.VISIBLE);
 
-            holder.itemView.setOnClickListener(view -> startActivity(new Intent(getContext(), ThreadViewActivity.class).putExtra("thread", data.get(newPosition))));
+            holder.itemView.setOnClickListener(view -> startActivity(new Intent(getContext(), ThreadViewActivity.class).putExtra("thread", data.get(newPosition).getID())));
 
             holder.itemView.findViewById(R.id.poll_option_1).setOnClickListener(view -> {
                 setHeaderPos((TextView) view, true);

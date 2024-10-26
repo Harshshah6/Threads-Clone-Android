@@ -5,4 +5,5 @@ public class Constants {
     public static final String FCM_AUTH_KEY = "";
     public static final String UsersDBReference = "users";
     public static final String GUsernamesDBReference = "gusernames";
+    public static final String THREADS = "threads";
 }

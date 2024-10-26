@@ -128,6 +128,7 @@
                 app:srcCompat="@drawable/verified_24px" />
 
             <TextView
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="21h"
@@ -168,13 +169,77 @@
                 tools:listitem="@layout/home_list_item_image_item"
                 tools:itemCount="1"/>
 
+            <LinearLayout
+                android:id="@+id/poll_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="8dp"
+                android:paddingHorizontal="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/profileImage"
+                app:layout_constraintTop_toBottomOf="@+id/postRecyclerView"
+                app:layout_goneMarginBottom="0dp"
+                app:layout_goneMarginTop="0dp">
+
+                <TextView
+                    android:id="@+id/poll_option_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Yes"
+                    android:singleLine="true"
+                    style="@style/Base.Widget.AppCompat.TextView.ButtonFilled"
+                    android:gravity="left"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/poll_option_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/button_background_outlined"
+                    android:text="No"
+                    android:singleLine="true"
+                    android:textColor="@color/textMain"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/poll_option_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/button_background_outlined"
+                    android:singleLine="true"
+                    android:textColor="@color/textMain"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+                <TextView
+                    android:id="@+id/poll_option_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/button_background_outlined"
+                    android:singleLine="true"
+                    android:textColor="@color/textMain"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 app:layout_constraintStart_toStartOf="@+id/profileImage"
-                app:layout_constraintTop_toBottomOf="@+id/postRecyclerView">
+                app:layout_constraintTop_toBottomOf="@+id/poll_layout">
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"

@@ -61,6 +61,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
     public static DatabaseReference mUsersDatabaseReference;
     public static UserModel mUser;
+    public static DatabaseReference mThreadsDatabaseReference;
     public FirebaseAuth mAuth;
     public FirebaseDatabase mDatabase;
     public DatabaseReference gUsernamesDatabaseReference;
@@ -126,6 +127,7 @@ public class BaseActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mUsersDatabaseReference = mDatabase.getReference(Constants.UsersDBReference);
         gUsernamesDatabaseReference = mDatabase.getReference(Constants.GUsernamesDBReference);
+        mThreadsDatabaseReference = mDatabase.getReference(Constants.THREADS);
 
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(Constants.webApplicationID)
