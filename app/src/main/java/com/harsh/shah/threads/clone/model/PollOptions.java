@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+
 public class PollOptions implements Parcelable {
     public static final Creator<PollOptions> CREATOR = new Creator<PollOptions>() {
         @Override
@@ -98,21 +100,21 @@ public class PollOptions implements Parcelable {
 
 
     public static class PollOptionsItem implements Parcelable{
-        private int votes = 0;
         private String text = "";
         private boolean visibility = false;
+        private ArrayList<String> votes = new ArrayList<>();
 
         public PollOptionsItem() {
         }
 
-        public PollOptionsItem(int votes, String text, boolean visibility) {
+        public PollOptionsItem(ArrayList<String> votes, String text, boolean visibility) {
             this.votes = votes;
             this.text = text;
             this.visibility = visibility;
         }
 
         protected PollOptionsItem(Parcel in) {
-            votes = in.readInt();
+            votes = in.createStringArrayList();
             text = in.readString();
             visibility = in.readByte() != 0;
         }
@@ -129,11 +131,11 @@ public class PollOptions implements Parcelable {
             }
         };
 
-        public int getVotes() {
+        public ArrayList<String> getVotes() {
             return votes;
         }
 
-        public void setVotes(int votes) {
+        public void setVotes(ArrayList<String> votes) {
             this.votes = votes;
         }
 
@@ -171,7 +173,7 @@ public class PollOptions implements Parcelable {
 
         @Override
         public void writeToParcel(@NonNull Parcel parcel, int i) {
-            parcel.writeInt(votes);
+            parcel.writeStringList(votes);
             parcel.writeString(text);
             parcel.writeByte((byte) (visibility ? 1 : 0));
         }

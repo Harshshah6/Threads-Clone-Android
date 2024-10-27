@@ -22,7 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -58,6 +60,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     ArrayList<ThreadModel> data = new ArrayList<>();
+    private Adapter dataAdapter = new Adapter(data);
 
     public HomeFragment() {
         // Required empty public constructor
@@ -95,7 +98,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        recyclerView.setAdapter(dataAdapter);
         refreshList();
 
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
@@ -108,17 +111,56 @@ public class HomeFragment extends Fragment {
     }
 
     private void refreshList(){
-        BaseActivity.mThreadsDatabaseReference.addValueEventListener(new ValueEventListener() {
+        data.clear();
+//        BaseActivity.mThreadsDatabaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    ThreadModel threadModel = dataSnapshot.getValue(ThreadModel.class);
+//                    //Log.i("HomeFragment", "onDataChange: " + threadModel.profileImage());
+//                    if (threadModel != null) {
+//                        data.add(threadModel);
+//                        recyclerView.setAdapter(new Adapter(data));
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+        BaseActivity.mThreadsDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    ThreadModel threadModel = dataSnapshot.getValue(ThreadModel.class);
-                    //Log.i("HomeFragment", "onDataChange: " + threadModel.profileImage());
-                    if (threadModel != null) {
-                        data.add(threadModel);
-                        recyclerView.setAdapter(new Adapter(data));
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                dataAdapter.addData(snapshot.getValue(ThreadModel.class));
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                ThreadModel model = snapshot.getValue(ThreadModel.class);
+                if (model != null) {
+                    for (int i = 0; i < data.size(); i++) {
+                        if (data.get(i).getID().equals(model.getID())) {
+                            dataAdapter.updateData(i, model);
+                            break;
+                        }
                     }
                 }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                ThreadModel model = snapshot.getValue(ThreadModel.class);
+                if (model != null)
+                    dataAdapter.removeData(model);
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
@@ -135,6 +177,7 @@ public class HomeFragment extends Fragment {
         } else {
             TextViewCompat.setTextAppearance(view, R.style.Base_Widget_AppCompat_TextView_ButtonOutlined);
             view.setBackgroundResource(R.drawable.button_background_outlined);
+            view.setEnabled(false);
         }
     }
 
@@ -176,8 +219,10 @@ public class HomeFragment extends Fragment {
             holder.itemView.setLayoutParams(params);
             ImageView imageView = holder.itemView.findViewById(R.id.imageView);
             if (!data.get(position).isEmpty()) {
-                Picasso.get().load(data.get(position)).placeholder(R.drawable.photo_library_24px).into(imageView);
-                setImage(Utils.getBitmapFromURL(data.get(position)), imageView);
+                //Picasso.get().load(data.get(position)).placeholder(R.drawable.photo_library_24px).into(imageView);
+                if(data.get(position).contains("gif"))Glide.with(holder.itemView.getContext()).asGif().load(data.get(position)).into(imageView);
+                else Glide.with(holder.itemView.getContext()).load(data.get(position)).into(imageView);
+                //setImage(Utils.getBitmapFromURL(data.get(position)), imageView);
             }
 
         }
@@ -276,28 +321,6 @@ public class HomeFragment extends Fragment {
             } else
                 holder.itemView.findViewById(R.id.poll_layout).setVisibility(View.GONE);
 
-//            int rand = Utils.getRandomNumber(0, 2);
-//            if (rand == 0) {
-//                holder.itemView.findViewById(R.id.imagesListRecyclerView).setVisibility(View.VISIBLE);
-//                holder.itemView.findViewById(R.id.poll_layout).setVisibility(View.GONE);
-//            }
-//            if (rand == 1) {
-//                holder.itemView.findViewById(R.id.imagesListRecyclerView).setVisibility(View.GONE);
-//                holder.itemView.findViewById(R.id.poll_layout).setVisibility(View.VISIBLE);
-//            }
-//            if (rand == 2) {
-//                holder.itemView.findViewById(R.id.imagesListRecyclerView).setVisibility(View.GONE);
-//                holder.itemView.findViewById(R.id.poll_layout).setVisibility(View.GONE);
-//            }
-//            if (((TextView) holder.itemView.findViewById(R.id.poll_option_3_edittext)).getText().toString().isEmpty()) {
-//                ((TextView) holder.itemView.findViewById(R.id.poll_option_4_edittext)).setVisibility(View.GONE);
-//                ((TextView) holder.itemView.findViewById(R.id.poll_option_3_edittext)).setVisibility(View.GONE);
-//            }
-//            if (((TextView) holder.itemView.findViewById(R.id.poll_option_4_edittext)).getText().toString().isEmpty()) {
-//                ((TextView) holder.itemView.findViewById(R.id.poll_option_4_edittext)).setVisibility(View.GONE);
-//            } else
-//                ((TextView) holder.itemView.findViewById(R.id.poll_option_4_edittext)).setVisibility(View.VISIBLE);
-
             holder.itemView.setOnClickListener(view -> startActivity(new Intent(getContext(), ThreadViewActivity.class).putExtra("thread", data.get(newPosition).getID())));
 
             holder.itemView.findViewById(R.id.poll_option_1).setOnClickListener(view -> {
@@ -305,25 +328,82 @@ public class HomeFragment extends Fragment {
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_2), false);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_3), false);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_4), false);
+                ArrayList<String> list = data.get(newPosition).getPollOptions().getOption1().getVotes();
+                ArrayList<String> list1 = data.get(newPosition).getPollOptions().getOption2().getVotes();
+                ArrayList<String> list2 = data.get(newPosition).getPollOptions().getOption3().getVotes();
+                ArrayList<String> list3 = data.get(newPosition).getPollOptions().getOption4().getVotes();
+                if(!(list.contains(BaseActivity.mUser.getUid()) && list1.contains(BaseActivity.mUser.getUid()) && list2.contains(BaseActivity.mUser.getUid()) && list3.contains(BaseActivity.mUser.getUid()))){
+                    list.add(BaseActivity.mUser.getUid());
+                    data.get(newPosition).getPollOptions().getOption1().setVotes(list);
+                    updateVote(data.get(newPosition).getID(), data.get(newPosition));
+                }
+
             });
             holder.itemView.findViewById(R.id.poll_option_2).setOnClickListener(view -> {
                 setHeaderPos((TextView) view, true);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_1), false);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_3), false);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_4), false);
+                ArrayList<String> list = data.get(newPosition).getPollOptions().getOption1().getVotes();
+                ArrayList<String> list1 = data.get(newPosition).getPollOptions().getOption2().getVotes();
+                ArrayList<String> list2 = data.get(newPosition).getPollOptions().getOption3().getVotes();
+                ArrayList<String> list3 = data.get(newPosition).getPollOptions().getOption4().getVotes();
+                if(!(list.contains(BaseActivity.mUser.getUid()) && list1.contains(BaseActivity.mUser.getUid()) && list2.contains(BaseActivity.mUser.getUid()) && list3.contains(BaseActivity.mUser.getUid()))){
+                    list1.add(BaseActivity.mUser.getUid());
+                    data.get(newPosition).getPollOptions().getOption2().setVotes(list1);
+                    updateVote(data.get(newPosition).getID(), data.get(newPosition));
+                }
             });
             holder.itemView.findViewById(R.id.poll_option_3).setOnClickListener(view -> {
                 setHeaderPos((TextView) view, true);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_1), false);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_2), false);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_4), false);
+                ArrayList<String> list = data.get(newPosition).getPollOptions().getOption1().getVotes();
+                ArrayList<String> list1 = data.get(newPosition).getPollOptions().getOption2().getVotes();
+                ArrayList<String> list2 = data.get(newPosition).getPollOptions().getOption3().getVotes();
+                ArrayList<String> list3 = data.get(newPosition).getPollOptions().getOption4().getVotes();
+                if(!(list.contains(BaseActivity.mUser.getUid()) && list1.contains(BaseActivity.mUser.getUid()) && list2.contains(BaseActivity.mUser.getUid()) && list3.contains(BaseActivity.mUser.getUid()))){
+                    list2.add(BaseActivity.mUser.getUid());
+                    data.get(newPosition).getPollOptions().getOption3().setVotes(list2);
+                    updateVote(data.get(newPosition).getID(), data.get(newPosition));
+                }
             });
             holder.itemView.findViewById(R.id.poll_option_4).setOnClickListener(view -> {
                 setHeaderPos((TextView) view, true);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_1), false);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_2), false);
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_3), false);
+                ArrayList<String> list = data.get(newPosition).getPollOptions().getOption1().getVotes();
+                ArrayList<String> list1 = data.get(newPosition).getPollOptions().getOption2().getVotes();
+                ArrayList<String> list2 = data.get(newPosition).getPollOptions().getOption3().getVotes();
+                ArrayList<String> list3 = data.get(newPosition).getPollOptions().getOption4().getVotes();
+                if(!(list.contains(BaseActivity.mUser.getUid()) && list1.contains(BaseActivity.mUser.getUid()) && list2.contains(BaseActivity.mUser.getUid()) && list3.contains(BaseActivity.mUser.getUid()))){
+                    list3.add(BaseActivity.mUser.getUid());
+                    data.get(newPosition).getPollOptions().getOption4().setVotes(list3);
+                    updateVote(data.get(newPosition).getID(), data.get(newPosition));
+                }
             });
+//
+//            setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_1), false);
+//            setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_2), false);
+//            setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_3), false);
+//            setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_4), false);
+//
+//            holder.itemView.findViewById(R.id.poll_option_1).setEnabled(true);
+//            holder.itemView.findViewById(R.id.poll_option_2).setEnabled(true);
+//            holder.itemView.findViewById(R.id.poll_option_3).setEnabled(true);
+//            holder.itemView.findViewById(R.id.poll_option_4).setEnabled(true);
+
+            if(data.get(newPosition).getPollOptions().getOption1().getVotes().contains(BaseActivity.mUser.getUid()))
+                setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_1), true);
+            else if (data.get(newPosition).getPollOptions().getOption2().getVotes().contains(BaseActivity.mUser.getUid()))
+                setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_2), true);
+            else if (data.get(newPosition).getPollOptions().getOption3().getVotes().contains(BaseActivity.mUser.getUid()))
+                setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_3), true);
+            else if (data.get(newPosition).getPollOptions().getOption4().getVotes().contains(BaseActivity.mUser.getUid()))
+                setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_4), true);
+
         }
 
         @Override
@@ -340,6 +420,36 @@ public class HomeFragment extends Fragment {
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
             }
+        }
+
+        private void updateVote(String id, ThreadModel dataModel){
+            BaseActivity.mThreadsDatabaseReference.child(id).setValue(dataModel);
+        }
+
+        public void updateData(int position, ThreadModel data) {
+            this.data.set(position, data);
+            notifyItemChanged(position);
+        }
+
+        public void addData(ThreadModel data) {
+            this.data.add(data);
+            notifyItemInserted(this.data.size());
+        }
+
+        public void removeData(int position) {
+            this.data.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        public void removeData(ThreadModel model) {
+            int i = this.data.indexOf(model);
+            this.data.remove(model);
+            notifyItemRemoved(i);
+        }
+
+        public void clearData() {
+            this.data.clear();
+            notifyDataSetChanged();
         }
     }
 }

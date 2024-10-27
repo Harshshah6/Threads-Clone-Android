@@ -24,8 +24,11 @@ import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.databinding.ActivityThreadViewBinding;
 import com.harsh.shah.threads.clone.fragments.HomeFragment;
+import com.harsh.shah.threads.clone.model.CommentsModel;
 import com.harsh.shah.threads.clone.model.ThreadModel;
 import com.harsh.shah.threads.clone.utils.Utils;
+
+import java.util.ArrayList;
 
 public class ThreadViewActivity extends BaseActivity {
 
@@ -40,7 +43,7 @@ public class ThreadViewActivity extends BaseActivity {
         binding.postRecyclerView.setAdapter(new HomeFragment.PostImagesListAdapter(false));
 
         binding.commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.commentsRecyclerView.setAdapter(new CommentsImagesListAdapter());
+        //binding.commentsRecyclerView.setAdapter(new CommentsImagesListAdapter());
 
         mThreadsDatabaseReference.child(getIntent().getExtras().getString("thread")).addValueEventListener(new ValueEventListener() {
             @Override
@@ -117,6 +120,10 @@ public class ThreadViewActivity extends BaseActivity {
                 setHeaderPos((TextView) binding.pollOption3, false);
             });
         }
+
+        if(threadModel.getComments()!=null){
+            binding.commentsRecyclerView.setAdapter(new CommentsImagesListAdapter(threadModel.getComments()));
+        }
     }
 
     private void setHeaderPos(TextView view, boolean isActivated) {
@@ -130,6 +137,14 @@ public class ThreadViewActivity extends BaseActivity {
     }
 
     public static class CommentsImagesListAdapter extends RecyclerView.Adapter<CommentsImagesListAdapter.ViewHolder> {
+
+        public ArrayList<CommentsModel> data;
+
+        public CommentsImagesListAdapter(){}
+
+        public CommentsImagesListAdapter(ArrayList<CommentsModel> data){
+            this.data = data;
+        }
 
         @NonNull
         @Override
@@ -149,7 +164,7 @@ public class ThreadViewActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            return 5;
+            return data.size();
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {

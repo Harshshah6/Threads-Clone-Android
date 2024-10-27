@@ -111,10 +111,10 @@ public class NewThreadActivity extends BaseActivity {
                     binding.edittext.getText().toString().trim(),
                     System.currentTimeMillis() + "",
                     new PollOptions(
-                            new PollOptions.PollOptionsItem(0, binding.pollOption1Edittext.getText().toString().trim(), true),
-                            new PollOptions.PollOptionsItem(0, binding.pollOption2Edittext.getText().toString().trim(), true),
-                            new PollOptions.PollOptionsItem(0, binding.pollOption3Edittext.getText().toString().trim(), !binding.pollOption3Edittext.getText().toString().trim().isEmpty()),
-                            new PollOptions.PollOptionsItem(0, binding.pollOption4Edittext.getText().toString().trim(), !binding.pollOption4Edittext.getText().toString().trim().isEmpty())
+                            new PollOptions.PollOptionsItem(new ArrayList<>(), binding.pollOption1Edittext.getText().toString().trim(), true),
+                            new PollOptions.PollOptionsItem(new ArrayList<>(), binding.pollOption2Edittext.getText().toString().trim(), true),
+                            new PollOptions.PollOptionsItem(new ArrayList<>(), binding.pollOption3Edittext.getText().toString().trim(), !binding.pollOption3Edittext.getText().toString().trim().isEmpty()),
+                            new PollOptions.PollOptionsItem(new ArrayList<>(), binding.pollOption4Edittext.getText().toString().trim(), !binding.pollOption4Edittext.getText().toString().trim().isEmpty())
                     ),
                     new ArrayList<>(),
                     (mUser.getProfileImage()==null||mUser.getProfileImage().isEmpty())?"":mUser.getProfileImage(),

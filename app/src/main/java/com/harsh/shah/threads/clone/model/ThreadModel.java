@@ -243,7 +243,6 @@ public class ThreadModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringList(images);
         dest.writeList(comments);
-
         dest.writeByte((byte) (allowedComments ? 1 : 0));
         dest.writeByte((byte) (isGif ? 1 : 0));
         dest.writeByte((byte) (isPoll ? 1 : 0));

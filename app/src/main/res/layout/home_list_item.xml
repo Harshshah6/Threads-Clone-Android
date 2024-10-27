@@ -160,7 +160,7 @@
                 android:layout_height="match_parent"
                 android:text="Yes"
                 android:singleLine="true"
-                style="@style/Base.Widget.AppCompat.TextView.ButtonFilled"
+                android:background="@drawable/button_background_outlined"
                 android:gravity="left"
                 android:textSize="15sp" />
 

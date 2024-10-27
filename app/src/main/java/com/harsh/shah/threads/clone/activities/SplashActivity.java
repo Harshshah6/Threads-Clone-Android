@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.util.Pair;
 import android.view.View;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 
@@ -17,6 +19,27 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        getUsersDatabase(new AuthListener() {
+            @Override
+            public void onAuthTaskStart() {
+
+            }
+
+            @Override
+            public void onAuthSuccess(DataSnapshot snapshot) {
+                nextScreen();
+            }
+
+            @Override
+            public void onAuthFail(DatabaseError error) {
+                showToast(error.getMessage());
+                finishAffinity();
+            }
+        });
+
+    }
+
+    private void nextScreen(){
         new Handler().postDelayed(() -> {
             Pair<View, String> p1 = Pair.create(findViewById(R.id.imageView), "splash_image");
             Intent intent = new Intent(SplashActivity.this, isUserLoggedIn() ? MainActivity.class : AuthActivity.class);
@@ -25,6 +48,5 @@ public class SplashActivity extends BaseActivity {
         }, 3000);
 
         new Handler().postDelayed(this::finish, 6000);
-
     }
 }
