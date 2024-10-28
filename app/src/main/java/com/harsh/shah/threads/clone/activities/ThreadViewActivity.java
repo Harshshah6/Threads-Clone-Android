@@ -74,7 +74,7 @@ public class ThreadViewActivity extends BaseActivity {
         binding.postRecyclerView.setAdapter(new HomeFragment.PostImagesListAdapter(threadModel.getImages(), false));
         binding.commentsRecyclerView.setAdapter(new CommentsImagesListAdapter());
 
-        if(threadModel.isIsPoll()) {
+        if(threadModel.isIsPoll() && false) {
             binding.pollLayout.setVisibility(View.VISIBLE);
             binding.postRecyclerView.setVisibility(View.GONE);
         }

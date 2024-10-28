@@ -14,6 +14,8 @@ firebaseAuth = "23.1.0"
 firebaseDatabase = "21.0.0"
 firebaseBom = "33.5.1"
 firebasePlayServiceAuth = "21.2.0"
+photoview = "2.0.0"
+photoviewDialog = "1.0.2"
 picasso = "2.8"
 swipeRefreshLayout = "1.2.0-alpha01"
 switchButton = "0.0.3"
@@ -33,6 +35,8 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-play-service-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "firebasePlayServiceAuth" }
+photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photoview" }
+photoview-dialog = { module = "io.getstream:photoview-dialog", version.ref = "photoviewDialog" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", name = "swipe-refresh-layout", version.ref = "swipeRefreshLayout" }
 switch-button = { module = "com.github.zcweng:switch-button", version.ref = "switchButton" }

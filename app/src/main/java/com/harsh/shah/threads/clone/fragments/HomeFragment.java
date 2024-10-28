@@ -3,9 +3,7 @@ package com.harsh.shah.threads.clone.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +25,21 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.NewThreadActivity;
 import com.harsh.shah.threads.clone.activities.ThreadViewActivity;
-import com.harsh.shah.threads.clone.model.PollOptions;
 import com.harsh.shah.threads.clone.model.ThreadModel;
 import com.harsh.shah.threads.clone.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
+import io.getstream.photoview.dialog.PhotoViewDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String  TAG = "HomeFragment";
     private static HomeFragment instance;
     RecyclerView recyclerView;
     // TODO: Rename and change types of parameters
@@ -148,6 +149,7 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 }
+                Log.i(TAG, "onChildChanged: " + snapshot);
             }
 
             @Override
@@ -224,6 +226,10 @@ public class HomeFragment extends Fragment {
                 else Glide.with(holder.itemView.getContext()).load(data.get(position)).into(imageView);
                 //setImage(Utils.getBitmapFromURL(data.get(position)), imageView);
             }
+
+            imageView.setOnClickListener(view -> {
+                new PhotoViewDialog.Builder(holder.itemView.getContext(), data, (imageView1, url) -> Glide.with(holder.itemView.getContext()).load(url).into(imageView1)).withTransitionFrom(imageView).withStartPosition(position).build().show(true);
+            });
 
         }
 
@@ -428,22 +434,26 @@ public class HomeFragment extends Fragment {
 
         public void updateData(int position, ThreadModel data) {
             this.data.set(position, data);
+            notifyDataSetChanged();
             notifyItemChanged(position);
         }
 
         public void addData(ThreadModel data) {
-            this.data.add(data);
+            this.data.add(0,data);
+            notifyDataSetChanged();
             notifyItemInserted(this.data.size());
         }
 
         public void removeData(int position) {
             this.data.remove(position);
-            notifyItemRemoved(position);
+            notifyDataSetChanged();
+            notifyItemRemoved(position+1);
         }
 
         public void removeData(ThreadModel model) {
             int i = this.data.indexOf(model);
             this.data.remove(model);
+            notifyDataSetChanged();
             notifyItemRemoved(i);
         }
 

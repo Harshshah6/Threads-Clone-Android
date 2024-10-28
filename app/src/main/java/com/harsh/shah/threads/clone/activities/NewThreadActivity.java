@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -67,6 +68,7 @@ public class NewThreadActivity extends BaseActivity {
         });
 
         binding.insertPoll.setOnClickListener(view -> {
+            if(true)return;
             binding.pollLayout.setVisibility(View.VISIBLE);
             binding.constraintLayout2.setVisibility(View.GONE);
         });
@@ -135,10 +137,13 @@ public class NewThreadActivity extends BaseActivity {
     public void askAndPressback(View view) {
 
         MDialogUtil mDialogUtil = new MDialogUtil(this)
-                .setB1("Exit", v -> finish())
                 .setTitle("Are you sure you want to exit?")
                 .setMessage("", false);
         AlertDialog dialog = mDialogUtil.create();
+        mDialogUtil.setB1("Exit", v -> {
+            dialog.dismiss();
+            finish();
+        });
         mDialogUtil.setB2("Cancel", v -> dialog.dismiss());
         dialog.show();
     }

@@ -56,5 +56,6 @@ dependencies {
     implementation libs.switch.button
     implementation libs.picasso
     implementation libs.glide
+    implementation(libs.photoview.dialog)
 
 }
