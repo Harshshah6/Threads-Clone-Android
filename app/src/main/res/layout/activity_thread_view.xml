@@ -363,6 +363,7 @@
                 style="@style/Base.Widget.AppCompat.TextView.TextMain"
                 android:text="Replies"
                 android:layout_marginTop="12dp"
+                android:layout_marginStart="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/constraintLayout"/>
 
@@ -371,6 +372,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Base.Widget.AppCompat.TextView.TextSec"
                 android:text="View Activity >"
+                android:layout_marginEnd="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/replies_label"
                 app:layout_constraintBottom_toBottomOf="@+id/replies_label"/>
@@ -399,9 +401,36 @@
                 android:overScrollMode="never"
                 android:scrollbars="none"/>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        android:orientation="horizontal"
+        android:background="@color/bgColor"
+        android:gravity="center_vertical">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            android:background="@color/textMain"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reply to <username>"
+            style="@style/Base.Widget.AppCompat.TextView.TextSec"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="8dp" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -18,13 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.database.DatabaseReference;
 import com.harsh.shah.threads.clone.BaseActivity;
-import com.harsh.shah.threads.clone.Constants;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.databinding.ActivityNewThreadBinding;
-import com.harsh.shah.threads.clone.model.PollOptions;
-import com.harsh.shah.threads.clone.model.ThreadModel;
 import com.harsh.shah.threads.clone.utils.MDialogUtil;
 
 import java.util.ArrayList;
@@ -33,22 +28,28 @@ public class NewThreadActivity extends BaseActivity {
 
     ActivityNewThreadBinding binding;
     ArrayList<String> data = new ArrayList<>();
-    ImagesListAdapter adapter = new ImagesListAdapter(data, dataList -> {
+    ImagesListAdapter adapter = new ImagesListAdapter(data, (listener, dataList) -> {
         data = dataList;
-        if (dataList.isEmpty()) {
-            binding.insertPoll.setVisibility(View.VISIBLE);
-            binding.insertGif.setVisibility(View.VISIBLE);
-        } else {
-            binding.insertPoll.setVisibility(View.GONE);
-            binding.insertGif.setVisibility(View.GONE);
-        }
+        //binding.recyclerView.setAdapter(new ImagesListAdapter(data, listener));
+//        if (dataList.isEmpty()) {
+//            binding.insertPoll.setVisibility(View.VISIBLE);
+//            binding.insertGif.setVisibility(View.VISIBLE);
+//        } else {
+//            binding.insertPoll.setVisibility(View.GONE);
+//            binding.insertGif.setVisibility(View.GONE);
+//        }
     });
     ActivityResultLauncher<PickVisualMediaRequest> launcher = registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(5), o -> {
         if (o == null) {
             Toast.makeText(NewThreadActivity.this, "No image Selected", Toast.LENGTH_SHORT).show();
         } else {
             for (Uri uri : o) {
-                adapter.addData(uri.toString());
+//                adapter.addData(uri.toString());
+                if (data.size() < 6) {
+                    //adapter.addData(uri.toString());
+                    data.add(uri.toString());
+                    binding.recyclerView.setAdapter(new ImagesListAdapter(data));
+                }
             }
         }
     });
@@ -58,9 +59,11 @@ public class NewThreadActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityNewThreadBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         binding.edittext.requestFocus();
+
         binding.insertImage.setOnClickListener(view -> {
-            if (adapter.getData().size() == 5)
+            if (data.size() == 5)
                 return;
             launcher.launch(new PickVisualMediaRequest.Builder()
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
@@ -68,7 +71,7 @@ public class NewThreadActivity extends BaseActivity {
         });
 
         binding.insertPoll.setOnClickListener(view -> {
-            if(true)return;
+            if (true) return;
             binding.pollLayout.setVisibility(View.VISIBLE);
             binding.constraintLayout2.setVisibility(View.GONE);
         });
@@ -99,42 +102,27 @@ public class NewThreadActivity extends BaseActivity {
         });
 
         binding.postButton.setOnClickListener(view -> {
-            DatabaseReference databaseReference = mDatabase.getReference(Constants.THREADS).push();
-            databaseReference.setValue(new ThreadModel(
-                    adapter.getData(),
-                    new ArrayList<>(),
-                    true,
-                    false,
-                    binding.pollLayout.getVisibility() == View.VISIBLE,
-                    new ArrayList<>(),
-                    mUser.getUid(),
-                    "",
-                    databaseReference.getKey(),
-                    binding.edittext.getText().toString().trim(),
-                    System.currentTimeMillis() + "",
-                    new PollOptions(
-                            new PollOptions.PollOptionsItem(new ArrayList<>(), binding.pollOption1Edittext.getText().toString().trim(), true),
-                            new PollOptions.PollOptionsItem(new ArrayList<>(), binding.pollOption2Edittext.getText().toString().trim(), true),
-                            new PollOptions.PollOptionsItem(new ArrayList<>(), binding.pollOption3Edittext.getText().toString().trim(), !binding.pollOption3Edittext.getText().toString().trim().isEmpty()),
-                            new PollOptions.PollOptionsItem(new ArrayList<>(), binding.pollOption4Edittext.getText().toString().trim(), !binding.pollOption4Edittext.getText().toString().trim().isEmpty())
-                    ),
-                    new ArrayList<>(),
-                    (mUser.getProfileImage()==null||mUser.getProfileImage().isEmpty())?"":mUser.getProfileImage(),
-                    mUser.getUsername(),
-                    new ArrayList<>()
-            )).addOnCompleteListener(task ->{
-                if (task.isSuccessful()){
-                    finish();
-                }else
-                    showToast(task.getException()==null?"An Error Occurred While Uploading Thread.":task.getException().toString());
-            });
+            if (binding.edittext.getText().toString().trim().isEmpty())
+                if ((adapter.getData() == null || adapter.getData().isEmpty()))
+                    return;
+
+            postThread();
         });
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.recyclerView.setAdapter(adapter);
+        //binding.recyclerView.setAdapter(adapter);
+    }
+
+    private void postThread() {
+
     }
 
     public void askAndPressback(View view) {
+        if (binding.edittext.getText().toString().trim().isEmpty())
+            if ((adapter.getData() == null || adapter.getData().isEmpty())) {
+                finish();
+                return;
+            }
 
         MDialogUtil mDialogUtil = new MDialogUtil(this)
                 .setTitle("Are you sure you want to exit?")
@@ -150,13 +138,18 @@ public class NewThreadActivity extends BaseActivity {
 
 
     interface dataChangeListener {
-        void onChanged(ArrayList<String> data);
+        void onChanged(dataChangeListener dataChangeListener, ArrayList<String> data);
     }
 
     static class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.ViewHolder> {
 
         private final ArrayList<String> data;
         private final dataChangeListener dataChangeListener;
+
+        public ImagesListAdapter(ArrayList<String> data){
+            this.data = data;
+            this.dataChangeListener = (listener, data1) -> {};
+        }
 
         public ImagesListAdapter(ArrayList<String> data, dataChangeListener listener) {
             this.data = data;
@@ -167,39 +160,7 @@ public class NewThreadActivity extends BaseActivity {
             return data;
         }
 
-        public void setData(ArrayList<String> data) {
-            this.data.clear();
-            this.data.addAll(data);
-            notifyDataSetChanged();
-            dataChangeListener.onChanged(this.data);
-        }
 
-        public void addData(String data) {
-            if (this.data.size() == 5) {
-                return;
-            }
-            this.data.add(data);
-            notifyItemInserted(this.data.size());
-            dataChangeListener.onChanged(this.data);
-        }
-
-        public void removeData(int position) {
-            this.data.remove(position);
-            notifyItemRemoved(position);
-            dataChangeListener.onChanged(this.data);
-        }
-
-        public void clearData() {
-            this.data.clear();
-            notifyDataSetChanged();
-            dataChangeListener.onChanged(this.data);
-        }
-
-        public void updateData(int position, String data) {
-            this.data.set(position, data);
-            notifyItemChanged(position);
-            dataChangeListener.onChanged(this.data);
-        }
 
         @NonNull
         @Override
@@ -225,9 +186,51 @@ public class NewThreadActivity extends BaseActivity {
             }
             holder.shapeableImageView.setLayoutParams(params);
 
-            holder.delete.setOnClickListener(view -> removeData(position));
+            holder.delete.setOnClickListener(view -> {
+//                removeData(position)
+                this.data.remove(position);
+                dataChangeListener.onChanged(this.dataChangeListener, this.data);
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
+            });
             Uri uri = Uri.parse(data.get(position));
             holder.shapeableImageView.setImageURI(uri);
+        }
+
+        public void setData(ArrayList<String> data) {
+            this.data.clear();
+            this.data.addAll(data);
+            notifyDataSetChanged();
+            dataChangeListener.onChanged(this.dataChangeListener, this.data);
+        }
+
+        public void addData(String data) {
+            if (this.data.size() == 5) {
+                return;
+            }
+            this.data.add(data);
+            notifyItemInserted(this.data.size());
+            dataChangeListener.onChanged(this.dataChangeListener, this.data);
+        }
+
+        public void removeData(int position) {
+            this.data.remove(position);
+            notifyItemRemoved(position);
+            dataChangeListener.onChanged(this.dataChangeListener, this.data);
+        }
+
+        public void clearData() {
+            this.data.clear();
+            notifyDataSetChanged();
+            dataChangeListener.onChanged(this.dataChangeListener, this.data);
+
+        }
+
+        public void updateData(int position, String data) {
+            this.data.set(position, data);
+            notifyItemChanged(position);
+            dataChangeListener.onChanged(this.dataChangeListener, this.data);
+
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {

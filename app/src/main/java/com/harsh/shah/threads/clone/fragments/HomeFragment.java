@@ -410,6 +410,17 @@ public class HomeFragment extends Fragment {
             else if (data.get(newPosition).getPollOptions().getOption4().getVotes().contains(BaseActivity.mUser.getUid()))
                 setHeaderPos((TextView) holder.itemView.findViewById(R.id.poll_option_4), true);
 
+            holder.itemView.findViewById(R.id.likeThreadLayout).setOnClickListener(view -> {
+                if (data.get(newPosition).getLikes().contains(BaseActivity.mUser.getUid())) {
+                    data.get(newPosition).getLikes().remove(BaseActivity.mUser.getUid());
+                } else {
+                    data.get(newPosition).getLikes().add(BaseActivity.mUser.getUid());
+                }
+                setLikeStatus(holder, newPosition);
+                BaseActivity.mThreadsDatabaseReference.child(data.get(newPosition).getID()).setValue(data.get(newPosition));
+                notifyDataSetChanged();
+            });
+            setLikeStatus(holder, newPosition);
         }
 
         @Override
@@ -460,6 +471,15 @@ public class HomeFragment extends Fragment {
         public void clearData() {
             this.data.clear();
             notifyDataSetChanged();
+        }
+
+        private void setLikeStatus(ViewHolder holder, int newPosition){
+            if (data.get(newPosition).getLikes().contains(BaseActivity.mUser.getUid())) {
+                ((ImageView)holder.itemView.findViewById(R.id.likeImage)).setImageResource(R.drawable.favorite_24px);
+            } else {
+                ((ImageView)holder.itemView.findViewById(R.id.likeImage)).setImageResource(R.drawable.favorite_outline_24px);
+                ((ImageView)holder.itemView.findViewById(R.id.likeImage)).setColorFilter(R.color.red);
+            }
         }
     }
 }
