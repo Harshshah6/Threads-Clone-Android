@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +18,7 @@ import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -59,6 +61,33 @@ public class ThreadViewActivity extends BaseActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+
+        binding.addNewCommentLayout.setOnClickListener(view -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(ThreadViewActivity.this);
+            final View bottomSheetView = LayoutInflater.from(ThreadViewActivity.this).inflate(R.layout.public_account_needed_dialog_layout, null);
+            bottomSheetDialog.setContentView(bottomSheetView);
+            final LinearLayout privateProfileButton, publicProfileButton;
+            final TextView cancel_button;
+            cancel_button = bottomSheetView.findViewById(R.id.cancel_button);
+            privateProfileButton = bottomSheetView.findViewById(R.id.privateProfileButton);
+            publicProfileButton = bottomSheetView.findViewById(R.id.publicProfileBtn);
+
+            cancel_button.setOnClickListener(view1 -> bottomSheetDialog.dismiss());
+            privateProfileButton.setOnClickListener(view1 -> {
+                publicProfileButton.setBackgroundResource(R.drawable.button_background_outlined);
+                privateProfileButton.setBackgroundResource(R.drawable.button_background_outlined_filled);
+                setHeaderPos(cancel_button, false);
+            });
+            publicProfileButton.setOnClickListener(view1 -> {
+                publicProfileButton.setBackgroundResource(R.drawable.button_background_outlined_filled);
+                privateProfileButton.setBackgroundResource(R.drawable.button_background_outlined);
+                setHeaderPos(cancel_button, true);
+            });
+
+            bottomSheetDialog.create();
+            bottomSheetDialog.show();
+
         });
     }
 

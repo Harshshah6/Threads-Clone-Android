@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     ArrayList<ThreadModel> data = new ArrayList<>();
-    private Adapter dataAdapter = new Adapter(data);
+    private final Adapter dataAdapter = new Adapter(data);
 
     public HomeFragment() {
         // Required empty public constructor
