@@ -55,6 +55,13 @@ public class Utils {
         }
     }
 
+    public static String calculateLikes(int likes){
+        if(likes>=1000)
+            return String.valueOf(likes/1000)+"k";
+        else
+            return String.valueOf(likes);
+    }
+
     public static Bitmap getBitmapFromURL(String s) {
         try {
             URL url = new URL(s);

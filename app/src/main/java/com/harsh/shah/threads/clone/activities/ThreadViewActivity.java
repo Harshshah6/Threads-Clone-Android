@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -152,6 +153,26 @@ public class ThreadViewActivity extends BaseActivity {
 
         if(threadModel.getComments()!=null){
             binding.commentsRecyclerView.setAdapter(new CommentsImagesListAdapter(threadModel.getComments()));
+        }
+
+        binding.likes.setOnClickListener(view -> {
+            if (threadModel.getLikes().contains(BaseActivity.mUser.getUid())) {
+                threadModel.getLikes().remove(BaseActivity.mUser.getUid());
+            } else {
+                threadModel.getLikes().add(BaseActivity.mUser.getUid());
+            }
+            setLikeStatus(binding.likes, threadModel);
+            BaseActivity.mThreadsDatabaseReference.child(threadModel.getID()).setValue(threadModel);
+        });
+        setLikeStatus(binding.likes, threadModel);
+    }
+
+    private void setLikeStatus(TextView likes, ThreadModel threadModel) {
+        if (threadModel.getLikes().contains(BaseActivity.mUser.getUid())) {
+            binding.likeImage.setImageResource(R.drawable.favorite_24px);
+        } else {
+            binding.likeImage.setImageResource(R.drawable.favorite_outline_24px);
+            binding.likeImage.setColorFilter(R.color.red);
         }
     }
 
