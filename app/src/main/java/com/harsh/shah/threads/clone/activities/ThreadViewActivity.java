@@ -1,3 +1,4 @@
+//TODO: FIX COMMENT SECTION
 package com.harsh.shah.threads.clone.activities;
 
 import android.os.Bundle;
