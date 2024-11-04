@@ -5,6 +5,7 @@ import static android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -317,7 +318,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private AlertDialog getProgressDialogInit() {
-        return new MaterialAlertDialogBuilder(this).setView(R.layout.progress_dialog).setCancelable(false).setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT)).create();
+        return new MaterialAlertDialogBuilder(this).setView(R.layout.progress_dialog).setCancelable(false).setBackground(new ColorDrawable(Color.TRANSPARENT)).create();
     }
 
     public boolean isNightMode() {

@@ -1,110 +1,121 @@
 package com.harsh.shah.threads.clone.model;
 
-import androidx.annotation.NonNull;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class CommentsModel {
-    private String UID;
-    private String ID;
-    private String text;
-    private String time;
-    private String profileImage;
-    private String username;
-    private ArrayList<String> likes;
-    private ArrayList<String> comments;
+public class CommentsModel{
+	private String uid;
+	private List<String> images;
+	private List<String> replies;
+	private int visibility;
+	private String id;
+	private String text;
+	private String time;
+	private String username;
+	private List<String> likes;
 
-    public CommentsModel() {
+	public CommentsModel() {
+	}
 
-    }
+	public CommentsModel(String uid, List<String> images, List<String> replies, int visibility, String id, String text, String time, String username, List<String> likes) {
+		this.uid = uid;
+		this.images = images;
+		this.replies = replies;
+		this.visibility = visibility;
+		this.id = id;
+		this.text = text;
+		this.time = time;
+		this.username = username;
+		this.likes = likes;
+	}
 
-    public CommentsModel(String UID, String ID, String text, String time, String profileImage, String username, ArrayList<String> likes, ArrayList<String> comments) {
-        this.UID = UID;
-        this.ID = ID;
-        this.text = text;
-        this.time = time;
-        this.profileImage = profileImage;
-        this.username = username;
-        this.likes = likes;
-        this.comments = comments;
-    }
+	public void setUid(String uid){
+		this.uid = uid;
+	}
 
-    public String getUID() {
-        return UID;
-    }
+	public String getUid(){
+		return uid;
+	}
 
-    public void setUID(String UID) {
-        this.UID = UID;
-    }
+	public void setImages(List<String> images){
+		this.images = images;
+	}
 
-    public String getID() {
-        return ID;
-    }
+	public List<String> getImages(){
+		return images;
+	}
 
-    public void setID(String ID) {
-        this.ID = ID;
-    }
+	public void setReplies(List<String> replies){
+		this.replies = replies;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public List<String> getReplies(){
+		return replies;
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
+	public void setVisibility(int visibility){
+		this.visibility = visibility;
+	}
 
-    public String getTime() {
-        return time;
-    }
+	public int getVisibility(){
+		return visibility;
+	}
 
-    public void setTime(String time) {
-        this.time = time;
-    }
+	public void setId(String id){
+		this.id = id;
+	}
 
-    public String getProfileImage() {
-        return profileImage;
-    }
+	public String getId(){
+		return id;
+	}
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
+	public void setText(String text){
+		this.text = text;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getText(){
+		return text;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setTime(String time){
+		this.time = time;
+	}
 
-    public ArrayList<String> getLikes() {
-        return likes;
-    }
+	public String getTime(){
+		return time;
+	}
 
-    public void setLikes(ArrayList<String> likes) {
-        this.likes = likes;
-    }
+	public void setUsername(String username){
+		this.username = username;
+	}
 
-    public ArrayList<String> getComments() {
-        return comments;
-    }
+	public String getUsername(){
+		return username;
+	}
 
-    public void setComments(ArrayList<String> comments) {
-        this.comments = comments;
-    }
+	public void setLikes(List<String> likes){
+		this.likes = likes;
+	}
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "CommentsModel{" +
-                "UID='" + UID + '\'' +
-                ", ID='" + ID + '\'' +
-                ", text='" + text + '\'' +
-                ", time='" + time + '\'' +
-                ", profileImage='" + profileImage + '\'' +
-                ", username='" + username + '\'' +
-                ", likes=" + likes +
-                ", comments=" + comments +
-                '}';
-    }
+	public List<String> getLikes(){
+		return likes;
+	}
+
+	@Override
+ 	public String toString(){
+		return 
+			"CommentsModel{" + 
+			"uid = '" + uid + '\'' + 
+			",images = '" + images + '\'' + 
+			",replies = '" + replies + '\'' + 
+			",visibility = '" + visibility + '\'' + 
+			",id = '" + id + '\'' + 
+			",text = '" + text + '\'' + 
+			",time = '" + time + '\'' + 
+			",username = '" + username + '\'' + 
+			",likes = '" + likes + '\'' + 
+			"}";
+		}
 }

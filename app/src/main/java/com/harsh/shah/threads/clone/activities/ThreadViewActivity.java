@@ -1,8 +1,9 @@
-//TODO: FIX COMMENT SECTION
 package com.harsh.shah.threads.clone.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,9 @@ public class ThreadViewActivity extends BaseActivity {
         binding.commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //binding.commentsRecyclerView.setAdapter(new CommentsImagesListAdapter());
 
+        if (getIntent().getExtras() == null || (getIntent().getExtras().getString("thread") == null))
+            finish();
+
         mThreadsDatabaseReference.child(getIntent().getExtras().getString("thread")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -56,7 +60,7 @@ public class ThreadViewActivity extends BaseActivity {
                 if (threadModel == null) {
                     finish();
                 }
-                setUpThreadView(threadModel==null?new ThreadModel():threadModel);
+                setUpThreadView(threadModel == null ? new ThreadModel() : threadModel);
             }
 
             @Override
@@ -66,31 +70,63 @@ public class ThreadViewActivity extends BaseActivity {
         });
 
         binding.addNewCommentLayout.setOnClickListener(view -> {
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(ThreadViewActivity.this);
-            final View bottomSheetView = LayoutInflater.from(ThreadViewActivity.this).inflate(R.layout.public_account_needed_dialog_layout, null);
-            bottomSheetDialog.setContentView(bottomSheetView);
-            final LinearLayout privateProfileButton, publicProfileButton;
-            final TextView cancel_button;
-            cancel_button = bottomSheetView.findViewById(R.id.cancel_button);
-            privateProfileButton = bottomSheetView.findViewById(R.id.privateProfileButton);
-            publicProfileButton = bottomSheetView.findViewById(R.id.publicProfileBtn);
-
-            cancel_button.setOnClickListener(view1 -> bottomSheetDialog.dismiss());
-            privateProfileButton.setOnClickListener(view1 -> {
-                publicProfileButton.setBackgroundResource(R.drawable.button_background_outlined);
-                privateProfileButton.setBackgroundResource(R.drawable.button_background_outlined_filled);
-                setHeaderPos(cancel_button, false);
-            });
-            publicProfileButton.setOnClickListener(view1 -> {
-                publicProfileButton.setBackgroundResource(R.drawable.button_background_outlined_filled);
-                privateProfileButton.setBackgroundResource(R.drawable.button_background_outlined);
-                setHeaderPos(cancel_button, true);
-            });
-
-            bottomSheetDialog.create();
-            bottomSheetDialog.show();
-
+            if (!mUser.isPublicAccount()) {
+                showNeedPublicProfileDialog();
+                return;
+            }
+            addNewComment();
         });
+    }
+
+    private void addNewComment() {
+        startActivity(new Intent(this, ReplyToThreadActivity.class).putExtra("thread", getIntent().getExtras().getString("thread")));
+    }
+
+    private void showNeedPublicProfileDialog(){
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(ThreadViewActivity.this);
+        final View bottomSheetView = LayoutInflater.from(ThreadViewActivity.this).inflate(R.layout.public_account_needed_dialog_layout, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+        final LinearLayout privateProfileButton, publicProfileButton;
+        final TextView cancel_button;
+        cancel_button = bottomSheetView.findViewById(R.id.cancel_button);
+        privateProfileButton = bottomSheetView.findViewById(R.id.privateProfileButton);
+        publicProfileButton = bottomSheetView.findViewById(R.id.publicProfileBtn);
+
+        final boolean publicAccountStatus = mUser.isPublicAccount();
+        if(publicAccountStatus){
+            publicProfileButton.setBackgroundResource(R.drawable.button_background_outlined_filled);
+            privateProfileButton.setBackgroundResource(R.drawable.button_background_outlined);
+        }else{
+            publicProfileButton.setBackgroundResource(R.drawable.button_background_outlined);
+            privateProfileButton.setBackgroundResource(R.drawable.button_background_outlined_filled);
+        }
+
+        privateProfileButton.setOnClickListener(view1 -> {
+            publicProfileButton.setBackgroundResource(R.drawable.button_background_outlined);
+            privateProfileButton.setBackgroundResource(R.drawable.button_background_outlined_filled);
+            setHeaderPos(cancel_button, publicAccountStatus);
+            cancel_button.setText(publicAccountStatus?"Done":"Cancel");
+            cancel_button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        });
+        publicProfileButton.setOnClickListener(view1 -> {
+            publicProfileButton.setBackgroundResource(R.drawable.button_background_outlined_filled);
+            privateProfileButton.setBackgroundResource(R.drawable.button_background_outlined);
+            setHeaderPos(cancel_button, !publicAccountStatus);
+            cancel_button.setText(!publicAccountStatus?"Done":"Cancel");
+            cancel_button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        });
+
+        cancel_button.setOnClickListener(view1 -> {
+            bottomSheetDialog.dismiss();
+            if(cancel_button.getText().toString().equals("Cancel"))
+                return;
+            showProgressDialog();
+            mUser.setPublicAccount(!publicAccountStatus);
+            mUsersDatabaseReference.child(mUser.getUsername()).setValue(mUser).addOnCompleteListener(task -> hideProgressDialog());
+        });
+
+        bottomSheetDialog.create();
+        bottomSheetDialog.show();
     }
 
     private void setUpThreadView(ThreadModel threadModel){
