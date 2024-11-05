@@ -20,7 +20,10 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.databinding.ActivityNewThreadBinding;
+import com.harsh.shah.threads.clone.model.PollOptions;
+import com.harsh.shah.threads.clone.model.ThreadModel;
 import com.harsh.shah.threads.clone.utils.MDialogUtil;
+import com.harsh.shah.threads.clone.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -61,6 +64,8 @@ public class NewThreadActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         binding.edittext.requestFocus();
+
+        binding.textView.setText(mUser.getUsername());
 
         binding.insertImage.setOnClickListener(view -> {
             if (data.size() == 5)
@@ -114,7 +119,34 @@ public class NewThreadActivity extends BaseActivity {
     }
 
     private void postThread() {
+        final String pid = mThreadsDatabaseReference.push().getKey();
 
+        ThreadModel threadModel = new ThreadModel(
+                adapter.getData(),
+                new ArrayList<>(),
+                true,
+                false,
+                false,
+                new ArrayList<>(),
+                mUser.getUid(),
+                "",
+                pid,
+                binding.edittext.getText().toString(),
+                Utils.getNowInMillis() + "",
+                new PollOptions(new PollOptions.PollOptionsItem(new ArrayList<>(), "", false), new PollOptions.PollOptionsItem(new ArrayList<>(), "", false), new PollOptions.PollOptionsItem(new ArrayList<>(), "", false), new PollOptions.PollOptionsItem(new ArrayList<>(), "", false)),
+                new ArrayList<>(),
+                mUser.getProfileImage(),
+                mUser.getUsername(),
+                new ArrayList<>()
+        );
+        showProgressDialog();
+        mThreadsDatabaseReference.child(pid).setValue(threadModel).addOnCompleteListener(task -> {
+            hideProgressDialog();
+            if(!task.isSuccessful()) {
+                showToast(task.getException().toString());
+            }
+            finish();
+        });
     }
 
     public void askAndPressback(View view) {
@@ -146,9 +178,10 @@ public class NewThreadActivity extends BaseActivity {
         private final ArrayList<String> data;
         private final dataChangeListener dataChangeListener;
 
-        public ImagesListAdapter(ArrayList<String> data){
+        public ImagesListAdapter(ArrayList<String> data) {
             this.data = data;
-            this.dataChangeListener = (listener, data1) -> {};
+            this.dataChangeListener = (listener, data1) -> {
+            };
         }
 
         public ImagesListAdapter(ArrayList<String> data, dataChangeListener listener) {
@@ -160,7 +193,12 @@ public class NewThreadActivity extends BaseActivity {
             return data;
         }
 
-
+        public void setData(ArrayList<String> data) {
+            this.data.clear();
+            this.data.addAll(data);
+            notifyDataSetChanged();
+            dataChangeListener.onChanged(this.dataChangeListener, this.data);
+        }
 
         @NonNull
         @Override
@@ -195,13 +233,6 @@ public class NewThreadActivity extends BaseActivity {
             });
             Uri uri = Uri.parse(data.get(position));
             holder.shapeableImageView.setImageURI(uri);
-        }
-
-        public void setData(ArrayList<String> data) {
-            this.data.clear();
-            this.data.addAll(data);
-            notifyDataSetChanged();
-            dataChangeListener.onChanged(this.dataChangeListener, this.data);
         }
 
         public void addData(String data) {

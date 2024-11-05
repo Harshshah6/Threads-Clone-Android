@@ -126,9 +126,9 @@ public class BaseActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
-        mUsersDatabaseReference = mDatabase.getReference(Constants.UsersDBReference);
-        gUsernamesDatabaseReference = mDatabase.getReference(Constants.GUsernamesDBReference);
-        mThreadsDatabaseReference = mDatabase.getReference(Constants.THREADS);
+        mUsersDatabaseReference = mDatabase.getReference(Constants.USERS_DB_REF);
+        gUsernamesDatabaseReference = mDatabase.getReference(Constants.USERNAMES_DB_REF);
+        mThreadsDatabaseReference = mDatabase.getReference(Constants.THREADS_DB_REF);
 
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(Constants.webApplicationID)

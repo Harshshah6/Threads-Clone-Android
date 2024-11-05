@@ -1,10 +1,15 @@
 package com.harsh.shah.threads.clone.activities;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,18 +20,43 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.databinding.ActivityReplyToThreadBinding;
 import com.harsh.shah.threads.clone.fragments.HomeFragment;
+import com.harsh.shah.threads.clone.model.CommentsModel;
 import com.harsh.shah.threads.clone.model.ThreadModel;
 import com.harsh.shah.threads.clone.utils.MDialogUtil;
 import com.harsh.shah.threads.clone.utils.Utils;
 
+import java.util.ArrayList;
+
 public class ReplyToThreadActivity extends BaseActivity {
 
     ActivityReplyToThreadBinding binding;
+
+    ThreadModel threadModel;
+
+    ArrayList<String> data = new ArrayList<>();
+    NewThreadActivity.ImagesListAdapter adapter = new NewThreadActivity.ImagesListAdapter(data, (listener, dataList) -> {
+        data = dataList;
+    });
+    ActivityResultLauncher<PickVisualMediaRequest> launcher = registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(5), o -> {
+        if (o == null) {
+            Toast.makeText(ReplyToThreadActivity.this, "No image Selected", Toast.LENGTH_SHORT).show();
+        } else {
+            for (Uri uri : o) {
+//                adapter.addData(uri.toString());
+                if (data.size() < 6) {
+                    //adapter.addData(uri.toString());
+                    data.add(uri.toString());
+                    binding.imagesRecyclerView.setAdapter(new NewThreadActivity.ImagesListAdapter(data));
+                }
+            }
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +74,7 @@ public class ReplyToThreadActivity extends BaseActivity {
         mThreadsDatabaseReference.child(getIntent().getExtras().getString("thread")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ThreadModel threadModel = snapshot.getValue(ThreadModel.class);
+                threadModel = snapshot.getValue(ThreadModel.class);
                 if (threadModel == null) {
                     finish();
                 }
@@ -56,6 +86,46 @@ public class ReplyToThreadActivity extends BaseActivity {
 
             }
         });
+
+        binding.postButton.setOnClickListener(view -> {
+            if (binding.edittext.getText().toString().trim().isEmpty() && data.isEmpty())
+                return;
+
+            if(threadModel == null) return;
+
+            ArrayList<CommentsModel> comments = threadModel.getComments();
+            if(comments == null) comments = new ArrayList<>();
+
+            comments.add(new CommentsModel(
+                    mUser.getUid(),
+                    data,
+                    new ArrayList<>(),
+                    1,
+                    (comments.size())+"",
+                    binding.edittext.getText().toString(),
+                    Utils.getNowInMillis()+"",
+                    mUser.getUsername(),
+                    new ArrayList<>()
+            ));
+
+            threadModel.setComments(comments);
+
+            showProgressDialog();
+            mThreadsDatabaseReference.child(threadModel.getID()).setValue(threadModel).addOnCompleteListener(task -> {
+                hideProgressDialog();
+                finish();
+            });
+
+        });
+
+        binding.insertImage.setOnClickListener(view -> {
+            if (data.size() == 5)
+                return;
+            launcher.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
+        });
+
     }
 
     private void setUpThreadView(ThreadModel threadModel){

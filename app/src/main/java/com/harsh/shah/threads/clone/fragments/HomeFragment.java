@@ -29,6 +29,7 @@ import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
 import com.harsh.shah.threads.clone.activities.NewThreadActivity;
 import com.harsh.shah.threads.clone.activities.ThreadViewActivity;
+import com.harsh.shah.threads.clone.model.CommentsModel;
 import com.harsh.shah.threads.clone.model.ThreadModel;
 import com.harsh.shah.threads.clone.utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -113,6 +114,7 @@ public class HomeFragment extends Fragment {
 
     private void refreshList(){
         data.clear();
+        dataAdapter.clearData();
 //        BaseActivity.mThreadsDatabaseReference.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -135,7 +137,20 @@ public class HomeFragment extends Fragment {
         BaseActivity.mThreadsDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //Log.i(TAG, "onChildAdded: " + snapshot);
                 dataAdapter.addData(snapshot.getValue(ThreadModel.class));
+                ArrayList<CommentsModel> comments = new ArrayList<>();
+                comments.add(new CommentsModel(
+                        BaseActivity.mUser.getUid(),
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        1,
+                        "cid",
+                        "comment",
+                        Utils.getNowInMillis()+"",
+                        BaseActivity.mUser.getUsername(),
+                        new ArrayList<>()
+                ));
             }
 
             @Override

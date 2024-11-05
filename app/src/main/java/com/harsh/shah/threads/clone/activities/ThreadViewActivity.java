@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -32,6 +34,8 @@ import com.harsh.shah.threads.clone.fragments.HomeFragment;
 import com.harsh.shah.threads.clone.model.CommentsModel;
 import com.harsh.shah.threads.clone.model.ThreadModel;
 import com.harsh.shah.threads.clone.utils.Utils;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -192,7 +196,7 @@ public class ThreadViewActivity extends BaseActivity {
             binding.commentsRecyclerView.setAdapter(new CommentsImagesListAdapter(threadModel.getComments()));
         }
 
-        binding.likes.setOnClickListener(view -> {
+        binding.likesLayout.setOnClickListener(view -> {
             if (threadModel.getLikes().contains(BaseActivity.mUser.getUid())) {
                 threadModel.getLikes().remove(BaseActivity.mUser.getUid());
             } else {
@@ -247,6 +251,13 @@ public class ThreadViewActivity extends BaseActivity {
 //            int dp = ((int) (holder.itemView.getContext().getResources().getDisplayMetrics().density));
 //            params.setMargins(dp*12,0,dp*12,0);
 //            holder.itemView.setLayoutParams(params);
+            ((TextView)holder.itemView.findViewById(R.id.username)).setText(data.get(position).getUsername());
+            ((TextView)holder.itemView.findViewById(R.id.title)).setText(data.get(position).getText());
+            TextView time = holder.itemView.findViewById(R.id.time);
+            time.setText(Utils.calculateTimeDiff(Long.parseLong(data.get(position).getTime())));
+            TextView likes = holder.itemView.findViewById(R.id.likes);
+            likes.setText(String.valueOf(data.get(position).getLikes() == null?0:data.get(position).getLikes().size()));
+
         }
 
         @Override

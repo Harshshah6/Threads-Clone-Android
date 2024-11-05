@@ -1,8 +1,5 @@
 package com.harsh.shah.threads.clone.model;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.util.List;
 
 public class CommentsModel{
