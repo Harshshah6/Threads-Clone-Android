@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
@@ -34,6 +35,9 @@ android {
     viewBinding {
         enabled true
     }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
@@ -43,6 +47,7 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.firebase.messaging
+    implementation libs.core.ktx
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -57,5 +62,8 @@ dependencies {
     implementation libs.picasso
     implementation libs.glide
     implementation(libs.photoview.dialog)
+
+    implementation(libs.sdk.for.android)
+
 
 }

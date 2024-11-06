@@ -17,9 +17,12 @@ firebasePlayServiceAuth = "21.2.0"
 photoview = "2.0.0"
 photoviewDialog = "1.0.2"
 picasso = "2.8"
+sdkForAndroid = "5.1.0"
 swipeRefreshLayout = "1.2.0-alpha01"
 switchButton = "0.0.3"
 firebaseMessaging = "24.0.3"
+kotlin = "2.0.21"
+coreKtx = "1.15.0"
 
 [libraries]
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -38,12 +41,15 @@ firebase-play-service-auth = { module = "com.google.android.gms:play-services-au
 photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photoview" }
 photoview-dialog = { module = "io.getstream:photoview-dialog", version.ref = "photoviewDialog" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+sdk-for-android = { module = "io.appwrite:sdk-for-android", version.ref = "sdkForAndroid" }
 swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", name = "swipe-refresh-layout", version.ref = "swipeRefreshLayout" }
 switch-button = { module = "com.github.zcweng:switch-button", version.ref = "switchButton" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
