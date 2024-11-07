@@ -77,6 +77,23 @@ public class BaseActivity extends AppCompatActivity {
 
         loginTask(task);
     };
+    private final ValueEventListener usersValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                UserModel user = dataSnapshot.getValue(UserModel.class);
+                if (user != null && user.getUid().equals(mAuth.getCurrentUser().getUid())) {
+                    mUser = user;
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
 
     public static void updateUserProfile() {
         updateProfileInfo(mUser, new AuthListener() {
@@ -137,25 +154,32 @@ public class BaseActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(BaseActivity.this, googleSignInOptions);
 
         if (isUserLoggedIn()) {
-            mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        UserModel user = dataSnapshot.getValue(UserModel.class);
-                        if (user != null && user.getUid().equals(mAuth.getCurrentUser().getUid())) {
-                            mUser = user;
-                            break;
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+            mUsersDatabaseReference.addValueEventListener(usersValueEventListener);
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mUsersDatabaseReference.removeEventListener(usersValueEventListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mUsersDatabaseReference.removeEventListener(usersValueEventListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mUsersDatabaseReference.addValueEventListener(usersValueEventListener);
     }
 
     @Override

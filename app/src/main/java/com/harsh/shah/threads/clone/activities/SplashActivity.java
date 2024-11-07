@@ -7,20 +7,10 @@ import android.os.Handler;
 import android.util.Pair;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
-import com.harsh.shah.threads.clone.database.StorageDatabase;
-
-import io.appwrite.models.InputFile;
-import kotlin.Unit;
-import kotlin.coroutines.Continuation;
-import kotlin.coroutines.CoroutineContext;
-import kotlin.jvm.functions.Function2;
 
 public class SplashActivity extends BaseActivity {
 
@@ -47,9 +37,8 @@ public class SplashActivity extends BaseActivity {
             }
         });
 
-        StorageDatabase.INSTANCE.create(this);
-        StorageDatabase.INSTANCE.uploadFile(InputFile.Companion.fromBytes(new byte[]{},"temp","image/png"));
-        StorageDatabase.INSTANCE.downloadFile("672b82950007fbde1497");
+//        StorageDatabase.INSTANCE.uploadFile(InputFile.Companion.fromBytes(new byte[]{},"temp","image/png"));
+//        StorageDatabase.INSTANCE.downloadFile("672b82950007fbde1497");
 
     }
 

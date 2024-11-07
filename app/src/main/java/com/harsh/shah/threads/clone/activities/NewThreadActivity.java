@@ -25,6 +25,7 @@ import com.harsh.shah.threads.clone.model.ThreadModel;
 import com.harsh.shah.threads.clone.utils.MDialogUtil;
 import com.harsh.shah.threads.clone.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class NewThreadActivity extends BaseActivity {
@@ -50,6 +51,10 @@ public class NewThreadActivity extends BaseActivity {
 //                adapter.addData(uri.toString());
                 if (data.size() < 6) {
                     //adapter.addData(uri.toString());
+
+                    File inputFile = new File(uri.getPath());
+                    File outputFile = new File(inputFile.getPath().replace(inputFile.getName(), "compressed_"+ inputFile.getName()));
+
                     data.add(uri.toString());
                     binding.recyclerView.setAdapter(new ImagesListAdapter(data));
                 }
