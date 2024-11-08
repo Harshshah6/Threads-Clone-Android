@@ -68,5 +68,6 @@ dependencies {
     implementation(libs.photoview.dialog)
 
     implementation(libs.sdk.for.android)
+    implementation libs.ivcompressor
 
 }

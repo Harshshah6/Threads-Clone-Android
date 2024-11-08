@@ -154,32 +154,9 @@ public class BaseActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(BaseActivity.this, googleSignInOptions);
 
         if (isUserLoggedIn()) {
-            mUsersDatabaseReference.addValueEventListener(usersValueEventListener);
+            //mUsersDatabaseReference.addValueEventListener(usersValueEventListener);
         }
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mUsersDatabaseReference.removeEventListener(usersValueEventListener);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mUsersDatabaseReference.removeEventListener(usersValueEventListener);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mUsersDatabaseReference.addValueEventListener(usersValueEventListener);
     }
 
     @Override
@@ -429,11 +406,5 @@ public class BaseActivity extends AppCompatActivity {
 
         void onAuthFail(DatabaseError error);
     }
-
-    public static interface UserQueryListener {
-        boolean isUsernameAvailable(String username);
-
-    }
-
 
 }

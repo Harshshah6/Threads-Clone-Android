@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
+import com.harsh.shah.threads.clone.database.StorageHelper;
 import com.harsh.shah.threads.clone.databinding.ActivityNewThreadBinding;
 import com.harsh.shah.threads.clone.model.PollOptions;
 import com.harsh.shah.threads.clone.model.ThreadModel;
@@ -51,9 +52,11 @@ public class NewThreadActivity extends BaseActivity {
 //                adapter.addData(uri.toString());
                 if (data.size() < 6) {
                     //adapter.addData(uri.toString());
-
+                    if(uri.getPath() == null) continue;
                     File inputFile = new File(uri.getPath());
                     File outputFile = new File(inputFile.getPath().replace(inputFile.getName(), "compressed_"+ inputFile.getName()));
+
+                    StorageHelper.getInstance().resizeImage(inputFile);
 
                     data.add(uri.toString());
                     binding.recyclerView.setAdapter(new ImagesListAdapter(data));
