@@ -303,7 +303,7 @@ public class HomeFragment extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             if (getItemViewType(position) == 1) {
                 holder.itemView.setOnClickListener(view -> startActivity(new Intent(getContext(), NewThreadActivity.class)));
-                ((TextView) holder.itemView.findViewById(R.id.username)).setText(BaseActivity.mUser.getUsername());
+                if(BaseActivity.mUser.getUsername()!=null)((TextView) holder.itemView.findViewById(R.id.username)).setText(BaseActivity.mUser.getUsername());
             }
             if (position == 0) return;
             final int newPosition = position - 1;

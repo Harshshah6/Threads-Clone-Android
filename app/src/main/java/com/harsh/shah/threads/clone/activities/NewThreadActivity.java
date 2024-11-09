@@ -1,9 +1,11 @@
 package com.harsh.shah.threads.clone.activities;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -13,6 +15,7 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +30,13 @@ import com.harsh.shah.threads.clone.utils.MDialogUtil;
 import com.harsh.shah.threads.clone.utils.Utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import io.appwrite.ID;
 
 public class NewThreadActivity extends BaseActivity {
 
@@ -48,16 +57,12 @@ public class NewThreadActivity extends BaseActivity {
         if (o == null) {
             Toast.makeText(NewThreadActivity.this, "No image Selected", Toast.LENGTH_SHORT).show();
         } else {
+            if(o.isEmpty()) return;
             for (Uri uri : o) {
 //                adapter.addData(uri.toString());
                 if (data.size() < 6) {
                     //adapter.addData(uri.toString());
                     if(uri.getPath() == null) continue;
-                    File inputFile = new File(uri.getPath());
-                    File outputFile = new File(inputFile.getPath().replace(inputFile.getName(), "compressed_"+ inputFile.getName()));
-
-                    StorageHelper.getInstance().resizeImage(inputFile);
-
                     data.add(uri.toString());
                     binding.recyclerView.setAdapter(new ImagesListAdapter(data));
                 }
