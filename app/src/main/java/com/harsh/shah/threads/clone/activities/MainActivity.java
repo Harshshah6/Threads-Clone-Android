@@ -16,9 +16,11 @@ import com.harsh.shah.threads.clone.fragments.AddThreadFragment;
 import com.harsh.shah.threads.clone.fragments.HomeFragment;
 import com.harsh.shah.threads.clone.fragments.ProfileFragment;
 import com.harsh.shah.threads.clone.fragments.SearchFragment;
+import com.harsh.shah.threads.clone.interfaces.profile.onProfileUpdate;
+import com.harsh.shah.threads.clone.model.UserModel;
 import com.harsh.shah.threads.clone.utils.Utils;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements onProfileUpdate {
 
     ActivityMainBinding binding;
     int selectedFragment = 0;
@@ -29,7 +31,7 @@ public class MainActivity extends BaseActivity {
         //WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        setup();
         setOnClickListeners();
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
@@ -122,5 +124,18 @@ public class MainActivity extends BaseActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        onProfileUpdatePause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onProfileUpdateResume();
     }
 }

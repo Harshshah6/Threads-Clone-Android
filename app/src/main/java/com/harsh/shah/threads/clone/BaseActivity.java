@@ -154,7 +154,7 @@ public class BaseActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(BaseActivity.this, googleSignInOptions);
 
         if (isUserLoggedIn()) {
-            mUsersDatabaseReference.addValueEventListener(usersValueEventListener);
+            //mUsersDatabaseReference.addValueEventListener(usersValueEventListener);
         }
 
     }

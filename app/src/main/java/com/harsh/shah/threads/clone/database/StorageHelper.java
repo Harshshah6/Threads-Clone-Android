@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.harsh.shah.threads.clone.Constants;
+import com.harsh.shah.threads.clone.interfaces.profile.onProfileUpdate;
 
 import java.io.File;
 import java.io.FileOutputStream;
