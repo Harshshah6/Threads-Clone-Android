@@ -11,8 +11,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.harsh.shah.threads.clone.BaseActivity;
 import com.harsh.shah.threads.clone.R;
+import com.harsh.shah.threads.clone.interfaces.profile.onProfileUpdate;
+import com.harsh.shah.threads.clone.interfaces.profile.onProfileUpdateImpl;
+import com.harsh.shah.threads.clone.model.UserModel;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements onProfileUpdate {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,5 +54,15 @@ public class SplashActivity extends BaseActivity {
         }, 3000);
 
         new Handler().postDelayed(this::finish, 6000);
+    }
+
+    @Override
+    public void setup() {
+
+    }
+
+    @Override
+    public void onProfileUpdate(UserModel userModel) {
+
     }
 }
